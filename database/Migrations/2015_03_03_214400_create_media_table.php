@@ -19,7 +19,6 @@ class CreateMediaTable extends Migration {
             $table->string('type', 25);
             $table->string('path', 200);
             $table->integer('post_id')->unsigned();
-            $table->foreign('post_id')->references('id')->on('posts');
             $table->timestamps();
             $table->softDeletes();
         });

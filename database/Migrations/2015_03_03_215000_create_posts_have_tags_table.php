@@ -16,10 +16,7 @@ class CreatePostsHaveTagsTable extends Migration {
         {
             $table->increments('id');
             $table->integer('post_id')->unsigned();
-            $table->foreign('post_id')->references('id')->on('posts');
             $table->integer('tag_id')->unsigned();
-            $table->foreign('tag_id')->references('id')->on('tags');
-
         });
     }
 

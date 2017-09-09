@@ -50,24 +50,6 @@ class CreateUsersTable extends Migration
             'id' => [
                 'type' => 'increments',
             ],
-            'hash' => [
-                'type' => 'string',
-                'length' => 80,
-                'extra' => 'unique',
-            ],
-            'lastname' => [
-                'type' => 'string',
-                'length' => 30,
-            ],
-            'firstname' => [
-                'type' => 'string',
-                'length' => 30,
-            ],
-            'username' => [
-                'type' => 'string',
-                'length' => 30,
-                'extra' => 'unique'
-            ],
             'email' => [
                 'type' => 'string',
                 'length' => 70,
@@ -89,6 +71,7 @@ class CreateUsersTable extends Migration
             'profilepicture' => [
                 'type' => 'string',
                 'length' => 200,
+                'extra' => 'nullable'
             ],
         ];
     }
@@ -101,16 +84,15 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function ($table) {
             foreach ($this->fields as $field => $value) {
-                $query = $table->$value['type']($field);
+                $query = $table->{$value['type']}($field);
 
                 if (isset($value['extra'])) {
-                    $query->$value['extra']();
+                    $query->{$value['extra']}();
                 }
             }
 
-            $table->foreign('role_id')->references('id')->on('roles');
-            $table->timestamps();
             $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -129,10 +111,6 @@ class CreateUsersTable extends Migration
                     if (isset($value['extra'])) {
                         $extra = $value['extra'];
                         $query->$extra();
-                    }
-
-                    if ($field == 'role_id') {
-                        $table->foreign('role_id')->references('id')->on('roles');
                     }
                 }
             }
