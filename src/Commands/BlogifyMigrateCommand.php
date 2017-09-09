@@ -35,7 +35,7 @@ class BlogifyMigrateCommand extends Command
 
         $this->paths = [
             'vendor/Donatix/blogify/database/Migrations',
-            'vendor/Donatix/tracert/database/Migrations',
+            'vendor/jorenvanhocht/tracert/database/Migrations',
         ];
     }
 
@@ -44,7 +44,7 @@ class BlogifyMigrateCommand extends Command
      *
      * @return mixed
      */
-    public function fire()
+    public function handle()
     {
         foreach ($this->paths as $path) {
             $this->call('migrate', ['--path' => $path]);

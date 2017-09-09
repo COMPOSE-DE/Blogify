@@ -58,7 +58,7 @@ class BlogifyGeneratePublicPartCommand extends Command
      *
      * @return mixed
      */
-    public function fire()
+    public function handle()
     {
         $namespace = $this->option('namespace');
 
@@ -103,12 +103,17 @@ class BlogifyGeneratePublicPartCommand extends Command
 
                 $key = ucfirst($key);
                 $filename = app_path("Http/$key/$k.php");
+                $dirname = app_path("Http/{$key}");
 
                 if (File::exists($filename)) {
                     if ($this->confirm("File $k allready exists, do you want to override it? Y/N")) {
                         file_put_contents($filename, $contents);
                     }
                 } else {
+                    if (! is_dir($dirname)) {
+                        mkdir($dirname, 0755, true);
+                    }
+
                     file_put_contents($filename, $contents);
                 }
             }

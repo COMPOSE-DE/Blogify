@@ -41,7 +41,7 @@ class BlogifySeedCommand extends Command
      *
      * @return mixed
      */
-    public function fire()
+    public function handle()
     {
         $this->call('db:seed', ['--class' => $this->class]);
     }

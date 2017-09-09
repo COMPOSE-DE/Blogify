@@ -39,7 +39,7 @@ class BlogifyCreateRequiredDirectories extends Command
      *
      * @return mixed
      */
-    public function fire()
+    public function handle()
     {
         foreach ($this->config->upload_paths as $paths) {
             foreach ($paths as $path) {
