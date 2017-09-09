@@ -257,7 +257,7 @@ class PostsController extends BaseController
         $hash = $this->auth_user->hash;
         $this->cache->forget("autoSavedPost-$hash");
 
-        return redirect()->route('admin.posts.index');
+        return redirect()->route('posts.index');
     }
 
     /**
@@ -276,7 +276,7 @@ class PostsController extends BaseController
         ]);
         session()->flash('notify', ['success', $message]);
 
-        return redirect()->route('admin.posts.index');
+        return redirect()->route('posts.index');
     }
 
     /**
@@ -311,7 +311,7 @@ class PostsController extends BaseController
     public function cancel($hash = null)
     {
         if (! isset($hash)) {
-            return redirect()->route('admin.posts.index');
+            return redirect()->route('posts.index');
         }
 
         $userHash = $this->auth_user->hash;
@@ -330,7 +330,7 @@ class PostsController extends BaseController
         ]);
         session()->flash('notify', ['success', $message]);
 
-        return redirect()->route('admin.posts.index');
+        return redirect()->route('posts.index');
     }
 
     /**
@@ -347,7 +347,7 @@ class PostsController extends BaseController
         ]);
         session()->flash('notify', ['success', $message]);
 
-        return redirect()->route('admin.posts.index');
+        return redirect()->route('posts.index');
     }
 
     ///////////////////////////////////////////////////////////////////////////

@@ -22,7 +22,7 @@
                         <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
-                        <li><a href="{{route('admin.profile.edit', Auth::user()->hash)}}"><i class="fa fa-user fa-fw"></i> {{ trans("blogify::navigation.profile") }} </a>
+                        <li><a href="{{route('profile.edit', Auth::user()->hash)}}"><i class="fa fa-user fa-fw"></i> {{ trans("blogify::navigation.profile") }} </a>
                         </li>
                         <li class="divider"></li>
                         <li><a href="{!! route('admin.logout') !!}"><i class="fa fa-sign-out fa-fw"></i> {{ trans("blogify::navigation.logout") }} </a>
@@ -45,11 +45,11 @@
                             <ul class="nav nav-second-level">
                                 @if ( Auth::user()->role->name == 'Admin' || Auth::user()->role->name == 'Author' )
                                     <li>
-                                        <a href="{{ route ('admin.posts.create') }}"><span class="fa fa-plus fa-fw"></span> {{ trans("blogify::navigation.posts.new") }}</a>
+                                        <a href="{{ route ('posts.create') }}"><span class="fa fa-plus fa-fw"></span> {{ trans("blogify::navigation.posts.new") }}</a>
                                     </li>
                                 @endif
                                 <li>
-                                    <a href="{{ route ('admin.posts.index' ) }}"><span class="fa fa-th-list fa-fw"></span> {{ trans("blogify::navigation.posts.overview") }}</a>
+                                    <a href="{{ route ('posts.index' ) }}"><span class="fa fa-th-list fa-fw"></span> {{ trans("blogify::navigation.posts.overview") }}</a>
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->
@@ -81,10 +81,10 @@
                                 <a href="#"><i class="fa fa-tags fa-fw"></i>{{ trans("blogify::navigation.tags.title") }}<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="{{ route ('admin.tags.create') }}"><span class="fa fa-plus fa-fw"></span> {{ trans("blogify::navigation.tags.new") }}</a>
+                                        <a href="{{ route ('tags.create') }}"><span class="fa fa-plus fa-fw"></span> {{ trans("blogify::navigation.tags.new") }}</a>
                                     </li>
                                     <li>
-                                        <a href="{{ route ('admin.tags.index' ) }}"><span class="fa fa-th-list fa-fw"></span> {{ trans("blogify::navigation.tags.overview") }}</a>
+                                        <a href="{{ route ('tags.index' ) }}"><span class="fa fa-th-list fa-fw"></span> {{ trans("blogify::navigation.tags.overview") }}</a>
                                     </li>
                                 </ul>
                                 <!-- /.nav-second-level -->
@@ -119,7 +119,7 @@
                 </div>
                 <!-- /.col-lg-12 -->
            </div>
-			<div class="row">  
+			<div class="row">
 				@yield('section')
 
             </div>

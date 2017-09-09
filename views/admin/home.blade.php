@@ -42,7 +42,7 @@
                             </div>
                         </div>
                     </div>
-                    <a href="{{route('admin.posts.index')}}">
+                    <a href="{{route('posts.index')}}">
                         <div class="panel-footer">
                             <span class="pull-left">@lang('blogify::dashboard.view_all_posts')</span>
                             <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -67,7 +67,7 @@
                             </div>
                         </div>
                     </div>
-                    <a href="{{route('admin.posts.index')}}">
+                    <a href="{{route('posts.index')}}">
                         <div class="panel-footer">
                             <span class="pull-left">@lang('blogify::dashboard.view_all_posts')</span>
                             <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -117,7 +117,7 @@
                                 $icon = 'fa-pencil';
                                 $post = Donatix\Blogify\Models\Post::withTrashed()->find($item->row);
                             ?>
-                                <a href="{{route('admin.posts.edit', [$post->hash])}}" class="list-group-item">
+                                <a href="{{route('posts.edit', [$post->hash])}}" class="list-group-item">
                                     <i class="fa {{$icon}} fa-fw"></i> @lang('blogify::dashboard.activity_feed.post', ['title' => $post->title, 'action' => $item->crud_action])
                                     <span class="pull-right text-muted small"><em>{{App\User::find($item->user_id)->fullName}} - {{$item->created_at}}</em>
                                         </span>

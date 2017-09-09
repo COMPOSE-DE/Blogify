@@ -60,7 +60,7 @@ class DenyIfBeingEdited
             $user = $this->user->find($post->being_edited_by)->fullName;
 
             session()->flash('notify', ['danger', trans('blogify::posts.notify.being_edited', ['name' => $user])]);
-            return redirect()->route('admin.posts.index');
+            return redirect()->route('posts.index');
         }
 
         return $next($request);

@@ -13,7 +13,7 @@ $currentPage    = (Request::has('page')) ? Request::get('page') : '1';
     @endif
 
     <p>
-        <a href="{{ ($trashed) ? route('admin.posts.index') : route('admin.posts.overview', ['trashed']) }}" title=""> {{ ($trashed) ? trans('blogify::posts.overview.links.active') : trans('blogify::posts.overview.links.trashed') }} </a>
+        <a href="{{ ($trashed) ? route('posts.index') : route('admin.posts.overview', ['trashed']) }}" title=""> {{ ($trashed) ? trans('blogify::posts.overview.links.active') : trans('blogify::posts.overview.links.trashed') }} </a>
     </p>
 
 @section ('cotable_panel_title', ($trashed) ? trans("blogify::posts.overview.table_head.title_trashed") : trans("blogify::posts.overview.table_head.title_active"))
@@ -44,9 +44,9 @@ $currentPage    = (Request::has('page')) ? Request::get('page') : '1';
                 <td>{!! $post->publish_date !!}</td>
                 <td>
                     @if(!$trashed)
-                        <a href="{{ route('admin.posts.edit', [$post->hash] ) }}"><span class="fa fa-edit fa-fw"></span></a>
-                        <a href="{{ route('admin.posts.show', [$post->hash] ) }}"><span class="fa fa-eye fa-fw"></span></a>
-                        {!! Form::open( [ 'route' => ['admin.posts.destroy', $post->hash], 'class' => $post->hash . ' form-delete' ] ) !!}
+                        <a href="{{ route('posts.edit', [$post->hash] ) }}"><span class="fa fa-edit fa-fw"></span></a>
+                        <a href="{{ route('posts.show', [$post->hash] ) }}"><span class="fa fa-eye fa-fw"></span></a>
+                        {!! Form::open( [ 'route' => ['posts.destroy', $post->hash], 'class' => $post->hash . ' form-delete' ] ) !!}
 
                         {!! Form::hidden('_method', 'delete') !!}
                         <a href="#" title="{{$post->name}}" class="delete" id="{{$post->hash}}"><span class="fa fa-trash-o fa-fw"></span></a>
