@@ -7,7 +7,7 @@ return [
      *
      */
     'auth_model' => \App\User::class,
-    
+
     /**
      * Array with all available character sets
      *
@@ -22,11 +22,9 @@ return [
      * This will be used to seed the users table
      */
     'admin_user'     => [
-        'name'          => 'Van Hocht',
-        'firstname'     => 'Joren',
-        'username'      => env('BLOGIFY_ADMIN_USERNAME'),
-        'email'         => env('BLOGIFY_ADMIN_EMAIL'),
-        'password'      => env('BLOGIFY_ADMIN_PASSWORD'),
+        'name'          => 'Admin',
+        'email'         => env('BLOGIFY_ADMIN_EMAIL', 'admin@example.com'),
+        'password'      => env('BLOGIFY_ADMIN_PASSWORD', 'secret'),
     ],
 
     /**
