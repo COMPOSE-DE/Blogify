@@ -134,7 +134,7 @@ class BlogifyServiceProvider extends ServiceProvider
     {
         // Publish the config files for the package
         $this->publishes([
-            __DIR__.'/../config' => config_path('blogify/'),
+            __DIR__.'/../config' => config_path('/'),
         ], 'config');
 
         $this->publishes([
@@ -142,11 +142,6 @@ class BlogifyServiceProvider extends ServiceProvider
             __DIR__.'/../public/ckeditor' => base_path('public/ckeditor/'),
             __DIR__.'/../public/datetimepicker' => base_path('public/datetimepicker/')
         ], 'assets');
-
-        $this->publishes([
-            __DIR__.'/../views/admin/auth/passwordreset/' => base_path('/resources/views/auth/'),
-            __DIR__.'/../views/mails/resetpassword.blade.php' => base_path('/resources/views/emails/password.blade.php')
-        ], 'pass-reset');
     }
 
     private function registerCommands()
