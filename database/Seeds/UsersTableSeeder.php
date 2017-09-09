@@ -26,7 +26,7 @@ class UsersTableSeeder extends Seeder
 
     public function __construct()
     {
-        $this->admin = config('blogify.blogify.admin_user');
+        $this->admin = config('blogify.admin_user');
 
         $role = Role::where('name', '=', 'Admin')->first();
         $this->admin_role = $role->id;
@@ -34,12 +34,9 @@ class UsersTableSeeder extends Seeder
 
     public function run()
     {
-        $user = app()->make(config(('blogify.auth_model')));
+        $user = app()->make(config('blogify.auth_model'));
         $user->create([
-            'hash' => blogify()->makeHash('users', 'hash', true),
-            'lastname' => $this->admin['name'],
-            'firstname' => $this->admin['firstname'],
-            'username' => $this->admin['username'],
+            'name' => $this->admin['name'],
             'email' => $this->admin['email'],
             'password' => Hash::make($this->admin['password']),
             'role_id' => $this->admin_role,
