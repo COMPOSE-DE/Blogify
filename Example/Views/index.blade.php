@@ -1,4 +1,5 @@
 @extends('blogify.templates.master')
+
 @section('content')
     @if(count($posts) <= 0)
         <div class="row">
@@ -49,10 +50,10 @@
                     <div class="panel-footer">
                         <div class="row">
                             <div class="col-md-6 col-xs-12">
-                                <?php $number_of_comments = 0; ?>
+                                {{  $number_of_comments = 0 }}
                                 @foreach($post->comment as $comment)
                                     @if($comment->revised == 2)
-                                        <?php $number_of_comments++; ?>
+                                        {{  $number_of_comments++ }}
                                     @endif
                                 @endforeach
                                 <small><a href="{{route('blog.show', [$post->slug])}}">{{$number_of_comments}} comments</a></small>
@@ -72,4 +73,4 @@
             {!! $posts->render() !!}
         </div>
     </div>
-@stop
+@endsection

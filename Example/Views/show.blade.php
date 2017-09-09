@@ -1,10 +1,7 @@
-<?php
-use Carbon\Carbon;
-?>
 @extends('blogify.templates.master')
-@section('content')
 
-    <?php $data = session()->get('notify') ?>
+@section('content')
+    {{ $data = session()->get('notify') }}
     <div id="notify" class="fixed-to-top">
         @include('blogify::admin.widgets.alert', ['class'=>$data[0], 'dismissable'=>true, 'message'=> $data[1], 'icon'=> 'check'])
     </div>
@@ -40,10 +37,10 @@ use Carbon\Carbon;
                         <div class="panel-footer">
                             <div class="row">
                                 <div class="col-md-6 col-xs-12">
-                                    <?php $number_of_comments = 0; ?>
+                                    {{ $number_of_comments = 0 }}
                                     @foreach($post->comment as $comment)
                                         @if($comment->revised == 2)
-                                            <?php $number_of_comments++; ?>
+                                            {{ $number_of_comments++ }}
                                         @endif
                                     @endforeach
                                     <small><a href="{{route('blog.show', [$post->slug])}}">{{$number_of_comments}} comments</a></small>
@@ -107,4 +104,4 @@ use Carbon\Carbon;
 
         </div>
     </div>
-@stop
+@endsection

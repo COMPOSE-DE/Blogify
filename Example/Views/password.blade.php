@@ -1,6 +1,7 @@
 @extends('blogify.templates.master')
+
 @section('content')
-    <?php $data = session()->get('wrong_password') ?>
+    {{ $data = session()->get('wrong_password') }}
     @if(isset($data))
         <div id="notify" class="fixed-to-top">
             @include('blogify::admin.widgets.alert', ['class'=>'danger', 'dismissable'=>true, 'message'=> $data, 'icon'=> 'check'])
@@ -31,4 +32,4 @@
             </div>
         </div>
     </div>
-@stop
+@endsection
