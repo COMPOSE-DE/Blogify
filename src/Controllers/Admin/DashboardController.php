@@ -5,7 +5,7 @@ namespace Donatix\Blogify\Controllers\Admin;
 use App\User;
 use Donatix\Blogify\Models\Comment;
 use Donatix\Blogify\Models\Post;
-use Donatix\Tracert\Models\History;
+use jorenvanhocht\Tracert\Models\History;
 use Illuminate\Contracts\Auth\Guard;
 use jorenvanhocht\Tracert\Tracert;
 
@@ -46,11 +46,11 @@ class DashboardController extends BaseController
 
     /**
      * @param \App\User $user
-     * @param \Donatix\Tracert\Models\History $history
+     * @param \jorenvanhocht\Tracert\Models\History $history
      * @param \Donatix\Blogify\Models\Post $post
      * @param \Donatix\Blogify\Models\Comment $comment
      * @param \Illuminate\Contracts\Auth\Guard $auth
-     * @param \Donatix\Tracert\Tracert $tracert
+     * @param \jorenvanhocht\Tracert\Tracert $tracert
      */
     public function __construct(
         User $user,
