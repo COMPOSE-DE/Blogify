@@ -244,7 +244,8 @@ class TagsController extends BaseController
                 $tag = $t;
             } else {
                 $tag = new Tag;
-                $tag->hash = $this->blogify->makeHash('tags', 'hash', true);
+                $tag->hash = str_random();
+                // $tag->hash = $this->blogify->makeHash('tags', 'hash', true);
             }
 
             $tag->name = $tag_name;
