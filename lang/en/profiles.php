@@ -7,12 +7,6 @@ return [
         'name' => [
             'label' => 'Name: ',
         ],
-        'firstname' => [
-            'label' => 'Firstname: ',
-        ],
-        'username' => [
-            'label' => 'Username: ',
-        ],
         'email' => [
             'label' => 'E-mail: ',
         ],

@@ -7,10 +7,7 @@ return [
         'table_head' => [
             'title_active' => 'Usuários ativos',
             'title_trashed' => 'Usuários removidos',
-            'hash' => 'Código',
             'name' => 'Nome',
-            'firstname' => 'Primeiro nome',
-            'username' => 'Nome de usuário',
             'email' => 'E-mail',
             'role' => 'Papel',
             'actions' => 'Ações'
@@ -30,10 +27,6 @@ return [
 
         'name' => [
             'label' => 'Nome:',
-        ],
-
-        'firstname' => [
-            'label' => 'Primeiro nome:',
         ],
 
         'email' => [
