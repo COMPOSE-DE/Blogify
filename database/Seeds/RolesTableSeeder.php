@@ -9,24 +9,12 @@ class RolesTableSeeder extends Seeder
 {
     public function run()
     {
-        Role::create([
-            "hash" => blogify()->makeHash('roles', 'hash', true),
-            "name" => "Admin",
-        ]);
+        Role::create(["name" => "Admin"]);
 
-        Role::create([
-            "hash" => blogify()->makeHash('roles', 'hash', true),
-            "name" => "Author",
-        ]);
+        Role::create(["name" => "Author"]);
 
-        Role::create([
-            "hash" => blogify()->makeHash('roles', 'hash', true),
-            "name" => "Reviewer",
-        ]);
+        Role::create(["name" => "Reviewer"]);
 
-        Role::create([
-            "hash" => blogify()->makeHash('roles', 'hash', true),
-            "name" => "Member",
-        ]);
+        Role::create(["name" => "Member"]);
     }
 }

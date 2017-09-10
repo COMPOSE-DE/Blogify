@@ -12,12 +12,13 @@ class CreateRolesTable extends Migration {
      */
     public function up()
     {
-        Schema::create('roles', function($table)
-        {
-            $table->increments('id');
-            $table->string('hash', 80)->unique();
-            $table->string('name', 25)->unique();
-        });
+        if (! Schema::hasTable('roles')) {
+            Schema::create('roles', function($table)
+            {
+                $table->increments('id');
+                $table->string('name', 25)->unique();
+            });
+        }
     }
 
     /**
@@ -29,5 +30,4 @@ class CreateRolesTable extends Migration {
     {
         Schema::dropIfExists('roles');
     }
-
 }
