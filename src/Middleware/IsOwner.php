@@ -42,7 +42,7 @@ class IsOwner
      */
     public function handle($request, Closure $next)
     {
-        $user = $this->user->byHash($request->segment(3));
+        $user = $this->user->findOrFail($request->segment(3));
 
         if ($this->auth->user()->getAuthIdentifier() != $user->id) {
             abort(404);

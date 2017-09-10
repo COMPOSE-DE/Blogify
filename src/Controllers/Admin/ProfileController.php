@@ -3,10 +3,11 @@
 namespace Donatix\Blogify\Controllers\Admin;
 
 use App\User;
-use Illuminate\Contracts\Hashing\Hasher;
+use Donatix\Blogify\Middleware\IsOwner;
 use Donatix\Blogify\Requests\ProfileUpdateRequest;
-use Intervention\Image\Facades\Image;
 use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Contracts\Hashing\Hasher;
+use Intervention\Image\Facades\Image;
 use jorenvanhocht\Tracert\Tracert;
 
 class ProfileController extends BaseController
@@ -41,7 +42,7 @@ class ProfileController extends BaseController
     ) {
         parent::__construct($auth);
 
-        $this->middleware('IsOwner', ['only', 'edit']);
+        $this->middleware(IsOwner::class, ['only', 'edit']);
 
         $this->user = $user;
         $this->tracert = $tracert;
@@ -56,13 +57,11 @@ class ProfileController extends BaseController
      * @param string $hash
      * @return \Illuminate\View\View
      */
-    public function edit($hash)
+    public function edit($id)
     {
-        $data = [
-            'user' => $this->user->byHash($hash),
-        ];
+        $user = User::findOrFail($id);
 
-        return view('blogify::admin.profiles.form', $data);
+        return view('blogify::admin.profiles.form', compact('user'));
     }
 
     ///////////////////////////////////////////////////////////////////////////
