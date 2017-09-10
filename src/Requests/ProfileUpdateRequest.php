@@ -4,6 +4,7 @@ namespace Donatix\Blogify\Requests;
 
 use App\User;
 use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Validation\Rule;
 
 class ProfileUpdateRequest extends Request
 {
@@ -35,7 +36,7 @@ class ProfileUpdateRequest extends Request
      *
      * @var int|bool
      */
-    protected $user_id;
+    protected $userId;
 
     /**
      * Construct the class
@@ -56,14 +57,7 @@ class ProfileUpdateRequest extends Request
      */
     public function authorize()
     {
-        $this->hash = $this->route('profile');
-        $this->user_id = $this->getUserId();
-
-        if ($this->auth->user()->getAuthIdentifier() != $this->user_id) {
-            return false;
-        }
-
-        return true;
+        return $this->auth->user()->getAuthIdentifier() == $this->route('profile');
     }
 
     /**
@@ -73,29 +67,13 @@ class ProfileUpdateRequest extends Request
      */
     public function rules()
     {
-        $this->hash = $this->route('profile');
-        $this->user_id = $this->getUserId();
-
         return [
-            'name'                  => 'required|min:3|max:30',
-            'firstname'             => 'required|min:3|max:30',
-            'username'              => 'required|min:2|max:30',
-            'email'                 => "required|email|unique:users,email,$this->user_id",
-            'password'              => "required_with:newpassword|AuthUserPass",
-            'newpasswordconfirm'    => "required_with:newpassword|same:newpassword",
-            'profilepicture'        => 'image|max:1000',
+            'name' => 'required|min:3|max:30',
+            'email' => ['required', 'email', Rule::unique('users')->ignore($this->route('profile'))],
+            'password' => 'nullable|required_with:new_password|AuthUserPass',
+            'new_password' => 'nullable|confirmed',
+            'profilepicture' => 'image|max:1000',
         ];
-    }
-
-    /**
-     * Get the user id of the user
-     * we are trying to edit
-     *
-     * @return int|boolean
-     */
-    private function getUserId()
-    {
-        return $this->user->byHash($this->hash)->id;
     }
 
     /**

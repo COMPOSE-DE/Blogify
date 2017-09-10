@@ -28,7 +28,7 @@ class UserRequest extends Request
         }
 
         $this->rules = [
-            'role'		=> 'required|exists:roles,hash',
+            'role' => 'required|exists:roles,id',
         ];
     }
 
@@ -60,7 +60,6 @@ class UserRequest extends Request
     public function generateSpecificsArray()
     {
         $this->specifics['name'] = 'required|min:3|max:30';
-        $this->specifics['firstname'] = 'required|min:3|max:30';
         $this->specifics['email'] = 'required|email|unique:users,email';
     }
 
