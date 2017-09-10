@@ -68,7 +68,9 @@ Route::group($admin, function()
          *
          */
         Route::group(['middleware' => HasAdminRole::class], function() {
-            Route::resource('users', 'UserController', ['except' => '']);
+            Route::resource('users', 'UserController', [
+                'names' => 'admin.users'
+            ]);
             Route::get('users/overview/{trashed?}', [
                 'as' => 'admin.users.overview',
                 'uses' => 'UserController@index',
@@ -78,12 +80,14 @@ Route::group($admin, function()
                 'uses' => 'UserController@restore'
             ]);
 
-            Route::resource('categories', 'CategoriesController');
+            Route::resource('categories', 'CategoriesController', [
+                'names' => 'admin.categories'
+            ]);
             Route::get('categories/overview/{trashed?}', [
                 'as' => 'admin.categories.overview',
                 'uses' => 'CategoriesController@index',
             ]);
-            Route::get('categories/{hash}/restore', [
+            Route::get('categories/{category}/restore', [
                 'as' => 'admin.categories.restore',
                 'uses' => 'CategoriesController@restore'
             ]);
@@ -95,7 +99,8 @@ Route::group($admin, function()
          * Post routes
          */
         Route::resource('posts', 'PostsController', [
-            'except' => 'store', 'update'
+            'except' => 'store', 'update',
+            'names' => 'admin.posts'
         ]);
         Route::post('posts', [
             'as'     => 'admin.posts.store',
