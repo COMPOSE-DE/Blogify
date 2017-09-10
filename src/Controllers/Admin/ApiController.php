@@ -8,35 +8,10 @@ use Donatix\Blogify\Exceptions\BlogifyException;
 use Donatix\Blogify\Models\Post;
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Carbon\Carbon;
-use Illuminate\Contracts\Auth\Guard;
 use Donatix\Blogify\Models\Tag;
 
 class ApiController extends BaseController
 {
-
-    /**
-     * @var \Donatix\Blogify\Models\Post
-     */
-    protected $post;
-
-    /**
-     * Holds the base slug
-     *
-     * @var string
-     */
-    protected $base_slug;
-
-    /**
-     * @param \Donatix\Blogify\Models\Post $post
-     * @param \Illuminate\Contracts\Auth\Guard $auth
-     */
-    public function __construct(Post $post, Guard $auth)
-    {
-        parent::__construct($auth);
-
-        $this->post = $post;
-    }
-
     /**
      * Order the data of a given table on the given column
      * and the given order
@@ -86,11 +61,11 @@ class ApiController extends BaseController
     public function checkIfSlugIsUnique($slug)
     {
         $i = 0;
-        $this->base_slug = $slug;
+        $baseSlug = $slug;
 
-        while ($this->post->whereSlug($slug)->get()->count() > 0) {
+        while (Post::whereSlug($slug)->get()->count() > 0) {
             $i++;
-            $slug = "$this->base_slug-$i";
+            $slug = "$baseSlug-$i";
         }
 
         return $slug;
@@ -120,13 +95,11 @@ class ApiController extends BaseController
     }
 
     /**
-     * @param $hash
      * @param \Donatix\Blogify\Models\Tag $tag
      * @return mixed
      */
-    public function getTag($hash, Tag $tag)
+    public function getTag(Tag $tag)
     {
-        return $tag->byHash($hash);
+        return $tag;
     }
-
 }
