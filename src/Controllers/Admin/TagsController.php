@@ -2,152 +2,56 @@
 
 namespace Donatix\Blogify\Controllers\Admin;
 
-use Input;
 use Donatix\Blogify\Blogify;
 use Donatix\Blogify\Models\Tag;
+use Illuminate\Http\Request;
 use Donatix\Blogify\Requests\TagUpdateRequest;
 use jorenvanhocht\Tracert\Tracert;
-use Request;
-use Illuminate\Contracts\Auth\Guard;
 
 class TagsController extends BaseController
 {
 
-    /**
-     * @var \Donatix\Blogify\Models\Tag
-     */
-    protected $tag;
-
-    /**
-     * Holds the submitted tags
-     *
-     * @var array
-     */
-    protected $tags = [];
-
-    /**
-     * Hols the tags that are successfully added
-     *
-     * @var array
-     */
-    protected $stored_tags = [];
-
-    /**
-     * @var \Donatix\Blogify\Blogify
-     */
-    protected $blogify;
-
-    /**
-     * @var \Donatix\Tracert\Tracert
-     */
-    protected $tracert;
-
-    /**
-     * @param \Donatix\Blogify\Models\Tag $tag
-     * @param \Illuminate\Contracts\Auth\Guard $auth
-     * @param \Donatix\Blogify\Blogify $blogify
-     * @param \Donatix\Tracert\Tracert $tracert
-     */
-    public function __construct(
-        Tag $tag,
-        Guard $auth,
-        Blogify $blogify,
-        Tracert $tracert
-    ) {
-        parent::__construct($auth);
-
-        $this->tag = $tag;
-        $this->blogify = $blogify;
-        $this->tracert = $tracert;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////
-    // View methods
-    ///////////////////////////////////////////////////////////////////////////
-
-    /**
-     * @param string $trashed
-     * @return \Illuminate\View\View
-     */
     public function index($trashed = null)
     {
-        $data = [
-            'tags' => (! $trashed) ?
-                $this->tag->orderBy('created_at', 'DESC')
-                    ->paginate($this->config->items_per_page)
-                :
-                $this->tag->onlyTrashed()
-                    ->orderBy('created_at', 'DESC')
-                    ->paginate($this->config->items_per_page),
-            'trashed' => $trashed,
-        ];
+        $q = Tag::orderBy('created_at', 'DESC');
+        if ($trashed) {
+            $q->onlyTrashed();
+        }
 
-        return view('blogify::admin.tags.index', $data);
+        $tags = $q->paginate($this->config->items_per_page);
+
+        return view('blogify::admin.tags.index', compact('tags', 'trashed'));
     }
 
-    /**
-     * @return \Illuminate\View\View
-     */
     public function create()
     {
         return view('blogify::admin.tags.form');
     }
 
-    /**
-     * @param $hash
-     * @return \Illuminate\View\View
-     */
-    public function edit($hash)
+    public function edit(Tag $tag)
     {
-        $data = [
-            'tag' => $this->tag->byHash($hash),
-        ];
-
-        return view('blogify::admin.tags.form', $data);
+        return view('blogify::admin.tags.form', compact('tag'));
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // CRUD methods
-    ///////////////////////////////////////////////////////////////////////////
-
-    /**
-     * @return $this|array|\Illuminate\Http\RedirectResponse
-     */
-    public function storeOrUpdate()
+    public function storeOrUpdate(Request $request)
     {
-        // prepare submitted tag(s)
-        $this->fillTagsArray();
-        $this->deleteSpacesAtTheBeginningAndEnd();
+        $tags = collect(explode(',', $request->get('tags')))->map(function ($tag) {
+            return trim($tag);
+        });
 
-        // validate tag(s)
-        $validation = $this->tag->validate($this->tags);
-        if ($validation->fails()) {
-            $data = [
-                'passed' => false,
-                'messages' => $validation->messages(),
-            ];
-
-            if (Request::ajax()) {
-                return $data;
-            }
-
-            return redirect()->back()->withErrors($validation->messages())->withInput();
-        }
-
-        // store or update the tag in the db
-        $this->storeOrUpdateTags();
-
-        $data = ['passed' => true, 'tags' => $this->stored_tags];
-        if (Request::ajax()) {
-            return $data;
-        }
-
-        $message = trans('blogify::notify.success', [
-            'model' => 'Tags',
-            'name' => $this->getTagNames(),
-            'action' =>'created'
+        $request->replace(['tags' => $tags->all()]);
+        $this->validate($request, [
+            'tags' => 'required|array',
+            'tags.*' => 'required|min:2|max:45'
         ]);
-        session()->flash('notify', ['success', $message]);
+
+        $storedTags = Tag::fromArray($tags);
+
+        if ($request->wantsJson()) {
+            return response()->json(['passed' => true, 'tags' => $storedTags], 201);
+        }
+
+        $this->flashSuccess($tags->implode(','), 'created');
 
         return redirect()->route('admin.tags.index');
     }
@@ -157,37 +61,22 @@ class TagsController extends BaseController
      * @param \Donatix\Blogify\Requests\TagUpdateRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update($hash, TagUpdateRequest $request)
+    public function update(Tag $tag, TagUpdateRequest $request)
     {
-        $tag = $this->tag->byHash($hash);
         $tag->name = $request->tags;
         $tag->save();
 
-        $this->tracert->log('tags', $tag->id, $this->auth_user->id, 'update');
-
-        $message = trans('blogify::notify.success', [
-            'model' => 'Tags', 'name' => $tag->name, 'action' =>'updated'
-        ]);
-        session()->flash('notify', ['success', $message]);
+        $this->flashSuccess($tag->name, 'updated');
 
         return redirect()->route('admin.tags.index');
     }
 
-    /**
-     * @param string $hash
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function destroy($hash)
+    public function destroy(Tag $tag)
     {
-        $tag = $this->tag->byHash($hash);
+        $tagName = $tag->name;
         $tag->delete();
 
-        $this->tracert->log('tags', $tag->id, $this->auth_user->id, 'delete');
-
-        $message = trans('blogify::notify.success', [
-            'model' => 'Tags', 'name' => $tag->name, 'action' =>'deleted'
-        ]);
-        session()->flash('notify', ['success', $message]);
+        $this->flashSuccess($tagName, 'deleted');
 
         return redirect()->route('admin.tags.index');
     }
@@ -198,75 +87,19 @@ class TagsController extends BaseController
      */
     public function restore($hash)
     {
-        $tag = $this->tag->withTrashed()->byHash($hash);
+        $tag = Tag::withTrashed()->byHash($hash);
         $tag->restore();
 
-        $message = trans('blogify::notify.success', [
-            'model' => 'Tag', 'name' => $tag->name, 'action' =>'restored'
-        ]);
-        session()->flash('notify', ['success', $message]);
+        $this->flashSuccess($tag->name, 'restored');
 
         return redirect()->route('admin.tags.index');
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Helper methods
-    ///////////////////////////////////////////////////////////////////////////
-
-    /**
-     * @return void
-     */
-    private function fillTagsArray()
+    private function flashSuccess($name, $action)
     {
-        $tags = Input::get('tags');
-        $this->tags = explode(',', $tags);
-    }
-
-    /**
-     * @return void
-     */
-    private function deleteSpacesAtTheBeginningAndEnd()
-    {
-        foreach ($this->tags as $key => $tag) {
-            $this->tags[$key] = trim($tag);
-        }
-    }
-
-    /**
-     * @return void
-     */
-    private function storeOrUpdateTags()
-    {
-        foreach ($this->tags as $tag_name) {
-            $t = $this->tag->whereName($tag_name)->first();
-
-            if (count($t) > 0) {
-                $tag = $t;
-            } else {
-                $tag = new Tag;
-                $tag->hash = str_random();
-                // $tag->hash = $this->blogify->makeHash('tags', 'hash', true);
-            }
-
-            $tag->name = $tag_name;
-
-            $tag->save();
-            array_push($this->stored_tags, $tag);
-            $this->tracert->log('tags', $tag->id, $this->auth_user->id);
-        }
-    }
-
-    /**
-     * @return string
-     */
-    private function getTagNames()
-    {
-        $tags = '';
-
-        foreach ($this->stored_tags as $tag) {
-            $tags .= $tag->name.', ';
-        }
-
-        return $tags;
+        $message = trans('blogify::notify.success', [
+            'model' => 'Tag', 'name' => $name, 'action' => $action
+        ]);
+        session()->flash('notify', ['success', $message]);
     }
 }

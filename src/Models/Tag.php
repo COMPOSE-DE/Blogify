@@ -8,59 +8,23 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Tag extends BaseModel
 {
-
     use SoftDeletes;
 
-    /**
-     * The database table used by the model
-     *
-     * @var string
-     */
-    protected $table = 'tags';
-
-    /**
-     * The attributes that are mass assignable
-     *
-     * @var array
-     */
-    protected $fillable = [];
-
-    /**
-     * Set or unset the timestamps for the model
-     *
-     * @var bool
-     */
-    public $timestamps = true;
-
-    /**
-     * @param $tags
-     * @return \Illuminate\Validation\Validator
-     */
-    public function validate($tags)
+    public function getRouteKeyName()
     {
-        $rules = [];
-        $messages = [
-            'required'  => trans('blogify::posts.validation.required'),
-            'min'       => trans('blogify::posts.validation.min'),
-            'max'       => trans('blogify::posts.validation.max'),
-        ];
-
-        foreach ($tags as $key => $tag) {
-            $rules[$key] = 'required|min:2|max:45';
-        }
-
-        return Validator::make($tags, $rules, $messages);
+        return 'hash';
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Relationships
-    |--------------------------------------------------------------------------
-    |
-    | For more information pleas check out the official Laravel docs at
-    | http://laravel.com/docs/5.0/eloquent#relationships
-    |
-    */
+    public static function fromArray($tags)
+    {
+        $tags->reject(function($tag) {
+            return static::where('name', $tag)->exists();
+        })->map(function($tag) {
+            return static::create([
+                'name' => $tag, 'hash' => str_random()
+            ]);
+        });
+    }
 
     public function post()
     {
