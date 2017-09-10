@@ -3,35 +3,26 @@
 namespace Donatix\Blogify\Controllers\Admin;
 
 use Donatix\Blogify\Controllers\Admin;
-use Illuminate\Contracts\Auth\Guard;
 
 class BaseController extends Controller
 {
-    /**
-     * @var \Illuminate\Contracts\Auth\Guard
-     */
-    protected $auth;
-
-    /**
-     * Holds the logged in user
-     *
-     * @var bool|\Illuminate\Contracts\Auth\Authenticatable|null
-     */
+    protected $user;
     protected $auth_user;
 
-    /**
-     * @var \Illuminate\Support\Facades\Config
-     */
     protected $config;
 
-    /**
-     * @param \Illuminate\Contracts\Auth\Guard $auth
-     */
-    public function __construct(Guard $auth)
+    public function __construct()
     {
-        $this->auth = $auth;
         $this->config = objectify(config('blogify'));
-        $this->auth_user = $this->auth->check() ? $this->auth->user() : false;
-    }
 
+        $this->middleware(function ($request, $next) {
+            $this->user = $request->user();
+            view()->share('_user', $this->user);
+
+            // should be removed
+            $this->auth_user = $this->user;
+
+            return $next($request);
+        });
+    }
 }
