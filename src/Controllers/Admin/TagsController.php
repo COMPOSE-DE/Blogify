@@ -95,11 +95,8 @@ class TagsController extends BaseController
         return redirect()->route('admin.tags.index');
     }
 
-    private function flashSuccess($name, $action)
+    protected function flashSuccess($name, $action, $model = '')
     {
-        $message = trans('blogify::notify.success', [
-            'model' => 'Tag', 'name' => $name, 'action' => $action
-        ]);
-        session()->flash('notify', ['success', $message]);
+        parent::flashSuccess($name, $action, 'Tag');
     }
 }
