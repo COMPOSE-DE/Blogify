@@ -68,29 +68,14 @@ Trait BlogifyUserTrait
 
     public function scopeReviewers($query)
     {
-        $reviewer_role_id = Role::whereName('Reviewer')->first()->id;
-        $admin_role_id = Role::whereName('Admin')->first()->id;
+        $reviewer_role_id = Role::whereName('reviewer')->first()->id;
+        $admin_role_id = Role::whereName('admin')->first()->id;
 
         return $query->where(function($q) use ($reviewer_role_id, $admin_role_id)
         {
             $q->whereRoleId($reviewer_role_id)
                 ->orWhere('role_id', '=', $admin_role_id);
         })->where('id', '<>', Auth::user()->id)->get();
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Accessors
-    |--------------------------------------------------------------------------
-    |
-    | For more information pleas check out the official Laravel docs at
-    | http://laravel.com/docs/master/eloquent#accessors-and-mutators
-    |
-    */
-
-    public function getFullNameAttribute()
-    {
-        return $this->attributes['firstname'].' '.$this->attributes['lastname'];
     }
 }
 

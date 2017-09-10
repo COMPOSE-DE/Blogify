@@ -61,7 +61,7 @@ class CanEditPost
         if (
             $user_id != $post->user_id &&
             $user_id != $post->reviewer_id &&
-            $this->auth->user()->role->name != 'Admin'
+            $this->auth->user()->role->name != 'admin'
         ) {
             return false;
         }

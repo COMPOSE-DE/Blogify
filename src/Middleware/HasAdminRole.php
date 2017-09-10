@@ -34,7 +34,7 @@ class HasAdminRole
      */
     public function handle($request, Closure $next)
     {
-        if ($this->auth->user()->role->name != 'Admin') {
+        if ($this->auth->user()->role->name != 'admin') {
             return redirect()->route('admin.dashboard');
         }
 
