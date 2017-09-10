@@ -28,7 +28,7 @@ class UsersTableSeeder extends Seeder
     {
         $this->admin = config('blogify.admin_user');
 
-        $role = Role::where('name', '=', 'Admin')->first();
+        $role = Role::where('name', 'Admin')->first();
         $this->admin_role = $role->id;
     }
 
@@ -40,8 +40,6 @@ class UsersTableSeeder extends Seeder
             'email' => $this->admin['email'],
             'password' => Hash::make($this->admin['password']),
             'role_id' => $this->admin_role,
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now()
         ]);
     }
 }
