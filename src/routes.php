@@ -36,47 +36,19 @@ if ($use_default_routes) {
         ]);
     });
 }
-///////////////////////////////////////////////////////////////////////////
-// Logged in user routes
-///////////////////////////////////////////////////////////////////////////
-
-Route::group(['prefix' => 'auth'], function()
-{
-
-    Route::group(['middleware' => 'auth|web'], function()
-    {
-
-    });
-
-});
-
 
 ///////////////////////////////////////////////////////////////////////////
 // Admin routes
 ///////////////////////////////////////////////////////////////////////////
 
 $admin = [
-    'prefix'    => 'admin',
-    'namespace' =>'Donatix\Blogify\Controllers\Admin',
-    'middleware' => 'web',
+    'prefix' => 'admin',
+    'namespace' => 'Donatix\Blogify\Controllers\Admin',
+    'middleware' => ['web', 'auth'],
 ];
-
 
 Route::group($admin, function()
 {
-    Route::group(['middleware' => 'BlogifyGuest'], function() {
-        // Login
-        Route::get('login', [
-            'as'    =>  'admin.login',
-            'uses'  =>  'AuthController@index'
-        ]);
-
-        Route::post('login/post', [
-            'as'    =>  'admin.login.post',
-            'uses'  =>  'AuthController@login'
-        ]);
-    });
-
     Route::group(['middleware' => BlogifyAdminAuthenticate::class], function()
     {
         // Dashboard
@@ -148,7 +120,8 @@ Route::group($admin, function()
 
         Route::group(['middleware' => HasAdminOrAuthorRole::class], function() {
             Route::resource('tags', 'TagsController', [
-                'except'    => 'store'
+                'except'    => 'store',
+                'names'      => 'admin.tags'
             ]);
             Route::post('tags', [
                 'as'    => 'admin.tags.store',
@@ -158,7 +131,7 @@ Route::group($admin, function()
                 'as'    => 'admin.tags.overview',
                 'uses'  => 'TagsController@index',
             ]);
-            Route::get('tags/{hash}/restore', [
+            Route::get('tags/{tag}/restore', [
                 'as' => 'admin.tags.restore',
                 'uses' => 'TagsController@restore'
             ]);
