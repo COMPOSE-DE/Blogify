@@ -461,8 +461,8 @@ class PostsController extends BaseController
         $post->content = $this->data->post;
         $post->status_id = $this->status->byHash($this->data->status)->id;
         $post->publish_date = $this->data->publishdate;
-        $post->user_id = $this->user->byHash($this->auth_user->hash)->id;
-        $post->reviewer_id = $this->user->byHash($this->data->reviewer)->id;
+        $post->user_id = $this->user->find($this->auth_user->id)->id;
+        $post->reviewer_id = $this->user->find($this->data->reviewer)->id;
         $post->visibility_id = $this->visibility->byHash($this->data->visibility)->id;
         $post->category_id = $this->category->byHash($this->data->category)->id;
         $post->being_edited_by = null;
@@ -512,7 +512,7 @@ class PostsController extends BaseController
         $post['publish_date'] = $cached_post['publishdate'];
         $post['status_id'] = $this->status->byHash($cached_post['status'])->id;
         $post['visibility_id'] = $this->visibility->byHash($cached_post['visibility'])->id;
-        $post['reviewer_id'] = $this->user->byHash($cached_post['reviewer'])->id;
+        $post['reviewer_id'] = $this->user->find($cached_post['reviewer'])->id;
         $post['category_id'] = $this->category->byHash($cached_post['category'])->id;
         $post['tag'] = $this->buildTagsArrayForPostObject($cached_post['tags']);
 
