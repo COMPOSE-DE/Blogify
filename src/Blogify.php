@@ -46,30 +46,4 @@ class Blogify
 
         return $hash;
     }
-
-    /**
-     * Generate a unique username with the users
-     * lastname and firstname
-     *
-     * @param $lastname
-     * @param $firstname
-     * @param int $iteration
-     * @return string
-     */
-    public function generateUniqueUsername($lastname, $firstname, $iteration = 0)
-    {
-        $username = strtolower(str_replace(' ', '', $lastname).substr($firstname, 0, 1));
-
-        if ($iteration != 0) {
-            $username = $username.$iteration;
-        }
-
-        $usernames = count($this->db->table('users')->where('username', '=', $username)->get());
-
-        if ($usernames > 0) {
-            return $this->generateUniqueUsername($lastname, $firstname, $iteration + 1);
-        }
-
-        return $username;
-    }
 }
