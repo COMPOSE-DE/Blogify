@@ -3,60 +3,23 @@
 namespace Donatix\Blogify\Controllers\Admin;
 
 use App\User;
+use Donatix\Blogify\Config;
 use Donatix\Blogify\Middleware\IsOwner;
 use Donatix\Blogify\Requests\ProfileUpdateRequest;
-use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Contracts\Hashing\Hasher;
 use Intervention\Image\Facades\Image;
-use jorenvanhocht\Tracert\Tracert;
 
 class ProfileController extends BaseController
 {
-
-    /**
-     * @var \App\User
-     */
     protected $user;
 
-    /**
-     * @var \Donatix\Tracert\Tracert
-     */
-    protected $tracert;
-
-    /**
-     * @var \Illuminate\Contracts\Hashing\Hasher
-     */
-    protected $hash;
-
-    /**
-     * @param \App\User $user
-     * @param \Illuminate\Contracts\Auth\Guard $auth
-     * @param \Donatix\Tracert\Tracert $tracert
-     * @param \Illuminate\Contracts\Hashing\Hasher $hash
-     */
-    public function __construct(
-        User $user,
-        Guard $auth,
-        Tracert $tracert,
-        Hasher $hash
-    ) {
-        parent::__construct($auth);
+    public function __construct(User $user) {
+        parent::__construct();
 
         $this->middleware(IsOwner::class, ['only', 'edit']);
 
         $this->user = $user;
-        $this->tracert = $tracert;
-        $this->hash = $hash;
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // View methods
-    ///////////////////////////////////////////////////////////////////////////
-
-    /**
-     * @param string $hash
-     * @return \Illuminate\View\View
-     */
     public function edit($id)
     {
         $user = User::findOrFail($id);
@@ -64,25 +27,15 @@ class ProfileController extends BaseController
         return view('blogify::admin.profiles.form', compact('user'));
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // CRUD methods
-    ///////////////////////////////////////////////////////////////////////////
-
-    /**
-     * @param string $hash
-     * @param \Donatix\Blogify\Requests\ProfileUpdateRequest $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function update($hash, ProfileUpdateRequest $request)
+    public function update(ProfileUpdateRequest $request, $id)
     {
-        $user = $this->user->byHash($hash);
-        $user->lastname = $request->name;
-        $user->firstname = $request->firstname;
-        $user->username = $request->username;
-        $user->email = $request->email;
+        $user = User::findOrFail($id);
 
-        if ($request->has('newpassword')) {
-            $user->password = $this->hash->make($request->newpassword);
+        $user->name = $request->get('name');
+        $user->email = $request->get('email');
+
+        if ($request->has('new_password')) {
+            $user->password = bcrypt($request->new_password);
         }
 
         if ($request->hasFile('profilepicture')) {
@@ -91,12 +44,7 @@ class ProfileController extends BaseController
 
         $user->save();
 
-        $this->tracert->log('users', $user->id, $this->auth_user->id, 'update');
-
-        $message = trans('blogify::notify.success', [
-            'model' => 'User', 'name' => $user->fullName, 'action' =>'updated'
-        ]);
-        session()->flash('notify', ['success', $message]);
+        $this->flashSuccess($user->name, 'updated');
 
         return redirect()->route('admin.dashboard');
     }
@@ -159,4 +107,8 @@ class ProfileController extends BaseController
         }
     }
 
+    protected function flashSuccess($name, $action, $model = '')
+    {
+        parent::flashSuccess($name, $action, 'User');
+    }
 }
