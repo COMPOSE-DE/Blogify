@@ -29,39 +29,22 @@ class Blogify
     /**
      * @param null $table
      * @param null $field
-     * @param bool $unique_in_table
-     * @param int $min_length
-     * @param int $max_length
+     * @param bool $unique
+     * @param int $min
+     * @param int $max
      * @return string
      */
-    public function makeHash(
-        $table = null,
-        $field = null,
-        $unique_in_table = false,
-        $min_length = 5,
-        $max_length = 10
-    ) {
-        $hash = '';
-        $charset = $this->char_sets[($unique_in_table) ? 'hash' : 'password'];
-
-        // Generate a random length for the hash between the given min and max length
-        $rand = rand($min_length, $max_length);
-
-        for ($i = 0; $i < $rand; $i++) {
-            $char = rand(0, strlen($charset));
-
-            // When it's not the first char from the char_set make $minus equal to 1
-            $minus = $char != 0 ? 1 : 0;
-
-            // Add the character to the hash
-            $hash .= $charset[$char - $minus];
+    public function makeHash($table = null, $field = null, $unique = false, $min = 5, $max = 10)
+    {
+        if (! $unique) {
+            return str_random(rand($min, $max));
         }
 
-        if ($unique_in_table) {
-            return $this->checkIfHashIsUnique($table, $field, $hash, $min_length, $max_length);
-        } else {
-            return $hash;
-        }
+       do {
+            $hash = str_random(rand($min, $max));
+        } while($this->db->table($table)->where($field, '=', $hash)->exists());
+
+        return $hash;
     }
 
     /**
@@ -89,26 +72,4 @@ class Blogify
 
         return $username;
     }
-
-    ///////////////////////////////////////////////////////////////////////////
-    // Helper methods
-    ///////////////////////////////////////////////////////////////////////////
-
-    /**
-     * @param $table
-     * @param $field
-     * @param $hash
-     * @param $min_length
-     * @param $max_length
-     * @return string
-     */
-    private function checkIfHAshIsUnique($table, $field, $hash, $min_length, $max_length)
-    {
-        if (! $this->db->table($table)->where($field, '=', $hash)->get()) {
-            return $hash;
-        } else {
-            return $this->makeHash($table, $field, true, $min_length, $max_length);
-        }
-    }
-
 }
