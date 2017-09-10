@@ -25,4 +25,12 @@ class BaseController extends Controller
             return $next($request);
         });
     }
+
+    protected function flashSuccess($name, $action, $model = '')
+    {
+        $message = trans('blogify::notify.success', [
+            'model' => $model, 'name' => $name, 'action' => $action
+        ]);
+        session()->flash('notify', ['success', $message]);
+    }
 }
