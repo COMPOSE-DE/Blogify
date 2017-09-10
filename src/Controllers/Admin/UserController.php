@@ -8,7 +8,6 @@ use Donatix\Blogify\Requests\UserRequest;
 use App\User;
 use Illuminate\Contracts\Hashing\Hasher as Hash;
 use Donatix\Blogify\Services\BlogifyMailer;
-use Illuminate\Contracts\Auth\Guard;
 use jorenvanhocht\Tracert\Tracert;
 
 class UserController extends BaseController
@@ -29,63 +28,23 @@ class UserController extends BaseController
      */
     protected $mail;
 
-    /**
-     * @var \Illuminate\Contracts\Hashing\Hasher
-     */
-    protected $hash;
-
-    /**
-     * @var \Donatix\Blogify\Blogify
-     */
-    protected $blogify;
-
-    /**
-     * @param \App\User $user
-     * @param \Donatix\Blogify\Models\Role $role
-     * @param \Donatix\Blogify\Services\BlogifyMailer $mail
-     * @param \Illuminate\Contracts\Hashing\Hasher $hash
-     * @param \Illuminate\Contracts\Auth\Guard $auth
-     * @param \Donatix\Blogify\Blogify $blogify
-     * @param \Donatix\Tracert\Tracert $tracert
-     */
-    public function __construct(
-        User $user,
-        Role $role,
-        BlogifyMailer $mail,
-        Hash $hash,
-        Guard $auth,
-        Blogify $blogify,
-        Tracert $tracert
-    ) {
-        parent::__construct($auth);
+    public function __construct(User $user, Role $role, BlogifyMailer $mail) {
+        parent::__construct();
 
         $this->user = $user;
         $this->role = $role;
         $this->mail = $mail;
-        $this->hash = $hash;
-        $this->blogify = $blogify;
-        $this->tracert = $tracert;
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // View methods
-    ///////////////////////////////////////////////////////////////////////////
-
-    /**
-     * @param bool $trashed
-     * @return \Illuminate\View\View
-     */
     public function index($trashed = false)
     {
         $data = [
             'users' => (! $trashed) ?
                     $this->user
-                        ->orderBy('lastname', 'ASC')
                         ->paginate($this->config->items_per_page)
                     :
                     $this->user
                         ->onlyTrashed()
-                        ->orderBy('name', 'ASC')
                         ->paginate($this->config->items_per_page),
             'trashed' => $trashed,
         ];
@@ -93,114 +52,56 @@ class UserController extends BaseController
         return view('blogify::admin.users.index', $data);
     }
 
-    /**
-     * @return \Illuminate\View\View
-     */
     public function create()
     {
-        $data = [
-            'roles' => $this->role->all(),
-        ];
+        $roles = $this->role->all();
 
-        return view('blogify::admin.users.form', $data);
+        return view('blogify::admin.users.form', compact('roles'));
     }
 
-    /**
-     * @param string $hash
-     * @return \Illuminate\View\View
-     */
-    public function edit($hash)
+    public function edit(User $user)
     {
-        $data = [
-            'roles' => $this->role->all(),
-            'user'  => $this->user->byHash($hash),
-        ];
+        $roles = $this->role->all();
 
-        return view('blogify::admin.users.form', $data);
+        return view('blogify::admin.users.form', compact('roles', 'user'));
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // CRUD methods
-    ///////////////////////////////////////////////////////////////////////////
-
-    /**
-     * @param \Donatix\Blogify\Requests\UserRequest $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function store(UserRequest $request)
     {
-        $data = $this->storeOrUpdateUser($request);
-        $user = $data['user'];
-        $mail_data = [
-            'user'      => $data['user'],
-            'password'  => $data['password'],
-        ];
+        $data = $this->createUser($request);
+        $this->mail->mailPassword($data['user']->email, 'Blogify temperary password', $data);
 
-        $this->mail->mailPassword($user->email, 'Blogify temperary password', $mail_data);
-
-        $this->tracert->log('users', $user->id, $this->auth_user->id);
-
-        $message = trans('blogify::notify.success', [
-            'model' => 'User', 'name' => $user->fullName, 'action' =>'created'
-        ]);
-        session()->flash('notify', ['success', $message]);
+        $this->flashSuccess($data['user']->name, 'created');
 
         return redirect()->route('admin.users.index');
     }
 
-    /**
-     * @param \Donatix\Blogify\Requests\UserRequest $request
-     * @param string $hash
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function update(UserRequest $request, $hash)
+    public function update(UserRequest $request, User $user)
     {
-        $data = $this->storeOrUpdateUser($request, $hash);
-        $user = $data['user'];
-        $message = trans('blogify::notify.success', [
-            'model' => 'User',
-            'name' => $user->firstname.' '.$user->name,
-            'action' =>'updated'
-        ]);
+        $user->role_id = $request->get('role');
+        $user->save();
 
-        $this->tracert->log('users', $user->id, $this->auth_user->id, 'update');
+        $this->flashSuccess($user->name, 'updated');
 
-        session()->flash('notify', ['success', $message]);
         return redirect()->route('admin.users.index');
     }
 
-    /**
-     * @param string $hash
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function destroy($hash)
+    public function destroy(User $user)
     {
-        $user = $this->user->byHash($hash);
+        $username = $user->name;
         $user->delete();
 
-        $this->tracert->log('users', $user->id, $this->auth_user->id, 'delete');
-
-        $message = trans('blogify::notify.success', [
-            'model' => 'User', 'name' => $user->fullName, 'action' =>'deleted'
-        ]);
-        session()->flash('notify', ['success', $message]);
+        $this->flashSuccess($username, 'deleted');
 
         return redirect()->route('admin.users.index');
     }
 
-    /**
-     * @param string $hash
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function restore($hash)
+    public function restore($id)
     {
-        $user = $this->user->withTrashed()->byHash($hash);
+        $user = $this->user->withTrashed()->find($id);
         $user->restore();
 
-        $message = trans('blogify::notify.success', [
-            'model' => 'Post', 'name' => $user->fullName, 'action' =>'restored'
-        ]);
-        session()->flash('notify', ['success', $message]);
+        $this->flashSuccess($user->name, 'restored');
 
         return redirect()->route('admin.users.index');
     }
@@ -211,29 +112,23 @@ class UserController extends BaseController
 
     /**
      * @param \Donatix\Blogify\Requests\UserRequest $data
-     * @param string $hash
+     * @param string $id
      * @return array
      */
-    private function storeOrUpdateUser($data, $hash = null)
+    private function createUser($request)
     {
-        $password = null;
+        $password = str_random(8);
+        $user = Role::find($request->role)->createUser([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($password),
+        ]);
 
-        if (! isset($hash)) {
-            $password = $this->blogify->makeHash();
-            $user = new User;
-            $user->hash = $this->blogify->makeHash('users', 'hash', true);
-            $user->password = $this->hash->make($password);
-            $user->username = $this->blogify->generateUniqueUsername($data->name, $data->firstname);
-            $user->lastname = $data->name;
-            $user->firstname = $data->firstname;
-            $user->email = $data->email;
-        } else {
-            $user = $this->user->byHash($hash);
-        }
+        return compact('user', 'password');
+    }
 
-        $user->role_id = $this->role->byHash($data->role)->id;
-        $user->save();
-
-        return ['user' => $user, 'password' => $password];
+    protected function flashSuccess($name, $action, $model = '')
+    {
+        parent::flashSuccess($name, $action, 'User');
     }
 }
