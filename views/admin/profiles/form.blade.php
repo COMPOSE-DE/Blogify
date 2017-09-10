@@ -4,33 +4,15 @@
 
 @include('blogify::admin.snippets.validation-errors')
 
-    {!! Form::open( [ 'route' => ['admin.profile.update', $user->hash], 'files' => true ] ) !!}
+    {!! Form::open( [ 'route' => ['admin.profile.update', $user->id], 'files' => true ] ) !!}
     {!! Form::hidden('_method', 'put') !!}
-    {!! Form::hidden('hash', $user->hash) !!}
+    {!! Form::hidden('id', $user->id) !!}
     <div class="row form-group {{ $errors->has('name') ? 'has-error' : '' }}">
         <div class="col-sm-2">
             {!! Form::label('name', trans("blogify::profiles.form.name.label") ) !!}
         </div>
         <div class="col-sm-10">
-            {!! Form::text('name', isset($user) ? $user->lastname : '', ['class' => 'form-control form-small' ]) !!}
-        </div>
-    </div>
-
-    <div class="row form-group {{ $errors->has('firstname') ? 'has-error' : '' }}">
-        <div class="col-sm-2">
-            {!! Form::label('firstname', trans("blogify::profiles.form.firstname.label") ) !!}
-        </div>
-        <div class="col-sm-10">
-            {!! Form::text('firstname', isset($user) ? $user->firstname : '', ['class' => 'form-control form-small']) !!}
-        </div>
-    </div>
-
-    <div class="row form-group {{ $errors->has('username') ? 'has-error' : '' }}">
-        <div class="col-sm-2">
-            {!! Form::label('username', trans("blogify::profiles.form.username.label") ) !!}
-        </div>
-        <div class="col-sm-10">
-            {!! Form::text('username', isset($user) ? $user->username : '', ['class' => 'form-control form-small']) !!}
+            {!! Form::text('name', isset($user) ? $user->name : '', ['class' => 'form-control form-small' ]) !!}
         </div>
     </div>
 
@@ -52,21 +34,21 @@
         </div>
     </div>
 
-    <div class="row form-group {{ $errors->has('newpassword') ? 'has-error' : '' }}">
+    <div class="row form-group {{ $errors->has('new_password') ? 'has-error' : '' }}">
         <div class="col-sm-2">
-            {!! Form::label('newpassword', trans("blogify::profiles.form.newpassword.label") ) !!}
+            {!! Form::label('new_password', trans("blogify::profiles.form.newpassword.label") ) !!}
         </div>
         <div class="col-sm-10">
-            {!! Form::password('newpassword', ['class' => 'form-control form-small']) !!}
+            {!! Form::password('new_password', ['class' => 'form-control form-small']) !!}
         </div>
     </div>
 
-    <div class="row form-group {{ $errors->has('newpasswordconfirm') ? 'has-error' : '' }}">
+    <div class="row form-group {{ $errors->has('new_password_confirmation') ? 'has-error' : '' }}">
         <div class="col-sm-2">
-            {!! Form::label('newpasswordconfirm', trans("blogify::profiles.form.newpasswordconfirm.label") ) !!}
+            {!! Form::label('new_password_confirmation', trans("blogify::profiles.form.newpasswordconfirm.label") ) !!}
         </div>
         <div class="col-sm-10">
-            {!! Form::password('newpasswordconfirm', ['class' => 'form-control form-small']) !!}
+            {!! Form::password('new_password_confirmation', ['class' => 'form-control form-small']) !!}
         </div>
     </div>
 

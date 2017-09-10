@@ -1,6 +1,6 @@
 <h1>Blogify password</h1>
 <p>
-    Hello {{ $data['user']->firstname }},
+    Hello {{ $data['user']->name }},
 </p>
 <p>
     An account for you has been created. You can sign in with your e-mail adress {{ $data['user']->email }}

@@ -8,7 +8,7 @@ $editable = (isset($user)) ? "disabled" : null;
 @include('blogify::admin.snippets.validation-errors')
 
 @if ( isset($user) )
-    {!! Form::open( [ 'route' => ['admin.users.update', $user->hash] ] ) !!}
+    {!! Form::open( [ 'route' => ['admin.users.update', $user->id] ] ) !!}
     {!! Form::hidden('_method', 'put') !!}
 @else
     {!! Form::open( [ 'route' => 'admin.users.store' ] ) !!}
@@ -19,15 +19,6 @@ $editable = (isset($user)) ? "disabled" : null;
         </div>
         <div class="col-sm-10">
             {!! Form::text('name', isset($user) ? $user->name : '', ['class' => 'form-control form-small', $editable ]) !!}
-        </div>
-    </div>
-
-    <div class="row form-group {{ $errors->has('firstname') ? 'has-error' : '' }}">
-        <div class="col-sm-2">
-            {!! Form::label('firstname', trans("blogify::users.form.firstname.label") ) !!}
-        </div>
-        <div class="col-sm-10">
-            {!! Form::text('firstname', isset($user) ? $user->firstname : '', ['class' => 'form-control form-small', $editable]) !!}
         </div>
     </div>
 
@@ -47,7 +38,7 @@ $editable = (isset($user)) ? "disabled" : null;
         <div class="col-sm-10">
             <select name="role" class="form-control form-small">
                 @foreach ($roles as $role)
-                    <option value="{!! $role->hash !!}" {{ ( isset($user) && $role->id == $user->role_id ) ? 'selected' : '' }}>{!! $role->name !!}</option>
+                    <option value="{!! $role->id !!}" {{ ( isset($user) && $role->id == $user->role_id ) ? 'selected' : '' }}>{!! $role->name !!}</option>
                 @endforeach
             </select>
         </div>

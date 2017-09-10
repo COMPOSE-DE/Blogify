@@ -1,7 +1,7 @@
 <h1>You are asigned to review a post</h1>
 
 <p>
-    Hello {{ $data['reviewer']->firstname }},
+    Hello {{ $data['reviewer']->name }},
 </p>
 <p>
    You are assigned as reviewer for the " {{ $data['post']['title'] }}" article.<br>
