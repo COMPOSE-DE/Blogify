@@ -146,7 +146,7 @@ Route::group($admin, function()
             ]);
         });
 
-        Route::resource('profile', 'ProfileController');
+        Route::resource('profile', 'ProfileController', ['names' => 'admin.profile']);
 
         ///////////////////////////////////////////////////////////////////////////
         // API routes
@@ -173,7 +173,7 @@ Route::group($admin, function()
                 'uses'  => 'ApiController@autoSave',
             ]);
 
-            Route::get('tags/{hash}', [
+            Route::get('tags/{tag}', [
                 'as' => 'admin.api.tags',
                 'uses' => 'ApiController@getTag'
             ]);
