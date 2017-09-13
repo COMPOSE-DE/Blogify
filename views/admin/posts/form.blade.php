@@ -150,12 +150,12 @@
                             <div class="row">
                                 <div class="col-sm-12 form-group">
                                     <select name="reviewer" id="reviewer" class="form-control">
-                                        <option {{ (!isset($post) ? 'selected' : '') }} value="{{Auth::user()->hash}}">{{Auth::user()->fullName}}</option>
+                                        <option {{ (!isset($post) ? 'selected' : '') }} value="{{Auth::user()->id}}">{{ Auth::user()->name }}</option>
                                         @foreach ( $reviewers as $reviewer )
                                             @if ( isset($post) )
-                                                <option {{ ($reviewer->id === $post->reviewer_id || $reviewer->hash == Input::old('reviewer') ) ? 'selected' : '' }} value="{{$reviewer->hash}}">{{$reviewer->fullName}}</option>
+                                                <option {{ ($reviewer->id === $post->reviewer_id || $reviewer->id == Input::old('reviewer') ) ? 'selected' : '' }} value="{{$reviewer->id}}">{{ $reviewer->name }}</option>
                                             @else
-                                                <option {{ ( $reviewer->hash == Input::old('reviewer') ) ? 'selected' : '' }} value="{{$reviewer->hash}}">{{$reviewer->fullName}}</option>
+                                                <option {{ ( $reviewer->id == Input::old('reviewer') ) ? 'selected' : '' }} value="{{$reviewer->id}}">{{ $reviewer->name }}</option>
                                             @endif
                                         @endforeach
                                     </select>
@@ -250,7 +250,7 @@
                                     <div id="tags">
                                         @if( isset($post) && count($post->tag) > 0 )
                                             @foreach ( $post->tag as $tag )
-                                                <span class="tag {{$tag->hash}}"><a href="#" class="{{$tag->hash}}" title="Remove tag"><span class="fa fa-times-circle"></span></a> {{ $tag->name }} </span>
+                                                <span class="tag {{$tag->id}}"><a href="#" class="{{$tag->id}}" title="Remove tag"><span class="fa fa-times-circle"></span></a> {{ $tag->name }} </span>
                                             @endforeach
                                         @endif
 
