@@ -68,14 +68,12 @@ Trait BlogifyUserTrait
 
     public function scopeReviewers($query)
     {
-        $reviewer_role_id = Role::whereName('reviewer')->first()->id;
-        $admin_role_id = Role::whereName('admin')->first()->id;
+        $reviewerRoleId = Role::whereName('reviewer')->first()->id;
+        $adminRoleId = Role::whereName('admin')->first()->id;
 
-        return $query->where(function($q) use ($reviewer_role_id, $admin_role_id)
-        {
-            $q->whereRoleId($reviewer_role_id)
-                ->orWhere('role_id', '=', $admin_role_id);
-        })->where('id', '<>', Auth::user()->id)->get();
+        return $query
+            ->where('id', '<>', Auth::id())
+            ->whereIn('role_id', [$reviewerRoleId, $adminRoleId]);
     }
 }
 
