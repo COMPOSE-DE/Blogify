@@ -52,10 +52,10 @@ class PostRequest extends Request
         return [
             'title'             => 'required|min:2|max:100',
             'slug'              => "required|unique:posts,slug,$id|min:2|max:120",
-            'reviewer'          => 'exists:users,hash',
+            'reviewer'          => 'exists:users,id',
             'post'              => 'required',
             'category'          => 'required|exists:categories,hash',
-            'publishdate'       => 'required|date_format: d-m-Y H:i',
+            'publishdate'       => 'required|date: d-M-Y H:i',
             'password'          => "required_if:visibility,$protected_visibility",
         ];
     }
