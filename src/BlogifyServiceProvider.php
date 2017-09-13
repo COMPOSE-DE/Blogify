@@ -89,18 +89,18 @@ class BlogifyServiceProvider extends ServiceProvider
      */
     private function registerMiddleware()
     {
-        $this->app['router']->middleware('BlogifyAdminAuthenticate', 'Donatix\Blogify\Middleware\BlogifyAdminAuthenticate');
-        $this->app['router']->middleware('BlogifyVerifyCsrfToken', 'Donatix\Blogify\Middleware\BlogifyVerifyCsrfToken');
-        $this->app['router']->middleware('CanEditPost', 'Donatix\Blogify\Middleware\CanEditPost');
-        $this->app['router']->middleware('DenyIfBeingEdited', 'Donatix\Blogify\Middleware\DenyIfBeingEdited');
-        $this->app['router']->middleware('BlogifyGuest', 'Donatix\Blogify\Middleware\Guest');
-        $this->app['router']->middleware('HasAdminOrAuthorRole', 'Donatix\Blogify\Middleware\HasAdminOrAuthorRole');
-        $this->app['router']->middleware('HasAdminRole', 'Donatix\Blogify\Middleware\HasAdminRole');
-        $this->app['router']->middleware('RedirectIfAuthenticated', 'Donatix\Blogify\Middleware\RedirectIfAuthenticated');
-        $this->app['router']->middleware('IsOwner', 'Donatix\Blogify\Middleware\IsOwner');
-        $this->app['router']->middleware('CanViewPost', 'Donatix\Blogify\Middleware\CanViewPost');
-        $this->app['router']->middleware('ProtectedPost', 'Donatix\Blogify\Middleware\ProtectedPost');
-        $this->app['router']->middleware('ConfirmPasswordChange', 'Donatix\Blogify\Middleware\ConfirmPasswordChange');
+        $this->app['router']->aliasMiddleware('BlogifyAdminAuthenticate', 'Donatix\Blogify\Middleware\BlogifyAdminAuthenticate');
+        $this->app['router']->aliasMiddleware('BlogifyVerifyCsrfToken', 'Donatix\Blogify\Middleware\BlogifyVerifyCsrfToken');
+        $this->app['router']->aliasMiddleware('CanEditPost', 'Donatix\Blogify\Middleware\CanEditPost');
+        $this->app['router']->aliasMiddleware('DenyIfBeingEdited', 'Donatix\Blogify\Middleware\DenyIfBeingEdited');
+        $this->app['router']->aliasMiddleware('BlogifyGuest', 'Donatix\Blogify\Middleware\Guest');
+        $this->app['router']->aliasMiddleware('HasAdminOrAuthorRole', 'Donatix\Blogify\Middleware\HasAdminOrAuthorRole');
+        $this->app['router']->aliasMiddleware('HasAdminRole', 'Donatix\Blogify\Middleware\HasAdminRole');
+        $this->app['router']->aliasMiddleware('RedirectIfAuthenticated', 'Donatix\Blogify\Middleware\RedirectIfAuthenticated');
+        $this->app['router']->aliasMiddleware('IsOwner', 'Donatix\Blogify\Middleware\IsOwner');
+        $this->app['router']->aliasMiddleware('CanViewPost', 'Donatix\Blogify\Middleware\CanViewPost');
+        $this->app['router']->aliasMiddleware('ProtectedPost', 'Donatix\Blogify\Middleware\ProtectedPost');
+        $this->app['router']->aliasMiddleware('ConfirmPasswordChange', 'Donatix\Blogify\Middleware\ConfirmPasswordChange');
     }
 
     /**
