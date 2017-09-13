@@ -18,7 +18,7 @@ class CreatePostsTable extends Migration {
             $table->string('hash', 80)->unique();
             $table->string('title', 100);
             $table->string('slug', 120)->unique();
-            $table->text('short_description');
+            // $table->text('short_description');
             $table->longtext('content');
             $table->integer('user_id')->unsigned();
             $table->integer('reviewer_id');
