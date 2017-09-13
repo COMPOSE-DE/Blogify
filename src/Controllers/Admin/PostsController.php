@@ -18,7 +18,6 @@ use Donatix\Blogify\Models\Post;
 use Donatix\Blogify\Services\BlogifyMailer;
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Contracts\Auth\Guard;
-use jorenvanhocht\Tracert\Tracert;
 
 class PostsController extends BaseController
 {
@@ -37,11 +36,6 @@ class PostsController extends BaseController
      * @var \Donatix\Blogify\Models\Visibility
      */
     protected $visibility;
-
-    /**
-     * @var \App\User
-     */
-    protected $user;
 
     /**
      * @var \Donatix\Blogify\Models\Category
@@ -94,11 +88,6 @@ class PostsController extends BaseController
     protected $blogify;
 
     /**
-     * @var \Donatix\Tracert\Tracert
-     */
-    protected $tracert;
-
-    /**
      * @param \Donatix\Blogify\Models\Tag $tag
      * @param \Donatix\Blogify\Models\Role $role
      * @param \App\User $user
@@ -111,12 +100,10 @@ class PostsController extends BaseController
      * @param \Donatix\Blogify\Models\Visibility $visibility
      * @param \Illuminate\Contracts\Auth\Guard $auth
      * @param \Donatix\Blogify\Blogify $blogify
-     * @param \Donatix\Tracert\Tracert $tracert
      */
     public function __construct(
         Tag $tag,
         Role $role,
-        User $user,
         Post $post,
         BlogifyMailer $mail,
         Hasher $hash,
@@ -125,8 +112,7 @@ class PostsController extends BaseController
         Category $category,
         Visibility $visibility,
         Guard $auth,
-        Blogify $blogify,
-        Tracert $tracert
+        Blogify $blogify
     ) {
         parent::__construct($auth);
 
@@ -134,14 +120,12 @@ class PostsController extends BaseController
 
         $this->tag = $tag;
         $this->role = $role;
-        $this->user = $user;
         $this->post = $post;
         $this->mail = $mail;
         $this->hash = $hash;
         $this->cache = $cache;
         $this->status = $status;
         $this->blogify = $blogify;
-        $this->tracert = $tracert;
         $this->category = $category;
         $this->visibility = $visibility;
     }
@@ -156,7 +140,7 @@ class PostsController extends BaseController
      */
     public function index($trashed = false)
     {
-        $scope = 'for'.$this->auth_user->role->name;
+        $scope = 'for'.$this->user->role->name;
         $data = [
             'posts' => (! $trashed) ?
                 $this->post->$scope()
@@ -173,62 +157,31 @@ class PostsController extends BaseController
         return view('blogify::admin.posts.index', $data);
     }
 
-    /**
-     * @return \Illuminate\View\View
-     */
     public function create()
     {
-        $hash = $this->auth_user->hash;
-        $post = $this->cache->has("autoSavedPost-$hash") ? $this->buildPostObject() : null;
+        $id = $this->user->id;
+        $post = $this->cache->has("autoSavedPost-$id") ? $this->buildPostObject() : null;
         $data = $this->getViewData($post);
 
         return view('blogify::admin.posts.form', $data);
     }
 
-    /**
-     * @param string $hash
-     * @return \Illuminate\View\View
-     */
-    public function show($hash)
+    public function show(Post $post)
     {
-        $data = [
-            'post' => $this->post->byHash($hash),
-        ];
-
-        if ($data['post']->count() <= 0) {
-            abort(404);
-        }
-
-        return view('blogify::admin.posts.show', $data);
+        return view('blogify::admin.posts.show', compact('post'));
     }
 
-    /**
-     * @param string $hash
-     * @return \Illuminate\View\View
-     */
-    public function edit($hash)
+    public function edit(Post $post)
     {
-        $originalPost = $this->post->byHash($hash);
-        $hash = $this->auth_user->hash;
-        $post = $this->cache->has("autoSavedPost-$hash") ? $this->buildPostObject() : $originalPost;
-        $data = $this->getViewData($post);
+        $post->being_edited_by = $this->user->id;
+        $post->save();
 
-        $originalPost->being_edited_by = $this->auth_user->id;
-        $originalPost->save();
+        $cachedPost = $this->cache->has("autoSavedPost-{$this->user->id}") ? $this->buildPostObject() : $post;
+        $data = $this->getViewData($cachedPost);
 
         return view('blogify::admin.posts.form', $data);
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // CRUD methods
-    ///////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Store or update a post
-     *
-     * @param \Donatix\Blogify\Requests\PostRequest $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function store(PostRequest $request)
     {
         $this->data = objectify($request->except([
@@ -245,38 +198,27 @@ class PostsController extends BaseController
             $this->mailReviewer($post);
         }
 
-        $action = ($request->hash == '') ? 'created' : 'updated';
+        $action = $request->hash == '' ? 'created' : 'updated';
+        $this->flashSuccess($post->title, $action);
 
-        $this->tracert->log('posts', $post->id, $this->auth_user->id, $action);
+        $userId = $this->user->id;
+        $this->cache->forget("autoSavedPost-{$userId}");
 
-        $message = trans('blogify::notify.success', [
-            'model' => 'Post', 'name' => $post->title, 'action' => $action
-        ]);
-        session()->flash('notify', ['success', $message]);
-
-        $hash = $this->auth_user->hash;
-        $this->cache->forget("autoSavedPost-$hash");
-
-        return redirect()->route('posts.index');
+        return redirect()->route('admin.posts.index');
     }
 
     /**
      * @param string $hash
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy($hash)
+    public function destroy(Post $post)
     {
-        $post = $this->post->byHash($hash);
+        $postTitle = $post->title;
         $post->delete();
 
-        $this->tracert->log('posts', $post->id, $this->auth_user->id, 'delete');
+        $this->flashSuccess($postTitle, 'deleted');
 
-        $message = trans('blogify::notify.success', [
-            'model' => 'Post', 'name' => $post->title, 'action' =>'deleted'
-        ]);
-        session()->flash('notify', ['success', $message]);
-
-        return redirect()->route('posts.index');
+        return redirect()->route('admin.posts.index');
     }
 
     /**
@@ -311,26 +253,21 @@ class PostsController extends BaseController
     public function cancel($hash = null)
     {
         if (! isset($hash)) {
-            return redirect()->route('posts.index');
+            return redirect()->route('admin.posts.index');
         }
 
-        $userHash = $this->auth_user->hash;
-        if ($this->cache->has("autoSavedPost-$userHash")) {
-            $this->cache->forget("autoSavedPost-$userHash");
+        $userId = $this->user->id;
+        if ($this->cache->has("autoSavedPost-$userId")) {
+            $this->cache->forget("autoSavedPost-$userId");
         }
 
         $post = $this->post->byHash($hash);
         $post->being_edited_by = null;
         $post->save();
 
-        $this->tracert->log('posts', $post->id, $this->auth_user->id, 'canceled');
+        $this->flashSuccess($post->title, 'canceled');
 
-        $message = trans('blogify::notify.success', [
-            'model' => 'Post', 'name' => $post->name, 'action' =>'canceled'
-        ]);
-        session()->flash('notify', ['success', $message]);
-
-        return redirect()->route('posts.index');
+        return redirect()->route('admin.posts.index');
     }
 
     /**
@@ -342,12 +279,9 @@ class PostsController extends BaseController
         $post = $this->post->withTrashed()->byHash($hash);
         $post->restore();
 
-        $message = trans('blogify::notify.success', [
-            'model' => 'Post', 'name' => $post->title, 'action' =>'restored'
-        ]);
-        session()->flash('notify', ['success', $message]);
+        $this->flashSuccess($post->title, 'restored');
 
-        return redirect()->route('posts.index');
+        return redirect()->route('admin.posts.index');
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -386,7 +320,7 @@ class PostsController extends BaseController
     private function getViewData($post = null)
     {
         return [
-            'reviewers'     => $this->user->reviewers(),
+            'reviewers'     => User::reviewers()->get(),
             'statuses'      => $this->status->all(),
             'categories'    => $this->category->all(),
             'visibility'    => $this->visibility->all(),
@@ -429,7 +363,7 @@ class PostsController extends BaseController
      */
     private function createImageName()
     {
-        return time().'-'.str_replace(' ', '-', $this->auth_user->fullName);
+        return time().'-'.str_replace(' ', '-', $this->user->fullName);
     }
 
     /**
@@ -461,14 +395,14 @@ class PostsController extends BaseController
         $post->content = $this->data->post;
         $post->status_id = $this->status->byHash($this->data->status)->id;
         $post->publish_date = $this->data->publishdate;
-        $post->user_id = $this->user->find($this->auth_user->id)->id;
-        $post->reviewer_id = $this->user->find($this->data->reviewer)->id;
+        $post->user_id = $this->user->id;
+        $post->reviewer_id = $this->data->reviewer;
         $post->visibility_id = $this->visibility->byHash($this->data->visibility)->id;
         $post->category_id = $this->category->byHash($this->data->category)->id;
         $post->being_edited_by = null;
 
         if (!empty($this->data->password)) {
-            $post->password = $this->hash->make($this->data->password);
+            $post->password = bcrypt($this->data->password);
         }
 
         $post->save();
@@ -501,7 +435,7 @@ class PostsController extends BaseController
      */
     private function buildPostObject()
     {
-        $hash = $this->auth_user->hash;
+        $hash = $this->user->hash;
         $cached_post = $this->cache->get("autoSavedPost-$hash");
 
         $post = [];
@@ -537,5 +471,10 @@ class PostsController extends BaseController
         }
 
         return $aTags;
+    }
+
+    protected function flashSuccess($name, $action, $model = '')
+    {
+        parent::flashSuccess($name, $action, 'Post');
     }
 }

@@ -3,90 +3,26 @@
 namespace Donatix\Blogify\Controllers\Admin;
 
 use Donatix\Blogify\Models\Comment;
-use Illuminate\Contracts\Auth\Guard;
-use jorenvanhocht\Tracert\Tracert;
 
 class CommentsController extends BaseController
 {
 
-    /**
-     * @var \Donatix\Blogify\Models\Comment
-     */
-    protected $comment;
-
-    /**
-     * @var \Donatix\Tracert\Tracert
-     */
-    protected $tracert;
-
-    /**
-     * @param \Donatix\Blogify\Models\Comment $comment
-     * @param \Illuminate\Contracts\Auth\Guard $auth
-     * @param \Donatix\Tracert\Tracert $tracert
-     */
-    public function __construct(
-        Comment $comment,
-        Guard $auth,
-        Tracert $tracert
-    ) {
-        parent::__construct($auth);
-
-        $this->comment = $comment;
-        $this->tracert = $tracert;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////
-    // View methods
-    ///////////////////////////////////////////////////////////////////////////
-
-    /**
-     * @param string $revised
-     * @return \Illuminate\View\View
-     */
     public function index($revised = "pending")
     {
-        $revised = $this->checkRevised($revised);
-        if ($revised === false) {
-            abort(404);
-        }
+        $this->checkRevised($revised);
 
-        $data = [
-            'comments' => $this->comment
-                                ->byRevised($revised)
-                                ->paginate($this->config->items_per_page),
-            'revised' => $revised,
-        ];
+        $comments = Comment::byRevised($revised)->paginate($this->config->items_per_page);
 
-        return view('blogify::admin.comments.index', $data);
+        return view('blogify::admin.comments.index', compact('comments', 'revised'));
     }
 
-
-    ///////////////////////////////////////////////////////////////////////////
-    // CRUD methods
-    ///////////////////////////////////////////////////////////////////////////
-
-    /**
-     * @param string $hash
-     * @param string $new_revised
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function changeStatus($hash, $new_revised)
     {
-        $revised = $this->checkRevised($new_revised);
-        if ($revised === false) {
-            abort(404);
-        }
+        $this->checkRevised($new_revised);
 
-        $comment = $this->comment->byHash($hash);
-        $comment->revised = $revised;
+        $comment = Comment::byHash($hash);
+        $comment->revised = true;
         $comment->save();
-
-        $this->tracert->log(
-            'comments',
-            $comment->id,
-            $this->auth_user->id,
-            $new_revised
-        );
 
         $message = trans(
             'blogify::notify.comment_success',
@@ -97,22 +33,10 @@ class CommentsController extends BaseController
         return redirect()->route('admin.comments.index');
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Helper methods
-    ///////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Check if the given revised
-     * is valid
-     *
-     * @param string $revised
-     * @return int|bool
-     */
     private function checkRevised($revised)
     {
-        $allowed = [1 => 'pending', 2 => 'approved', 3 => 'disapproved'];
-
-        return array_search($revised, $allowed);
+        if (! in_array($revised, ['pending', 'approved', 'disapproved'])) {
+            abort(404);
+        }
     }
-
 }
