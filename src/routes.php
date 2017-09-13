@@ -1,9 +1,5 @@
 <?php
 
-use Donatix\Blogify\Middleware\BlogifyAdminAuthenticate;
-use Donatix\Blogify\Middleware\HasAdminOrAuthorRole;
-use Donatix\Blogify\Middleware\HasAdminRole;
-
 // All default package route will be defined here
 
 ///////////////////////////////////////////////////////////////////////////
@@ -49,7 +45,7 @@ $admin = [
 
 Route::group($admin, function()
 {
-    Route::group(['middleware' => BlogifyAdminAuthenticate::class], function()
+    Route::group(['middleware' => 'BlogifyAdminAuthenticate'], function()
     {
         // Dashboard
         Route::get('/', [
@@ -67,7 +63,7 @@ Route::group($admin, function()
          * User routes
          *
          */
-        Route::group(['middleware' => HasAdminRole::class], function() {
+        Route::group(['middleware' => 'HasAdminRole'], function() {
             Route::resource('users', 'UserController', [
                 'names' => 'admin.users'
             ]);
@@ -99,13 +95,10 @@ Route::group($admin, function()
          * Post routes
          */
         Route::resource('posts', 'PostsController', [
-            'except' => 'store', 'update',
+            'except' => 'update',
             'names' => 'admin.posts'
         ]);
-        Route::post('posts', [
-            'as'     => 'admin.posts.store',
-            'uses'  => 'PostsController@store'
-        ]);
+
         Route::post('posts/image/upload', [
             'as'    => 'admin.posts.uploadImage',
             'uses'  => 'PostsController@uploadImage',
@@ -123,7 +116,7 @@ Route::group($admin, function()
             'uses' => 'PostsController@restore'
         ]);
 
-        Route::group(['middleware' => HasAdminOrAuthorRole::class], function() {
+        Route::group(['middleware' => 'HasAdminOrAuthorRole'], function() {
             Route::resource('tags', 'TagsController', [
                 'except'    => 'store',
                 'names'      => 'admin.tags'
