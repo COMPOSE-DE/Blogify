@@ -47,6 +47,11 @@ class Post extends BaseModel
     |
     */
 
+   public function getRouteKeyName()
+   {
+       return 'hash';
+   }
+
     public function user()
     {
         return $this->belongsTo(config('blogify.auth_model'))->withTrashed();
