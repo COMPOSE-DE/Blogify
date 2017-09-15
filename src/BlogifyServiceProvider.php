@@ -142,6 +142,10 @@ class BlogifyServiceProvider extends ServiceProvider
             __DIR__.'/../public/ckeditor' => base_path('public/ckeditor/'),
             __DIR__.'/../public/datetimepicker' => base_path('public/datetimepicker/')
         ], 'assets');
+
+        $this->publishes([
+            __DIR__.'/../views' => resource_path('views/vendor/blogify'),
+        ]);
     }
 
     private function registerCommands()
