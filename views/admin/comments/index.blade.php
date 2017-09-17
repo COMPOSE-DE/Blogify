@@ -39,9 +39,9 @@ $currentPage = (Request::has('page')) ? Request::get('page') : '1';
         @endif
         @foreach ( $comments as $comment )
             <tr>
-                <td>{!! $comment->user->fullName !!}</td>
+                <td>{!! $comment->user->name !!}</td>
                 <td>{!! nl2br($comment->content) !!}</td>
-                <td><a href="{{route('posts.show', [$comment->post->hash])}}" title="{{ $comment->post->title }}">{!! $comment->post->title !!}</a></td>
+                <td><a href="{{route('admin.posts.show', [$comment->post->hash])}}" title="{{ $comment->post->title }}">{!! $comment->post->title !!}</a></td>
                 <td>{!! $comment->created_at !!}</td>
                 <td>
                     <a href="{{ route('admin.comments.changeStatus', [$comment->hash, 'approved'] ) }}" title="{{ trans('blogify::comments.overview.actions.approve') }}"><span class="fa fa-check fa-fw"></span></a>

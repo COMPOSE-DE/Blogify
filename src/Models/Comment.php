@@ -10,36 +10,11 @@ class Comment extends BaseModel
 
     use SoftDeletes;
 
-    /**
-     * The database table used by the model
-     *
-     * @var string
-     */
-    protected $table = 'comments';
-
-    /**
-     * The attributes that are mass assignable
-     *
-     * @var array
-     */
-    protected $fillable = [];
-
-    /**
-     * Set or unset the timestamps for the model
-     *
-     * @var bool
-     */
-    public $timestamps = true;
-
-    /*
-    |--------------------------------------------------------------------------
-    | Relationships
-    |--------------------------------------------------------------------------
-    |
-    | For more information pleas check out the official Laravel docs at
-    | http://laravel.com/docs/5.0/eloquent#relationships
-    |
-    */
+    public $statuses = [
+	'pending' => 1,
+	'approved' => 2,
+	'disapproved' => 3,
+    ];
 
     public function user()
     {
@@ -63,7 +38,13 @@ class Comment extends BaseModel
 
     public function scopeByRevised($query, $revised)
     {
-        return $query->whereRevised($revised);
+        return $query->whereRevised($this->statuses[$revised]);
+    }
+
+    public function changeStatus($status)
+    {
+	$this->revised = $this->statuses[$status];
+	$this->save();
     }
 
     /*

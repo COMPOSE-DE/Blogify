@@ -16,17 +16,16 @@ class CommentsController extends BaseController
         return view('blogify::admin.comments.index', compact('comments', 'revised'));
     }
 
-    public function changeStatus($hash, $new_revised)
+    public function changeStatus($hash, $status)
     {
-        $this->checkRevised($new_revised);
+        $this->checkRevised($status);
 
         $comment = Comment::byHash($hash);
-        $comment->revised = true;
-        $comment->save();
+	$comment->changeStatus($status);
 
         $message = trans(
             'blogify::notify.comment_success',
-            ['action' => $new_revised]
+            ['action' => $status]
         );
         session()->flash('notify', ['success', $message]);
 
