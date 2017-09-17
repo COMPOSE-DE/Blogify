@@ -8,7 +8,7 @@
     Please review it as soon as possible, the article is placed in your feed.
 </p>
 <p>
-    Please <a href="{{ route('admin.login') }}" title="">sign in</a> to review the article.
+    Please <a href="{{ route('login') }}" title="">sign in</a> to review the article.
 </p>
 <p>
     Blogify
