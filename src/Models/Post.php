@@ -72,7 +72,7 @@ class Post extends BaseModel
         return $this->hasMany(Media::class);
     }
 
-    public function tag()
+    public function tags()
     {
         return $this->belongsToMany(Tag::class, 'posts_have_tags', 'post_id', 'tag_id')->withTrashed();
     }

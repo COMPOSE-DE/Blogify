@@ -17,7 +17,7 @@ class Tag extends BaseModel
 
     public static function fromArray($tags)
     {
-        $tags->reject(function($tag) {
+        return $tags->reject(function($tag) {
             return static::where('name', $tag)->exists();
         })->map(function($tag) {
             return static::create([

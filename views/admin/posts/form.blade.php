@@ -248,8 +248,8 @@
                                     <span id="helpBlock" class="help-block">{{ trans("blogify::posts.form.tags.help_block") }}</span>
                                     <div id="tag-errors" class="text-danger"></div>
                                     <div id="tags">
-                                        @if( isset($post) && count($post->tag) > 0 )
-                                            @foreach ( $post->tag as $tag )
+                                        @if( isset($post) && count($post->tags) > 0 )
+                                            @foreach ( $post->tags as $tag )
                                                 <span class="tag {{$tag->id}}"><a href="#" class="{{$tag->id}}" title="Remove tag"><span class="fa fa-times-circle"></span></a> {{ $tag->name }} </span>
                                             @endforeach
                                         @endif

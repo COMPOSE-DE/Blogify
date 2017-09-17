@@ -372,7 +372,6 @@ class PostsController extends BaseController
     private function buildTagsArray()
     {
         $tags = explode(',', $this->data->tags);
-
         foreach ($tags as $hash) {
             array_push($this->tags, $this->tag->byHash($hash)->id);
         }
@@ -406,7 +405,7 @@ class PostsController extends BaseController
         }
 
         $post->save();
-        $post->tag()->sync($this->tags);
+        $post->tags()->sync($this->tags);
 
         return $post;
     }
