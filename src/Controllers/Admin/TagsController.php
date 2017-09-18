@@ -45,13 +45,9 @@ class TagsController extends BaseController
             'tags.*' => 'required|min:2|max:45'
         ]);
 
-        $storedTags = Tag::fromArray($tags);
+        $storedTags = Tag::createMissing($tags);
 
-        if ($request->wantsJson()) {
-            return response()->json(['passed' => true, 'tags' => $storedTags], 201);
-        }
-
-        $this->flashSuccess($tags->implode(','), 'created');
+        $this->flashSuccess($storedTags->pluck('name')->implode(', '), 'created');
 
         return redirect()->route('admin.tags.index');
     }

@@ -162,6 +162,7 @@ class PostsController extends BaseController
         $id = $this->user->id;
         $post = $this->cache->has("autoSavedPost-$id") ? $this->buildPostObject() : null;
         $data = $this->getViewData($post);
+        $data['url'] = route('admin.posts.store', $post);
 
         return view('blogify::admin.posts.form', $data);
     }
@@ -178,31 +179,28 @@ class PostsController extends BaseController
 
         $cachedPost = $this->cache->has("autoSavedPost-{$this->user->id}") ? $this->buildPostObject() : $post;
         $data = $this->getViewData($cachedPost);
+        $data['url'] = route('admin.posts.update', $post);
 
         return view('blogify::admin.posts.form', $data);
     }
 
     public function store(PostRequest $request)
     {
-        $this->data = objectify($request->except([
+        $formData = objectify($request->except([
             '_token', 'newCategory', 'newTags'
         ]));
 
-        if (! empty($this->data->tags)) {
-            $this->buildTagsArray();
-        }
+        $post = $this->storeOrUpdatePost($formData);
+        $post->assignTags($request->get('tags', []));
 
-        $post = $this->storeOrUpdatePost();
-
-        if ($this->status->byHash($this->data->status)->name == 'Pending review') {
+        if ($this->status->byHash($request->get('status'))->name == 'Pending review') {
             $this->mailReviewer($post);
         }
 
-        $action = $request->hash == '' ? 'created' : 'updated';
+        $action = $request->get('hash') == null ? 'created' : 'updated';
         $this->flashSuccess($post->title, $action);
 
-        $userId = $this->user->id;
-        $this->cache->forget("autoSavedPost-{$userId}");
+        $this->cache->forget("autoSavedPost-{$this->user->id}");
 
         return redirect()->route('admin.posts.index');
     }
@@ -326,6 +324,7 @@ class PostsController extends BaseController
             'visibility'    => $this->visibility->all(),
             'publish_date'  => Carbon::now()->format('d-m-Y H:i'),
             'post'          => $post,
+            'tags'          => Tag::all(),
         ];
     }
 
@@ -367,45 +366,33 @@ class PostsController extends BaseController
     }
 
     /**
-     * @return void
-     */
-    private function buildTagsArray()
-    {
-        $tags = explode(',', $this->data->tags);
-        foreach ($tags as $hash) {
-            array_push($this->tags, $this->tag->byHash($hash)->id);
-        }
-    }
-
-    /**
      * @return \Donatix\Blogify\Models\Post
      */
-    private function storeOrUpdatePost()
+    private function storeOrUpdatePost($data)
     {
-        if (! empty($this->data->hash)) {
-            $post = $this->post->byHash($this->data->hash);
+        if (! empty($data->hash)) {
+            $post = $this->post->byHash($data->hash);
         } else {
             $post = new Post;
             $post->hash = $this->blogify->makeHash('posts', 'hash', true);
         }
 
-        $post->slug = $this->data->slug;
-        $post->title = $this->data->title;
-        $post->content = $this->data->post;
-        $post->status_id = $this->status->byHash($this->data->status)->id;
-        $post->publish_date = $this->data->publishdate;
+        $post->slug = $data->slug;
+        $post->title = $data->title;
+        $post->content = $data->post;
+        $post->status_id = $this->status->byHash($data->status)->id;
+        $post->publish_date = $data->publishdate;
         $post->user_id = $this->user->id;
-        $post->reviewer_id = $this->data->reviewer;
-        $post->visibility_id = $this->visibility->byHash($this->data->visibility)->id;
-        $post->category_id = $this->category->byHash($this->data->category)->id;
+        $post->reviewer_id = $data->reviewer;
+        $post->visibility_id = $this->visibility->byHash($data->visibility)->id;
+        $post->category_id = $this->category->byHash($data->category)->id;
         $post->being_edited_by = null;
 
-        if (!empty($this->data->password)) {
-            $post->password = bcrypt($this->data->password);
+        if (!empty($data->password)) {
+            $post->password = bcrypt($data->password);
         }
 
         $post->save();
-        $post->tags()->sync($this->tags);
 
         return $post;
     }

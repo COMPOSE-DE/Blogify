@@ -142,4 +142,18 @@ class Post extends BaseModel
         return $query->where('publish_date', '<=', date('Y-m-d H:i:s'))
                     ->where('visibility_id', '=', '1');
     }
+
+    public function hasTag($tagToCheck)
+    {
+        return $this->tags->contains(function($tag) use ($tagToCheck) {
+            return $tag->id === $tagToCheck->id;
+        });
+    }
+
+    public function assignTags($tags)
+    {
+        $tags = Tag::findOrCreateTags($tags);
+
+        $this->tags()->sync($tags->pluck('id'));
+    }
 }
