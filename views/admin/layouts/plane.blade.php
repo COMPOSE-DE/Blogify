@@ -13,6 +13,8 @@
 	<meta content="" name="description"/>
 	<meta content="" name="author"/>
 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+
 	<link rel="stylesheet" href="{{ asset("assets/blogify/assets/stylesheets/styles.css") }}" />
 	<link rel="stylesheet" href="{{ asset("assets/blogify/assets/stylesheets/custom.css") }}" />
 </head>
@@ -20,6 +22,7 @@
 	@yield('body')
 
 	<script src="{{ asset("assets/blogify/assets/scripts/frontend.js") }}" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 	@yield('scripts')
 	<script src="{{ asset("assets/blogify/assets/scripts/admin/custom.js") }}" type="text/javascript"></script>
 </body>

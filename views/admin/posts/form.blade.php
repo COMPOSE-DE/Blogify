@@ -1,23 +1,7 @@
-<?php
-    if (! empty($post) && count($post->tag) > 0) {
-        $hashes = '';
-        $i      = 0;
-        $count  = count($post->tag);
-
-        foreach ($post->tag as $tag) {
-            $hash = $tag->hash;
-
-            if ($i < $count - 1) {
-                $hash = $hash.',';
-            }
-
-            $hashes .= $hash;
-            $i++;
-        }
-    }
-?>
 @extends('blogify::admin.layouts.dashboard')
+
 @section('page_heading',trans("blogify::posts.form.page.title.create"))
+
 @section('section')
     {!! Form::open( ['route' => 'admin.posts.store'] ) !!}
     {!! Form::hidden('hash', (isset($post)) ? $post->hash : '') !!}
@@ -222,48 +206,26 @@
             <!-- end categories box -->
 
             <!-- tags box -->
-            <div class="panel-group" id="accordion">
-                <div class="panel panel-{{ isset($class) ? $class : 'default' }}">
-                    <div class="panel-heading">
-                        <h4 class="panel-title">
-                            <a data-toggle="collapse"
-                               href="#collapseTags">
-                                {{ trans("blogify::posts.form.tags.title") }}
-                            </a>
-                        </h4>
-                    </div>
-                    <div id="collapseTags" class="panel-collapse collapse in">
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-sm-12 form-group input-group">
-                                    {!! Form::text('newTags','', [ 'class' => 'form-control', 'id' => 'newTags', 'placeholder' => trans("blogify::posts.form.tags.placeholder") ] ) !!}
-                                    <span class="input-group-btn">
-                                    <button type="button" class="btn btn-success" id="tag-btn"><i class="fa fa-plus"></i></button>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    {!! Form::hidden('tags', isset($hashes) ? $hashes : '', [ 'id' => 'addedTags' ]) !!}
-                                    <span id="helpBlock" class="help-block">{{ trans("blogify::posts.form.tags.help_block") }}</span>
-                                    <div id="tag-errors" class="text-danger"></div>
-                                    <div id="tags">
-                                        @if( isset($post) && count($post->tags) > 0 )
-                                            @foreach ( $post->tags as $tag )
-                                                <span class="tag {{$tag->id}}"><a href="#" class="{{$tag->id}}" title="Remove tag"><span class="fa fa-times-circle"></span></a> {{ $tag->name }} </span>
-                                            @endforeach
-                                        @endif
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <a data-toggle="collapse" href="#collapseTags">
+                            {{ trans("blogify::posts.form.tags.title") }}
+                        </a>
+                </h3>
+                </div>
+                <div class="panel-body">
+                    <select class="js-admin-blog-tags form-control" name="tags[]" multiple>
+                        @foreach ($tags as $tag)
+                            <option value="{{ $tag->name }}" {{ optionSelected(isset($post) && $post->hasTag($tag)) }}>{{ $tag->name }}</option>
+                        @endforeach
+                    </select>
+                    <span id="helpBlock" class="help-block">
+                        {{ trans("blogify::posts.form.tags.help_block") }}
+                    </span>
                 </div>
             </div>
             <!-- end tags box -->
-
-
         </div>
         {!! Form::close() !!}
     </div>
@@ -273,6 +235,13 @@
     <link rel="stylesheet" type="text/css" href="{{asset('datetimepicker/DateTimePicker.css')}}" />
     <script type="text/javascript" src="{{asset('datetimepicker/DateTimePicker.js')}}"></script>
     <script src="{{asset('ckeditor/ckeditor.js')}}"></script>
+
+    <script type="text/javascript">
+        $('.js-admin-blog-tags').select2({
+            tags: true,
+            tokenSeparators: [',']
+        });
+    </script>
     <!--[if lt IE 9]>
     <link rel="stylesheet" type="text/css" href="{{asset('datetimepicker/DateTimePicker-ltie9.css')}}" />
     <script type="text/javascript" src="{{asset('datetimepicker/DateTimePicker-ltie9.js')}}"></script>
