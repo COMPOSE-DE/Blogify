@@ -26,3 +26,10 @@ if (! function_exists('objectify') )
         return json_decode(json_encode($var));
     }
 }
+
+if (! function_exists('optionSelected')) {
+    function optionSelected($condition)
+    {
+        return $condition ? 'selected' : '';
+    }
+}
