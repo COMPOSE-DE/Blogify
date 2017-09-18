@@ -7,30 +7,27 @@ use Illuminate\Database\Eloquent\Model;
 class BaseModel extends Model
 {
     protected $guarded = [];
-    /*
-    |--------------------------------------------------------------------------
-    | Scopes
-    |--------------------------------------------------------------------------
-    |
-    | For more information pleas check out the official Laravel docs at
-    | http://laravel.com/docs/5.0/eloquent#query-scopes
-    |
-    */
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->generateHash($model->getTable());
+        });
+    }
+
+    public function generateHash($table)
+    {
+        if (! $this->hash) {
+            $this->hash = app('donatix.blogify')->makeHash($table, 'hash', true);
+        }
+    }
 
     public function scopeByHash($query, $hash)
     {
         return $query->whereHash($hash)->first();
     }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Accessors & Mutators
-    |--------------------------------------------------------------------------
-    |
-    | For more information pleas check out the official Laravel docs at
-    | http://laravel.com/docs/5.0/eloquent#accessors-and-mutators
-    |
-    */
 
     public function getCreatedAtAttribute($value)
     {
