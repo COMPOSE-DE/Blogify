@@ -18,6 +18,7 @@ use Donatix\Blogify\Models\Post;
 use Donatix\Blogify\Services\BlogifyMailer;
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Database\Eloquent\Collection;
 
 class PostsController extends BaseController
 {
@@ -419,10 +420,10 @@ class PostsController extends BaseController
      */
     private function buildPostObject()
     {
-        $hash = $this->user->hash;
-        $cached_post = $this->cache->get("autoSavedPost-$hash");
+        $id = $this->user->id;
+        $cached_post = $this->cache->get("autoSavedPost-$id");
 
-        $post = [];
+        $post = new Post;
         $post['hash'] = '';
         $post['title'] = $cached_post['title'];
         $post['slug'] = $cached_post['slug'];
@@ -432,29 +433,9 @@ class PostsController extends BaseController
         $post['visibility_id'] = $this->visibility->byHash($cached_post['visibility'])->id;
         $post['reviewer_id'] = $this->user->find($cached_post['reviewer'])->id;
         $post['category_id'] = $this->category->byHash($cached_post['category'])->id;
-        $post['tag'] = $this->buildTagsArrayForPostObject($cached_post['tags']);
+        $post->assignTagsRelation($cached_post['tags']);
 
-        return objectify($post);
-    }
-
-    /**
-     * @param $tags
-     * @return array
-     */
-    private function buildTagsArrayForPostObject($tags)
-    {
-        if ($tags == "") {
-            return [];
-        }
-
-        $aTags = [];
-        $hashes = explode(',', $tags);
-
-        foreach ($hashes as $tag) {
-            array_push($aTags, $this->tag->byHash($tag));
-        }
-
-        return $aTags;
+        return $post;
     }
 
     protected function flashSuccess($name, $action, $model = '')

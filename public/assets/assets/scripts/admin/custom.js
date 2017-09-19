@@ -763,7 +763,7 @@ var app = {
                 publishdate: $('#publishdate')[0].value,
                 reviewer: $('#reviewer')[0].value,
                 category: $('#category')[0].value,
-                tags: $('#addedTags')[0].value
+                tags: $('.js-admin-blog-tags').val()
             }
         },
 
@@ -783,15 +783,12 @@ var app = {
                 dataType:   'json',
                 success: function( response )
                 {
-                    if ( response[0] )
-                    {
-                        $('.auto-save-log').empty();
-                        $('.auto-save-log').append('<p><span> Last saved on '+ response[1] +'</span></p>');
-                    }
-                    else
-                    {
-                        $('.auto-save-log').empty();
-                        $('.auto-save-log').append('<p><span class="text-danger"> Faild to save on '+ response[1] +'</span></p>');
+                    $('.auto-save-log').empty();
+
+                    if (response.saved) {
+                        $('.auto-save-log').append('<p><span> Last saved on '+ response.timestamp +'</span></p>');
+                    } else {
+                        $('.auto-save-log').append('<p><span class="text-danger"> Faild to save on '+ response.timestamp +'</span></p>');
                     }
                 }
             });

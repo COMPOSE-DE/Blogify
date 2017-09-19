@@ -10,6 +10,7 @@ use Donatix\Blogify\Models\Comment;
 use Donatix\Blogify\Models\Category;
 use Donatix\Blogify\Models\Visibility;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Collection;
 
 class Post extends BaseModel
 {
@@ -146,7 +147,7 @@ class Post extends BaseModel
     public function hasTag($tagToCheck)
     {
         return $this->tags->contains(function($tag) use ($tagToCheck) {
-            return $tag->id === $tagToCheck->id;
+            return $tag->name === $tagToCheck->name;
         });
     }
 
@@ -155,5 +156,12 @@ class Post extends BaseModel
         $tags = Tag::findOrCreateTags($tags);
 
         $this->tags()->sync($tags->pluck('id'));
+    }
+
+    public function assignTagsRelation($tags = [])
+    {
+        $this->setRelation('tags', (new Collection($tags))->map(function($tag) {
+            return Tag::make(['name' => $tag]);
+        }));
     }
 }

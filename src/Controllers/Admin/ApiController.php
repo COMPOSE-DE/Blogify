@@ -81,17 +81,25 @@ class ApiController extends BaseController
     public function autoSave(Cache $cache, Request $request)
     {
         try {
-            $hash = $this->auth_user->hash;
+            Tag::findOrCreateTags($request->get('tags', []));
+
+            $id = $this->user->id;
             $cache->put(
-                "autoSavedPost-$hash",
+                "autoSavedPost-$id",
                 $request->all(),
                 Carbon::now()->addHours(2)
             );
         } catch (BlogifyException $exception) {
-            return response()->json([false, date('d-m-Y H:i:s')]);
+            return response()->json([
+                'saved' => false,
+                'timestamp' => date('d-m-Y H:i:s')
+            ]);
         }
 
-        return response()->json([true, date('d-m-Y H:i:s')]);
+        return response()->json([
+            'saved' => true,
+            'timestamp' => date('d-m-Y H:i:s')
+        ]);
     }
 
     /**
