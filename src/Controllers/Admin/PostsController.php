@@ -79,11 +79,6 @@ class PostsController extends BaseController
     protected $cache;
 
     /**
-     * @var \Illuminate\Contracts\Hashing\Hasher
-     */
-    protected $hash;
-
-    /**
      * @var \Donatix\Blogify\Blogify
      */
     protected $blogify;
@@ -107,7 +102,6 @@ class PostsController extends BaseController
         Role $role,
         Post $post,
         BlogifyMailer $mail,
-        Hasher $hash,
         Status $status,
         Repository $cache,
         Category $category,
@@ -123,7 +117,6 @@ class PostsController extends BaseController
         $this->role = $role;
         $this->post = $post;
         $this->mail = $mail;
-        $this->hash = $hash;
         $this->cache = $cache;
         $this->status = $status;
         $this->blogify = $blogify;
@@ -177,8 +170,7 @@ class PostsController extends BaseController
         $post->being_edited_by = $this->user->id;
         $post->save();
 
-        $cachedPost = $this->cache->has("autoSavedPost-{$this->user->id}") ? $this->buildPostObject() : $post;
-        $data = $this->getViewData($cachedPost);
+        $data = $this->getViewData($post);
 
         return view('blogify::admin.posts.form', $data);
     }
@@ -402,7 +394,7 @@ class PostsController extends BaseController
      */
     private function mailReviewer($post)
     {
-        $reviewer = $this->user->find($post->reviewer_id);
+        $reviewer = User::find($post->reviewer_id);
         $data = [
             'reviewer'  => $reviewer,
             'post'      => $post,
@@ -420,20 +412,19 @@ class PostsController extends BaseController
      */
     private function buildPostObject()
     {
-        $id = $this->user->id;
-        $cached_post = $this->cache->get("autoSavedPost-$id");
+        $cachedPost = $this->cache->get("autoSavedPost-{$this->user->id}");
 
         $post = new Post;
-        $post['hash'] = '';
-        $post['title'] = $cached_post['title'];
-        $post['slug'] = $cached_post['slug'];
-        $post['content'] = $cached_post['content'];
-        $post['publish_date'] = $cached_post['publishdate'];
-        $post['status_id'] = $this->status->byHash($cached_post['status'])->id;
-        $post['visibility_id'] = $this->visibility->byHash($cached_post['visibility'])->id;
-        $post['reviewer_id'] = $this->user->find($cached_post['reviewer'])->id;
-        $post['category_id'] = $this->category->byHash($cached_post['category'])->id;
-        $post->assignTagsRelation($cached_post['tags']);
+        $post->hash = '';
+        $post->title = $cachedPost['title'];
+        $post->slug = $cachedPost['slug'];
+        $post->content = $cachedPost['content'];
+        $post->publish_date = $cachedPost['publishdate'];
+        $post->status_id = $this->status->byHash($cachedPost['status'])->id;
+        $post->visibility_id = $this->visibility->byHash($cachedPost['visibility'])->id;
+        $post->reviewer_id = User::find($cachedPost['reviewer'])->id;
+        $post->category_id = $this->category->byHash($cachedPost['category'])->id;
+        $post->assignTagsRelation($cachedPost['tags']);
 
         return $post;
     }
