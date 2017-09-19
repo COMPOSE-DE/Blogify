@@ -141,7 +141,12 @@ class Post extends BaseModel
     public function scopeForPublic($query)
     {
         return $query->where('publish_date', '<=', date('Y-m-d H:i:s'))
-                    ->where('visibility_id', '=', '1');
+                    ->whereIn('visibility_id', Visibility::getPublicIds());
+    }
+
+    public function scopeRecommended($query)
+    {
+        return $query->where('visibility_id', Visibility::getRecommendedId());
     }
 
     public function hasTag($tagToCheck)

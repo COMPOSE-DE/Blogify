@@ -7,22 +7,26 @@ use Donatix\Blogify\Models\Visibility;
 
 class VisibilityTableSeeder extends Seeder
 {
-
     public function run()
     {
         Visibility::create([
             "hash" => str_random(),
-            "name" => "Public",
+            "name" => Visibility::PUBLIC,
         ]);
 
         Visibility::create([
             "hash" => str_random(),
-            "name" => "Protected",
+            "name" => Visibility::PROTECTED,
         ]);
 
         Visibility::create([
             "hash" => str_random(),
-            "name" => "Private",
+            "name" => Visibility::PRIVATE,
+        ]);
+
+        Visibility::create([
+            "hash" => str_random(),
+            "name" => Visibility::RECOMMENDED,
         ]);
     }
 }

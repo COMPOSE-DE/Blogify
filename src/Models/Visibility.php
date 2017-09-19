@@ -6,40 +6,26 @@ use Donatix\Blogify\Models\Post;
 
 class Visibility extends BaseModel
 {
+    const PUBLIC = "Public";
+    const PRIVATE = "Private";
+    const PROTECTED = "Protected";
+    const RECOMMENDED = "Recommended";
 
-    /**
-     * The database table used by the model
-     *
-     * @var string
-     */
     protected $table = 'visibility';
-
-    /**
-     * The attributes that are mass assignable
-     *
-     * @var array
-     */
-    protected $fillable = [];
-
-    /**
-     * Set or unset the timestamps for the model
-     *
-     * @var bool
-     */
     public $timestamps = false;
-
-    /*
-    |--------------------------------------------------------------------------
-    | Relationships
-    |--------------------------------------------------------------------------
-    |
-    | For more information pleas check out the official Laravel docs at
-    | http://laravel.com/docs/5.0/eloquent#relationships
-    |
-    */
 
     public function post()
     {
         return $this->hasMany(Post::class);
+    }
+
+    public static function getPublicIds()
+    {
+        return static::whereIn('name', [static::RECOMMENDED, static::PUBLIC])->pluck('id');
+    }
+
+    public static function getRecommendedId()
+    {
+        return static::where('name', static::RECOMMENDED)->first()->id;
     }
 }
