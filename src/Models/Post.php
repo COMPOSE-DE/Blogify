@@ -14,44 +14,14 @@ use Illuminate\Database\Eloquent\Collection;
 
 class Post extends BaseModel
 {
-
     use SoftDeletes;
 
-    /**
-     * The database table used by the model
-     *
-     * @var string
-     */
-    protected $table = 'posts';
+    protected $dates = ['publish_date'];
 
-    /**
-     * The attributes that are mass assignable
-     *
-     * @var array
-     */
-    protected $fillable = [];
-
-    /**
-     * Set or unset the timestamps for the model
-     *
-     * @var bool
-     */
-    public $timestamps = true;
-
-    /*
-    |--------------------------------------------------------------------------
-    | Relationships
-    |--------------------------------------------------------------------------
-    |
-    | For more information pleas check out the official Laravel docs at
-    | http://laravel.com/docs/5.0/eloquent#relationships
-    |
-    */
-
-   public function getRouteKeyName()
-   {
-       return 'hash';
-   }
+    public function getRouteKeyName()
+    {
+        return 'hash';
+    }
 
     public function user()
     {
@@ -88,6 +58,11 @@ class Post extends BaseModel
         return $this->belongsTo(Visibility::class);
     }
 
+    public function approvedComments()
+    {
+        return $this->hasMany(Comment::class)->approved();
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Accessors & Mutators
@@ -98,16 +73,10 @@ class Post extends BaseModel
     |
     */
 
-    public function setPublishDateAttribute($value)
+    public function getApprovedCommentsCountAttribute()
     {
-        $this->attributes['publish_date'] = date("Y-m-d H:i:s", strtotime($value));
+        return $this->approvedComments()->count();
     }
-
-    public function getPublishDateAttribute($value)
-    {
-        return date("d-m-Y H:i", strtotime($value));
-    }
-
     /*
     |--------------------------------------------------------------------------
     | Scopes
@@ -154,6 +123,11 @@ class Post extends BaseModel
         return $this->tags->contains(function($tag) use ($tagToCheck) {
             return $tag->name === $tagToCheck->name;
         });
+    }
+
+    public function preview()
+    {
+        $this->increment('views_count');
     }
 
     public function assignTags($tags)

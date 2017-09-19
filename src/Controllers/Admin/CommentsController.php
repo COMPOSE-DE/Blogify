@@ -21,7 +21,7 @@ class CommentsController extends BaseController
         $this->checkRevised($status);
 
         $comment = Comment::byHash($hash);
-	$comment->changeStatus($status);
+        $comment->changeStatus($status);
 
         $message = trans(
             'blogify::notify.comment_success',

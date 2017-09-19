@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class BaseModel extends Model
 {
+    protected $hasHash = true;
     protected $guarded = [];
 
     protected static function boot()
@@ -19,7 +20,7 @@ class BaseModel extends Model
 
     public function generateHash($table)
     {
-        if (! $this->hash) {
+        if (! $this->hash && $this->hasHash) {
             $this->hash = app('Donatix.blogify')->makeHash($table, 'hash', true);
         }
     }

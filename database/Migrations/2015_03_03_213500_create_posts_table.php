@@ -20,6 +20,7 @@ class CreatePostsTable extends Migration {
             $table->string('slug', 120)->unique();
             // $table->text('short_description');
             $table->longtext('content');
+            $table->unsignedInteger('views_count')->default(0);
             $table->integer('user_id')->unsigned();
             $table->integer('reviewer_id');
             $table->integer('category_id')->unsigned();
