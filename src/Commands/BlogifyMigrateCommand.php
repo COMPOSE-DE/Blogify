@@ -34,7 +34,7 @@ class BlogifyMigrateCommand extends Command
         parent::__construct();
 
         $this->paths = [
-            'vendor/Donatix/blogify/database/Migrations'
+            'vendor/donatix/blogify/database/Migrations'
         ];
     }
 
