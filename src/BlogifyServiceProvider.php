@@ -15,14 +15,12 @@ class BlogifyServiceProvider extends ServiceProvider
     protected $providers = [
         'Collective\Html\HtmlServiceProvider',
         'Intervention\Image\ImageServiceProvider',
-        'jorenvanhocht\Tracert\TracertServiceProvider'
     ];
 
     /**
      * @var array
      */
     protected $aliases = [
-        'Tracert' => 'Donatix\Blogify\Facades\Tracert',
         'Form' => 'Collective\Html\FormFacade',
         'Html' => 'Collective\Html\HtmlFacade',
         'Image' => 'Intervention\Image\Facades\Image',

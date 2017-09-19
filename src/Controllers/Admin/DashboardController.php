@@ -5,9 +5,7 @@ namespace Donatix\Blogify\Controllers\Admin;
 use App\User;
 use Donatix\Blogify\Models\Comment;
 use Donatix\Blogify\Models\Post;
-use jorenvanhocht\Tracert\Models\History;
 use Illuminate\Contracts\Auth\Guard;
-use jorenvanhocht\Tracert\Tracert;
 
 class DashboardController extends BaseController
 {
@@ -16,11 +14,6 @@ class DashboardController extends BaseController
      * @var \App\User
      */
     protected $user;
-
-    /**
-     * @var \Donatix\Tracert\Models\History
-     */
-    protected $history;
 
     /**
      * @var \Donatix\Blogify\Models\Post
@@ -40,36 +33,19 @@ class DashboardController extends BaseController
     protected $data = [];
 
     /**
-     * @var \Donatix\Tracert\Tracert
-     */
-    protected $tracert;
-
-    /**
      * @param \App\User $user
-     * @param \jorenvanhocht\Tracert\Models\History $history
      * @param \Donatix\Blogify\Models\Post $post
      * @param \Donatix\Blogify\Models\Comment $comment
      * @param \Illuminate\Contracts\Auth\Guard $auth
-     * @param \jorenvanhocht\Tracert\Tracert $tracert
      */
-    public function __construct(
-        User $user,
-        History $history,
-        Post $post,
-        Comment $comment,
-        Guard $auth,
-        Tracert $tracert
-    ) {
-        parent::__construct($auth);
+    public function __construct(Post $post, Comment $comment) {
+        parent::__construct();
 
-        $this->user = $user;
-        $this->history = $history;
         $this->post = $post;
         $this->comment = $comment;
-        $this->tracert = $tracert;
 
-        if ($this->auth_user) {
-            $this->{"buildDataArrayFor".$this->auth_user->role->name}();
+        if ($this->user) {
+            $this->{"buildDataArrayFor".$this->user->role->name}();
         }
     }
 
@@ -96,12 +72,7 @@ class DashboardController extends BaseController
      */
     private function buildDataArrayForAdmin()
     {
-        $this->data['new_users_since_last_visit'] = $this->user->newUsersSince($this->auth_user->updated_at)->count();
-
-        $this->data['activity'] = $this->history->where('crud_action', '<>', 'login')
-                                                    ->where('crud_action', '<>', 'logout')
-                                                    ->orderBy('updated_at', 'DESC')
-                                                    ->paginate($this->config->items_per_page);
+        $this->data['new_users_since_last_visit'] = User::newUsersSince($this->user->updated_at)->count();
 
         $this->data['pending_comments'] = $this->comment->byRevised(1)->count();
 

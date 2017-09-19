@@ -8,7 +8,6 @@ use Donatix\Blogify\Requests\UserRequest;
 use App\User;
 use Illuminate\Contracts\Hashing\Hasher as Hash;
 use Donatix\Blogify\Services\BlogifyMailer;
-use jorenvanhocht\Tracert\Tracert;
 
 class UserController extends BaseController
 {

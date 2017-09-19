@@ -6,7 +6,6 @@ use Donatix\Blogify\Blogify;
 use Donatix\Blogify\Models\Tag;
 use Illuminate\Http\Request;
 use Donatix\Blogify\Requests\TagUpdateRequest;
-use jorenvanhocht\Tracert\Tracert;
 
 class TagsController extends BaseController
 {

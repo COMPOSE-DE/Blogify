@@ -52,8 +52,6 @@ class CommentsController extends Controller
         $comment->revised = ($this->config->approve_comments_first) ? 1 : 2;
         $comment->save();
 
-        tracert()->log('comments', $comment->id, $this->auth->user()->id, 'create');
-
         session()->flash('notify', [ 'success', 'Your comment has been added' ] );
 
         return back();

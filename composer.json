@@ -14,8 +14,7 @@
         "guzzlehttp/guzzle": "~6.2",
         "laravelcollective/html": "5.*",
         "intervention/image": "~2.1",
-        "predis/predis": "~1.0",
-        "jorenvanhocht/tracert": "v2.0.1"
+        "predis/predis": "~1.0"
     },
     "autoload": {
         "psr-4": {

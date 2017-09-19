@@ -6,7 +6,6 @@ use Illuminate\Contracts\Auth\Guard;
 use Donatix\Blogify\Blogify;
 use Donatix\Blogify\Models\Category;
 use Donatix\Blogify\Requests\CategoryRequest;
-use jorenvanhocht\Tracert\Tracert;
 
 class CategoriesController extends BaseController
 {

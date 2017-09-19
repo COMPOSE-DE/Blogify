@@ -74,7 +74,7 @@ class ProfileController extends BaseController
      */
     private function generateFilename()
     {
-        return time().'-'.$this->auth_user->username.'-profilepicture';
+        return time().'-'.$this->user->name.'-profilepicture';
     }
 
     /**
