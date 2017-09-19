@@ -16,8 +16,6 @@ class Post extends BaseModel
 {
     use SoftDeletes;
 
-    protected $dates = ['publish_date'];
-
     public function getRouteKeyName()
     {
         return 'hash';
@@ -77,6 +75,17 @@ class Post extends BaseModel
     {
         return $this->approvedComments()->count();
     }
+
+    public function setPublishDateAttribute($value)
+    {
+        $this->attributes['publish_date'] = date("Y-m-d H:i:s", strtotime($value));
+    }
+
+    public function getPublishDateAttribute($value)
+    {
+        return date("d-m-Y H:i", strtotime($value));
+    }
+    
     /*
     |--------------------------------------------------------------------------
     | Scopes
