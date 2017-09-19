@@ -20,7 +20,7 @@ class BaseModel extends Model
     public function generateHash($table)
     {
         if (! $this->hash) {
-            $this->hash = app('donatix.blogify')->makeHash($table, 'hash', true);
+            $this->hash = app('Donatix.blogify')->makeHash($table, 'hash', true);
         }
     }
 

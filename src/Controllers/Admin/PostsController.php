@@ -162,7 +162,6 @@ class PostsController extends BaseController
         $id = $this->user->id;
         $post = $this->cache->has("autoSavedPost-$id") ? $this->buildPostObject() : null;
         $data = $this->getViewData($post);
-        $data['url'] = route('admin.posts.store', $post);
 
         return view('blogify::admin.posts.form', $data);
     }
@@ -179,7 +178,6 @@ class PostsController extends BaseController
 
         $cachedPost = $this->cache->has("autoSavedPost-{$this->user->id}") ? $this->buildPostObject() : $post;
         $data = $this->getViewData($cachedPost);
-        $data['url'] = route('admin.posts.update', $post);
 
         return view('blogify::admin.posts.form', $data);
     }
