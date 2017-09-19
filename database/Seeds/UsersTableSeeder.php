@@ -9,37 +9,18 @@ use \Illuminate\Support\Facades\Hash;
 
 class UsersTableSeeder extends Seeder
 {
-
-    /**
-     * The id of the admin role
-     *
-     * @var
-     */
-    private $admin_role;
-
-    /**
-     * Admin user information
-     *
-     * @var mixed
-     */
-    private $admin;
-
-    public function __construct()
-    {
-        $this->admin = config('blogify.admin_user');
-
-        $role = Role::where('name', 'Admin')->first();
-        $this->admin_role = $role->id;
-    }
-
     public function run()
     {
+        $admin = config('blogify.admin_user');
         $user = app()->make(config('blogify.auth_model'));
-        $user->create([
-            'name' => $this->admin['name'],
-            'email' => $this->admin['email'],
-            'password' => Hash::make($this->admin['password']),
-            'role_id' => $this->admin_role,
-        ]);
+
+        if (! $user->where('email', $admin['email'])->exists()) {
+            $user->create([
+                'name' => $admin['name'],
+                'email' => $admin['email'],
+                'password' => Hash::make($admin['password']),
+                'role_id' => Role::getAdminRoleId(),
+            ]);
+        }
     }
 }

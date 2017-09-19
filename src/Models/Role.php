@@ -4,6 +4,13 @@ namespace Donatix\Blogify\Models;
 
 class Role extends BaseModel
 {
+    const ADMIN = 'admin';
+    const AUTHOR = 'author';
+    const REVIEWER = 'reviewer';
+    const MEMBER = 'member';
+
+    protected $hasHash = false;
+
     public function users()
     {
         return $this->hasMany(config('blogify.auth_model'));
@@ -11,7 +18,12 @@ class Role extends BaseModel
 
     public function scopeByAdminRoles($query)
     {
-        $query->whereIn('name', ['admin', 'author', 'reviewer']);
+        $query->whereIn('name', [static::ADMIN, static::AUTHOR, static::REVIEWER]);
+    }
+
+    public function getAdminRoleId()
+    {
+        return static::where('name', static::ADMIN)->first()->id;
     }
 
     public function createUser($userData)

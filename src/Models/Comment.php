@@ -7,13 +7,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Comment extends BaseModel
 {
-
     use SoftDeletes;
 
+    const PENDING = 1;
+    const APPROVED = 2;
+    const DISAPPROVED = 3;
+
     public $statuses = [
-	'pending' => 1,
-	'approved' => 2,
-	'disapproved' => 3,
+        'pending' => 1,
+        'approved' => 2,
+        'disapproved' => 3,
     ];
 
     public function user()
@@ -41,10 +44,19 @@ class Comment extends BaseModel
         return $query->whereRevised($this->statuses[$revised]);
     }
 
+    public function scopePending($query)
+    {
+        return $query->where('revised', static::PENDING);
+    }
+    public function scopeApproved($query)
+    {
+        return $query->where('revised', static::APPROVED);
+    }
+
     public function changeStatus($status)
     {
-	$this->revised = $this->statuses[$status];
-	$this->save();
+        $this->revised = $this->statuses[$status];
+        $this->save();
     }
 
     /*
