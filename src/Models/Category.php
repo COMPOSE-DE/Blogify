@@ -31,6 +31,11 @@ class Category extends BaseModel
      */
     public $timestamps = true;
 
+    public function getLinkAttribute()
+    {
+        return url('blog') . '?category=' . $this->id;
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Relationships

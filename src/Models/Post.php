@@ -71,7 +71,7 @@ class Post extends BaseModel
     |
     */
 
-    public function getApprovedCommentsCountAttribute()
+    public function getCommentsCountAttribute()
     {
         return $this->approvedComments()->count();
     }
@@ -85,7 +85,12 @@ class Post extends BaseModel
     {
         return date("d-m-Y H:i", strtotime($value));
     }
-    
+
+    public function getAuthorNameAttribute()
+    {
+        return $this->user->name;
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Scopes
@@ -125,6 +130,11 @@ class Post extends BaseModel
     public function scopeRecommended($query)
     {
         return $query->where('visibility_id', Visibility::getRecommendedId());
+    }
+
+    public function scopePopular($query)
+    {
+        return $query->orderBy('views_count', 'DESC');
     }
 
     public function hasTag($tagToCheck)

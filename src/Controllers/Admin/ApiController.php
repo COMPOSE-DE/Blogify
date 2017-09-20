@@ -81,7 +81,7 @@ class ApiController extends BaseController
     public function autoSave(Cache $cache, Request $request)
     {
         try {
-            Tag::findOrCreateTags($request->get('tags', []));
+            Tag::findOrCreateTags($request->get('tags') ?? []);
 
             $id = $this->user->id;
             $cache->put(

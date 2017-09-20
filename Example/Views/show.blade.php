@@ -37,7 +37,7 @@
                         <div class="panel-footer">
                             <div class="row">
                                 <div class="col-md-6 col-xs-12">
-                                    <small>{{ $post->approved_comments_count }} comments</small>
+                                    <small>{{ $post->comments_count }} comments</small>
                                     <small>{{ $post->views_count }} views</small>
                                 </div>
                                 <div class="col-md-6 col-xs-12 text-right">

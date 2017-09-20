@@ -69,8 +69,13 @@ class Comment extends BaseModel
     |
     */
 
-    public function getCreatedAtAttribute($value)
+    public function getAuthorNameAttribute()
     {
-        return date("d-m-Y H:i", strtotime($value));
+        return $this->user->name;
+    }
+
+    public function getCreatedAtFormattedAttribute()
+    {
+        return date('d.m.Y', strtotime($this->created_at));
     }
 }
