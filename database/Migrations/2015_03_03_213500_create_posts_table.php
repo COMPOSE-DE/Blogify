@@ -28,7 +28,7 @@ class CreatePostsTable extends Migration {
             $table->integer('visibility_id');
             $table->integer('being_edited_by')->nullable()->default(null);
             $table->string('password')->nullable();
-            $table->timestamp('publish_date');
+            $table->timestamp('publish_date')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
