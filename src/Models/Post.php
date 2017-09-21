@@ -162,4 +162,14 @@ class Post extends BaseModel
             return Tag::make(['name' => $tag]);
         }));
     }
+
+    public function hasPassword()
+    {
+        return $this->visibility_id === Visibility::getProtectedId();
+    }
+
+    public function passwordIs($password)
+    {
+        return Hash::check($password, $this->password);
+    }
 }
