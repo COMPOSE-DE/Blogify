@@ -11,7 +11,7 @@ class CommentsController extends BaseController
     {
         $this->checkRevised($revised);
 
-        $comments = Comment::byRevised($revised)->paginate($this->config->items_per_page);
+        $comments = Comment::with(['post', 'user'])->byRevised($revised)->paginate($this->config->items_per_page);
 
         return view('blogify::admin.comments.index', compact('comments', 'revised'));
     }

@@ -134,21 +134,16 @@ class PostsController extends BaseController
      */
     public function index($trashed = false)
     {
-        $scope = 'for'.$this->user->role->name;
-        $data = [
-            'posts' => (! $trashed) ?
-                $this->post->$scope()
-                        ->orderBy('publish_date', 'DESC')
-                        ->paginate($this->config->items_per_page)
-                :
-                $this->post->$scope()
-                        ->onlyTrashed()
-                        ->orderBy('publish_date', 'DESC')
-                        ->paginate($this->config->items_per_page),
-            'trashed' => $trashed,
-        ];
+        $query = $this->post
+            ->with('status')
+            ->forRole($this->user->role->name)
+            ->orderBy('publish_date', 'DESC');
+        if ($trashed) {
+            $query->onlyTrashed();
+        }
+        $posts = $query->paginate($this->config->items_per_page);
 
-        return view('blogify::admin.posts.index', $data);
+        return view('blogify::admin.posts.index', compact('posts', 'trashed'));
     }
 
     public function create()

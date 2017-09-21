@@ -40,9 +40,11 @@ class UserController extends BaseController
         $data = [
             'users' => (! $trashed) ?
                     $this->user
+                        ->with('role')
                         ->paginate($this->config->items_per_page)
                     :
                     $this->user
+                        ->with('role')
                         ->onlyTrashed()
                         ->paginate($this->config->items_per_page),
             'trashed' => $trashed,
