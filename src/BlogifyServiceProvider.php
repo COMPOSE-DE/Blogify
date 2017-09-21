@@ -97,7 +97,6 @@ class BlogifyServiceProvider extends ServiceProvider
         $this->app['router']->aliasMiddleware('RedirectIfAuthenticated', 'Donatix\Blogify\Middleware\RedirectIfAuthenticated');
         $this->app['router']->aliasMiddleware('IsOwner', 'Donatix\Blogify\Middleware\IsOwner');
         $this->app['router']->aliasMiddleware('CanViewPost', 'Donatix\Blogify\Middleware\CanViewPost');
-        $this->app['router']->aliasMiddleware('ProtectedPost', 'Donatix\Blogify\Middleware\ProtectedPost');
         $this->app['router']->aliasMiddleware('ConfirmPasswordChange', 'Donatix\Blogify\Middleware\ConfirmPasswordChange');
     }
 

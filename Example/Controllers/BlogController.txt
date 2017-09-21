@@ -5,7 +5,6 @@ use Donatix\Blogify\Models\Tag;
 use Donatix\Blogify\Models\Post;
 use Illuminate\Database\DatabaseManager;
 use Donatix\Blogify\Models\Category;
-use Donatix\Blogify\Middleware\ProtectedPost;
 
 class BlogController extends Controller
 {
@@ -47,8 +46,6 @@ class BlogController extends Controller
         $this->tag = $tag;
         $this->db = $db;
         $this->config = objectify(config('blogify'));
-
-        $this->middleware(ProtectedPost::class, ['only' => 'show']);
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -72,10 +69,17 @@ class BlogController extends Controller
      */
     public function show($slug)
     {
-        $data = $this->getOverviewData();
+        $post = $this->post->bySlug($slug)->firstOrFail();
 
-        $data['post'] = $this->post->bySlug($slug);
-        return view('blogify.show', $data);
+        if ($post->hasPassword() && ! $post->passwordIs(request('password'))) {
+            return redirect()->route('blog.askPassword', [$post->slug])
+                ->with(
+                    'wrong_password',
+                    'Please provide a valid password to view this post'
+                );
+        }
+
+        return view('blogify.show', $this->getOverviewData($post));
     }
 
     /**
@@ -87,11 +91,11 @@ class BlogController extends Controller
     {
         $data = $this->getOverviewData();
         $data['posts'] = $this->post
-                                ->forPublic()
-                                ->where($this->db->raw('MONTHNAME(publish_date)'), '=', $month)
-                                ->where($this->db->raw('YEAR(publish_date)'), '=', $year)
-                                ->orderBy('publish_date', 'DESC')
-                                ->paginate($this->config->items_per_page);
+            ->forPublic()
+            ->where($this->db->raw('MONTHNAME(publish_date)'), '=', $month)
+            ->where($this->db->raw('YEAR(publish_date)'), '=', $year)
+            ->orderBy('publish_date', 'DESC')
+            ->paginate($this->config->items_per_page);
 
         return view('blogify.index', $data);
     }
@@ -128,7 +132,7 @@ class BlogController extends Controller
     /**
      * @return array
      */
-    private function getOverviewData()
+    private function getOverviewData($post = null)
     {
         $archive = $this->post->where('publish_date', '<=', date('Y-m-d H:i:s'))->orderBy('publish_date', 'DESC')->get()->groupBy(function($query){
             return Carbon::parse($query->publish_date)->format('F Y');
@@ -138,6 +142,7 @@ class BlogController extends Controller
             'categories' => $this->category->all(),
             'tags'  => $this->tag->all(),
             'archives' => $archive,
+            'post' => $post,
         ];
 
         return $data;
