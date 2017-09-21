@@ -43,15 +43,4 @@ class Visibility extends BaseModel
     {
         return (new static)->getCachedId(static::PROTECTED);
     }
-
-    public function getCachedId($type)
-    {
-        return cache()->remember(
-            "visibility.{$type}",
-            config('blogify.config_items_cache_time'),
-            function() use($type) {
-                return $this->where('name', $type)->first(['id'])->id;
-            }
-        );
-    }
 }
