@@ -35,6 +35,14 @@ return [
     'items_per_page' => 20,
 
     /**
+     * Defines how much time the config items
+     * retrived from the database to be cached.
+     * The value is in minutes.
+     * Such tables are visibilities, statuses ...
+     */
+    'config_items_cache_time' => 60 * 24,
+
+    /**
      * Paths where uploaded images
      * wil be placed
      *
