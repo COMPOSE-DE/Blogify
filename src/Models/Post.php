@@ -107,19 +107,19 @@ class Post extends BaseModel
     |
     */
 
-    public function scopeForAdmin($query)
+    public function scopeForRole($query, $role)
     {
-        return $query;
-    }
+        if ($role === Role::ADMIN) {
+            return $query;
+        }
 
-    public function scopeForReviewer($query)
-    {
-        return $query->whereReviewerId(Auth::user()->id);
-    }
+        if ($role === Role::AUTHOR) {
+            return $query->whereReviewerId(Auth::user()->id);
+        }
 
-    public function scopeForAuthor($query)
-    {
-        return $query->whereUserId(Auth::user()->id);
+        if ($role === Role::MEMBER) {
+            return $query->whereUserId(Auth::user()->id);
+        }
     }
 
     public function scopeBySlug($query, $slug)
