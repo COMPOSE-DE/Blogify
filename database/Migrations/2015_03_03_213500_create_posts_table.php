@@ -20,15 +20,15 @@ class CreatePostsTable extends Migration {
             $table->string('slug', 120)->unique();
             // $table->text('short_description');
             $table->longtext('content');
-            $table->unsignedInteger('views_count')->default(0);
+            $table->unsignedInteger('views_count')->default(0)->index();
             $table->integer('user_id')->unsigned();
             $table->integer('reviewer_id');
             $table->integer('category_id')->unsigned();
             $table->integer('status_id');
-            $table->integer('visibility_id');
+            $table->integer('visibility_id')->index();
             $table->integer('being_edited_by')->nullable()->default(null);
             $table->string('password')->nullable();
-            $table->timestamp('publish_date')->nullable();
+            $table->timestamp('publish_date')->nullable()->index();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -43,5 +43,4 @@ class CreatePostsTable extends Migration {
     {
         Schema::dropIfExists('posts');
     }
-
 }

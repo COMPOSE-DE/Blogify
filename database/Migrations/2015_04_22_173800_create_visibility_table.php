@@ -28,5 +28,4 @@ class CreateVisibilityTable extends Migration {
     {
         Schema::dropIfExists('visibility');
     }
-
 }

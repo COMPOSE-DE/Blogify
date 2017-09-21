@@ -18,7 +18,7 @@ class CreateMediaTable extends Migration {
             $table->string('hash', 80)->unique();
             $table->string('type', 25);
             $table->string('path', 200);
-            $table->integer('post_id')->unsigned();
+            $table->integer('post_id')->unsigned()->index();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -33,5 +33,4 @@ class CreateMediaTable extends Migration {
     {
         Schema::dropIfExists('media');
     }
-
 }

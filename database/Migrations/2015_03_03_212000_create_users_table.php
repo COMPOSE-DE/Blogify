@@ -28,7 +28,6 @@ class CreateUsersTable extends Migration
         } else {
             $this->updateUsersTable();
         }
-
     }
 
     /**
@@ -124,5 +123,4 @@ class CreateUsersTable extends Migration
             }
         });
     }
-
 }

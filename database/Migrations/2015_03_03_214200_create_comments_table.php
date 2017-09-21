@@ -18,8 +18,8 @@ class CreateCommentsTable extends Migration {
             $table->string('hash', 80)->unique();
             $table->text('content');
             $table->integer('user_id')->unsigned();
-            $table->integer('post_id')->unsigned();
-            $table->integer('revised');
+            $table->integer('post_id')->unsigned()->index();
+            $table->integer('revised')->index();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -34,5 +34,4 @@ class CreateCommentsTable extends Migration {
     {
         Schema::dropIfExists('comments');
     }
-
 }

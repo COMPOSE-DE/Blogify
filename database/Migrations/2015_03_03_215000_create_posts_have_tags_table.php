@@ -15,8 +15,8 @@ class CreatePostsHaveTagsTable extends Migration {
         Schema::create('posts_have_tags', function($table)
         {
             $table->increments('id');
-            $table->integer('post_id')->unsigned();
-            $table->integer('tag_id')->unsigned();
+            $table->integer('post_id')->unsigned()->index();
+            $table->integer('tag_id')->unsigned()->index();
         });
     }
 
@@ -29,5 +29,4 @@ class CreatePostsHaveTagsTable extends Migration {
     {
         Schema::dropIfExists('posts_have_tags');
     }
-
 }
