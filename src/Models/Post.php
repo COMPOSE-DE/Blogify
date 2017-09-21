@@ -3,14 +3,15 @@
 namespace Donatix\Blogify\Models;
 
 use Auth;
-use Donatix\Blogify\Models\Tag;
+use Donatix\Blogify\Models\Category;
+use Donatix\Blogify\Models\Comment;
 use Donatix\Blogify\Models\Media;
 use Donatix\Blogify\Models\Status;
-use Donatix\Blogify\Models\Comment;
-use Donatix\Blogify\Models\Category;
+use Donatix\Blogify\Models\Tag;
 use Donatix\Blogify\Models\Visibility;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Hash;
 
 class Post extends BaseModel
 {
@@ -61,6 +62,11 @@ class Post extends BaseModel
         return $this->hasMany(Comment::class)->approved();
     }
 
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Accessors & Mutators
@@ -73,7 +79,7 @@ class Post extends BaseModel
 
     public function getCommentsCountAttribute()
     {
-        return $this->approvedComments()->count();
+        return $this->approvedComments->count();
     }
 
     public function setPublishDateAttribute($value)
@@ -118,7 +124,7 @@ class Post extends BaseModel
 
     public function scopeBySlug($query, $slug)
     {
-        return $query->whereSlug($slug)->first();
+        return $query->where('slug', $slug);
     }
 
     public function scopeForPublic($query)
