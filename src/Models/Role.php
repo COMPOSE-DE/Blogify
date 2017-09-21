@@ -21,9 +21,9 @@ class Role extends BaseModel
         $query->whereIn('name', [static::ADMIN, static::AUTHOR, static::REVIEWER]);
     }
 
-    public function getAdminRoleId()
+    public static function getAdminRoleId()
     {
-        return static::where('name', static::ADMIN)->first()->id;
+        return (new static)->getCachedId(static::ADMIN);
     }
 
     public function createUser($userData)
