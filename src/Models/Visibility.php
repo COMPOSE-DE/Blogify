@@ -21,11 +21,37 @@ class Visibility extends BaseModel
 
     public static function getPublicIds()
     {
-        return static::whereIn('name', [static::RECOMMENDED, static::PUBLIC])->pluck('id');
+        return [static::getRecommendedId(), static::getPublicId()];
     }
 
     public static function getRecommendedId()
     {
-        return static::where('name', static::RECOMMENDED)->first()->id;
+        return (new static)->getCachedId(static::RECOMMENDED);
+    }
+
+    public static function getPublicId()
+    {
+        return (new static)->getCachedId(static::PUBLIC);
+    }
+
+    public static function getPrivateId()
+    {
+        return (new static)->getCachedId(static::PRIVATE);
+    }
+
+    public static function getProtectedId()
+    {
+        return (new static)->getCachedId(static::PROTECTED);
+    }
+
+    public function getCachedId($type)
+    {
+        return cache()->remember(
+            "visibility.{$type}",
+            config('blogify.config_items_cache_time'),
+            function() use($type) {
+                return $this->where('name', $type)->first(['id'])->id;
+            }
+        );
     }
 }
