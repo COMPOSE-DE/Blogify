@@ -408,6 +408,7 @@ class PostsController extends BaseController
     private function buildPostObject()
     {
         $cachedPost = $this->cache->get("autoSavedPost-{$this->user->id}");
+        $category = $this->category->byHash($cachedPost['category']);
 
         $post = new Post;
         $post->hash = '';
@@ -418,7 +419,7 @@ class PostsController extends BaseController
         $post->status_id = $this->status->byHash($cachedPost['status'])->id;
         $post->visibility_id = $this->visibility->byHash($cachedPost['visibility'])->id;
         $post->reviewer_id = User::find($cachedPost['reviewer'])->id;
-        $post->category_id = $this->category->byHash($cachedPost['category'])->id;
+        $post->category_id = $category ? $category->id : null;
         $post->assignTagsRelation($cachedPost['tags']);
 
         return $post;
