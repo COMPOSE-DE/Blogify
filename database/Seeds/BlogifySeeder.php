@@ -21,5 +21,6 @@ class BlogifySeeder extends Seeder
         $this->call('Donatix\Blogify\database\Seeds\UsersTableSeeder');
         $this->call('Donatix\Blogify\database\Seeds\StatusesTableSeeder');
         $this->call('Donatix\Blogify\database\Seeds\VisibilityTableSeeder');
+        $this->call('Donatix\Blogify\database\Seeds\TagsTableSeeder');
     }
 }
