@@ -80,4 +80,10 @@ return [
      *
      */
     'enable_default_routes' => true,
+
+    /**
+     * If should send emails to reviewers of
+     * posts in the blog
+     */
+    'notify_reviewers' => env('BLOGIFY_NOTIFY_REVIEWERS', false),
 ];

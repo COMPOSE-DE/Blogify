@@ -178,8 +178,9 @@ class PostsController extends BaseController
 
         $post = $this->storeOrUpdatePost($formData);
         $post->assignTags($request->get('tags', []));
+        $status = $this->status->byHash($request->get('status'));
 
-        if ($this->status->byHash($request->get('status'))->name == 'Pending review') {
+        if ($status->name == Status::PENDING && $this->config->notify_reviewers) {
             $this->mailReviewer($post);
         }
 
