@@ -8,6 +8,6 @@ class Blogify extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return 'Donatix.blogify';
+        return 'ComposeDe.blogify';
     }
 }

@@ -32,7 +32,7 @@ class BlogifyServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('Donatix.blogify', function()
+        $this->app->bind('ComposeDe.blogify', function()
         {
             $db = $this->app['db'];
             $config = $this->app['config'];
