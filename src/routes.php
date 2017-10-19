@@ -8,21 +8,21 @@
 $use_default_routes = config('blogify.enable_default_routes');
 
 if ($use_default_routes) {
-    Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => 'web'], function() {
-        Route::resource('blog', 'BlogController', ['only' => ['index', 'show']]);
-        Route::post('blog/{slug}', [
+    Route::group(['prefix' => config('blogify.blog_route_prefix'), 'namespace' => 'App\Http\Controllers', 'middleware' => 'web'], function() {
+        Route::resource('/', 'BlogController', ['only' => ['index', 'show']]);
+        Route::post('{slug}', [
             'as' => 'blog.confirmPass',
             'uses' => 'BlogController@show',
         ]);
-        Route::get('blog/archive/{year}/{month}', [
+        Route::get('archive/{year}/{month}', [
             'as' => 'blog.archive',
             'uses' => 'BlogController@archive'
         ]);
-        Route::get('blog/category/{category}', [
+        Route::get('category/{category}', [
             'as' => 'blog.category',
             'uses' => 'BlogController@category',
         ]);
-        Route::get('blog/protected/verify/{hash}', [
+        Route::get('protected/verify/{hash}', [
             'as' => 'blog.askPassword',
             'uses' => 'BlogController@askPassword'
         ]);
@@ -38,7 +38,7 @@ if ($use_default_routes) {
 ///////////////////////////////////////////////////////////////////////////
 
 $admin = [
-    'prefix' => 'admin',
+    'prefix' => config('blogify.blog_admin_route_prefix'),
     'namespace' => 'ComposeDe\Blogify\Controllers\Admin',
     'middleware' => ['web', 'auth'],
 ];
