@@ -9,6 +9,14 @@ return [
     'models' => [
         //The model used for authentication and/or your users.
         'auth' => \App\User::class,
+        'category' => \ComposeDe\Blogify\Models\Category::class,
+        'comment' => \ComposeDe\Blogify\Models\Comment::class,
+        'media' => \ComposeDe\Blogify\Models\Media::class,
+        'post' => \ComposeDe\Blogify\Models\Post::class,
+        'role' => \ComposeDe\Blogify\Models\Role::class,
+        'status' => \ComposeDe\Blogify\Models\Status::class,
+        'tag' => \ComposeDe\Blogify\Models\Tag::class,
+        'visibility' => \ComposeDe\Blogify\Models\Visibility::class,
     ],
 
     /**
