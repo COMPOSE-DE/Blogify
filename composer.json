@@ -18,9 +18,9 @@
     },
     "autoload": {
         "psr-4": {
-            "Donatix\\Blogify\\": "src/",
-            "Donatix\\Blogify\\Example\\": "Example/",
-            "Donatix\\Blogify\\database\\": "database/"
+            "ComposeDe\\Blogify\\": "src/",
+            "ComposeDe\\Blogify\\Example\\": "Example/",
+            "ComposeDe\\Blogify\\database\\": "database/"
         },
         "files": [
             "src/Helpers.php"
