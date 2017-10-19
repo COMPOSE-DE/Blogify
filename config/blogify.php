@@ -3,10 +3,17 @@
 return [
 
     /**
-     * The model used for authentication and/or your users.
-     *
+     * Specify your own models, if you wish
      */
-    'auth_model' => \App\User::class,
+    
+    'models' => [
+        //The model used for authentication and/or your users.
+        'auth' => \App\User::class,
+    ],
+
+    /**
+     * Other models
+     */
 
     /**
      * Array with all available character sets

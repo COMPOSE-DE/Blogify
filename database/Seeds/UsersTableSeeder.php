@@ -12,7 +12,7 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         $admin = config('blogify.admin_user');
-        $user = app()->make(config('blogify.auth_model'));
+        $user = app()->make(config('blogify.models.auth'));
 
         if (! $user->where('email', $admin['email'])->exists()) {
             $user->create([

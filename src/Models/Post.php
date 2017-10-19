@@ -24,7 +24,7 @@ class Post extends BaseModel
 
     public function user()
     {
-        return $this->belongsTo(config('blogify.auth_model'))->withTrashed();
+        return $this->belongsTo(config('blogify.models.auth'))->withTrashed();
     }
 
     public function comment()

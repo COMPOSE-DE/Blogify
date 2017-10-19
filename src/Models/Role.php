@@ -13,7 +13,7 @@ class Role extends BaseModel
 
     public function users()
     {
-        return $this->hasMany(config('blogify.auth_model'));
+        return $this->hasMany(config('blogify.models.auth'));
     }
 
     public function scopeByAdminRoles($query)

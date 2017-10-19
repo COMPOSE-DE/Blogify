@@ -21,7 +21,7 @@ class Comment extends BaseModel
 
     public function user()
     {
-        return $this->belongsTo(config('blogify.auth_model'));
+        return $this->belongsTo(config('blogify.models.auth'));
     }
 
     public function post()
