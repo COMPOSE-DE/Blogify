@@ -7,20 +7,20 @@ use ComposeDe\Blogify\Models\Comment;
 class CommentsController extends BaseController
 {
 
-    public function index($revised = "pending")
+    public function index($revised = "pending", Comment $commentsModel)
     {
         $this->checkRevised($revised);
 
-        $comments = Comment::with(['post', 'user'])->byRevised($revised)->paginate($this->config->items_per_page);
+        $comments = $commentsModel->with(['post', 'user'])->byRevised($revised)->paginate($this->config->items_per_page);
 
         return view('blogify::admin.comments.index', compact('comments', 'revised'));
     }
 
-    public function changeStatus($hash, $status)
+    public function changeStatus($hash, $status, Comment $comments)
     {
         $this->checkRevised($status);
 
-        $comment = Comment::byHash($hash);
+        $comment =$comments->byHash($hash);
         $comment->changeStatus($status);
 
         $message = trans(

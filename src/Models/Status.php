@@ -2,7 +2,6 @@
 
 namespace ComposeDe\Blogify\Models;
 
-use ComposeDe\Blogify\Models\Post;
 
 class Status extends BaseModel
 {
@@ -14,7 +13,7 @@ class Status extends BaseModel
 
     public function post()
     {
-        return $this->hasMany(Post::class);
+        return $this->hasMany(config('blogify.models.post'));
     }
 
     public static function getDraftId()
@@ -30,5 +29,20 @@ class Status extends BaseModel
     public static function getReviewedId()
     {
         return (new static)->getCachedId(static::REVIEWED);
+    }
+
+    public function getDraftStatusName()
+    {
+        return static::DRAFT;
+    }
+
+    public function getPendingStatusName()
+    {
+        return static::PENDING;
+    }
+
+    public function getReviewedStatusName()
+    {
+        return static::REVIEWED;
     }
 }

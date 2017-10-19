@@ -11,21 +11,21 @@ class PostRequest extends Request
     /**
      * @var \ComposeDe\Blogify\Models\Post
      */
-    protected $post;
+    protected $posts;
 
     /**
      * @var \ComposeDe\Blogify\Models\Visibility
      */
-    protected $visibility;
+    protected $visibilities;
 
     /**
-     * @param \ComposeDe\Blogify\Models\Post $post
-     * @param \ComposeDe\Blogify\Models\Visibility $visibility
+     * @param \ComposeDe\Blogify\Models\Post       $posts
+     * @param \ComposeDe\Blogify\Models\Visibility $visibilities
      */
-    public function __construct(Post $post, Visibility $visibility)
+    public function __construct(Post $posts, Visibility $visibilities)
     {
-        $this->post = $post;
-        $this->visibility = $visibility;
+        $this->posts = $posts;
+        $this->visibilities = $visibilities;
     }
 
     /**
@@ -46,8 +46,8 @@ class PostRequest extends Request
     public function rules()
     {
         $hash = $this->input('hash');
-        $id = (! empty($hash)) ? $this->post->byHash($hash)->id : 0;
-        $protected_visibility = $this->visibility->whereName('Protected')->first()->hash;
+        $id = (! empty($hash)) ? $this->posts->byHash($hash)->id : 0;
+        $protected_visibility = $this->visibilities->whereName('Protected')->first()->hash;
 
         return [
             'title'             => 'required|min:2|max:100',

@@ -7,11 +7,22 @@ use ComposeDe\Blogify\Models\Visibility;
 
 class VisibilityTableSeeder extends Seeder
 {
+    /**
+     * @var \ComposeDe\Blogify\Models\Visibility
+     */
+    private $visibilities;
+
+    public function __construct(Visibility $visibilities)
+    {
+        $this->visibilities = $visibilities;
+    }
+
+
     public function run()
     {
-        Visibility::create(['name' => Visibility::PUBLIC]);
-        Visibility::create(['name' => Visibility::PROTECTED]);
-        Visibility::create(['name' => Visibility::PRIVATE]);
-        Visibility::create(['name' => Visibility::RECOMMENDED]);
+        $this->visibilities->create(['name' => $this->visibilities->getPublicVisibilityName()]);
+        $this->visibilities->create(['name' => $this->visibilities->getProtectedVisibilityName()]);
+        $this->visibilities->create(['name' => $this->visibilities->getPrivateVisibilityName()]);
+        $this->visibilities->create(['name' => $this->visibilities->getRecommendedVisibilityName()]);
     }
 }

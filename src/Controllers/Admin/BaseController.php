@@ -6,7 +6,7 @@ use ComposeDe\Blogify\Controllers\Admin;
 
 class BaseController extends Controller
 {
-    protected $user;
+    protected $users;
     protected $config;
 
     public function __construct()
@@ -14,8 +14,8 @@ class BaseController extends Controller
         $this->config = objectify(config('blogify'));
 
         $this->middleware(function ($request, $next) {
-            $this->user = $request->user();
-            view()->share('_user', $this->user);
+            $this->users = $request->user();
+            view()->share('_user', $this->users);
 
             return $next($request);
         });

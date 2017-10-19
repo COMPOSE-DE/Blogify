@@ -41,6 +41,6 @@ class Tag extends BaseModel
 
     public function post()
     {
-        return $this->belongsToMany(Post::class, 'posts_have_tags', 'tag_id', 'post_id');
+        return $this->belongsToMany(config('blogify.models.post'), 'posts_have_tags', 'tag_id', 'post_id');
     }
 }

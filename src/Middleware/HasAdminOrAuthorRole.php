@@ -17,7 +17,7 @@ class HasAdminOrAuthorRole
     /**
      * @var \ComposeDe\Blogify\Models\Role
      */
-    private $role;
+    private $roles;
 
     /**
      * @var array
@@ -27,13 +27,13 @@ class HasAdminOrAuthorRole
     /**
      * Create a new filter instance.
      *
-     * @param \ComposeDe\Blogify\Models\Role $role
+     * @param \ComposeDe\Blogify\Models\Role   $roles
      * @param \Illuminate\Contracts\Auth\Guard $auth
      */
-    public function __construct(Guard $auth, Role $role)
+    public function __construct(Guard $auth, Role $roles)
     {
         $this->auth = $auth;
-        $this->role = $role;
+        $this->roles = $roles;
 
         $this->fillAlowedRolesArray();
     }
@@ -59,7 +59,7 @@ class HasAdminOrAuthorRole
      */
     private function fillAlowedRolesArray()
     {
-        $roles = $this->role
+        $roles = $this->roles
                     ->where('name', '<>', 'reviewer')
                     ->where('name', '<>', 'member')
                     ->get();

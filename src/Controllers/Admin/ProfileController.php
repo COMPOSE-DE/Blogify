@@ -2,7 +2,6 @@
 
 namespace ComposeDe\Blogify\Controllers\Admin;
 
-use App\User;
 use ComposeDe\Blogify\Config;
 use ComposeDe\Blogify\Middleware\IsOwner;
 use ComposeDe\Blogify\Requests\ProfileUpdateRequest;
@@ -10,26 +9,26 @@ use Intervention\Image\Facades\Image;
 
 class ProfileController extends BaseController
 {
-    protected $user;
+    protected $users;
 
-    public function __construct(User $user) {
+    public function __construct() {
         parent::__construct();
 
         $this->middleware(IsOwner::class, ['only', 'edit']);
 
-        $this->user = $user;
+        $this->users = app(config('blogify.models.auth'));
     }
 
     public function edit($id)
     {
-        $user = User::findOrFail($id);
+        $user = $this->users->findOrFail($id);
 
         return view('blogify::admin.profiles.form', compact('user'));
     }
 
     public function update(ProfileUpdateRequest $request, $id)
     {
-        $user = User::findOrFail($id);
+        $user = $this->users->findOrFail($id);
 
         $user->name = $request->get('name');
         $user->email = $request->get('email');
@@ -74,7 +73,7 @@ class ProfileController extends BaseController
      */
     private function generateFilename()
     {
-        return time().'-'.$this->user->name.'-profilepicture';
+        return time().'-'.$this->users->name.'-profilepicture';
     }
 
     /**

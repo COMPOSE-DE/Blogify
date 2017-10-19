@@ -27,7 +27,7 @@ class ProfileUpdateRequest extends Request
     /**
      * @var \App\User
      */
-    protected $user;
+    protected $users;
 
 
     /**
@@ -42,12 +42,12 @@ class ProfileUpdateRequest extends Request
      * Construct the class
      *
      * @param Guard $auth
-     * @param User $user
+     * @param User  $users
      */
-    public function __construct(Guard $auth, User $user)
+    public function __construct(Guard $auth, User $users)
     {
         $this->auth = $auth;
-        $this->user = $user;
+        $this->users = $users;
     }
 
     /**

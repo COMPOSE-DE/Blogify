@@ -43,6 +43,6 @@ class Media extends BaseModel
 
     public function post()
     {
-        return $this->belongsTo(Post::class);
+        return $this->belongsTo(config('blogify.models.post'));
     }
 }

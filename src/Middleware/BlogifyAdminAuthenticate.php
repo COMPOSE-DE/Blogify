@@ -19,7 +19,7 @@ class BlogifyAdminAuthenticate
     /**
      * @var \ComposeDe\Blogify\Models\Role
      */
-    private $roles;
+    private $adminRoles;
 
     /**
      * @var array
@@ -30,12 +30,12 @@ class BlogifyAdminAuthenticate
      * Create a new filter instance.
      *
      * @param \Illuminate\Contracts\Auth\Guard $auth
-     * @param \ComposeDe\Blogify\Models\Role $role
+     * @param \ComposeDe\Blogify\Models\Role   $roles
      */
-    public function __construct(Guard $auth, Role $role)
+    public function __construct(Guard $auth, Role $roles)
     {
         $this->auth = $auth;
-        $this->roles = $role->byAdminRoles()->get();
+        $this->adminRoles = $roles->byAdminRoles()->get();
         $this->fillAllowedRolesArray();
     }
 
@@ -69,7 +69,7 @@ class BlogifyAdminAuthenticate
      */
     private function fillAllowedRolesArray()
     {
-        foreach ($this->roles as $role) {
+        foreach ($this->adminRoles as $role) {
             array_push($this->allowed_roles, $role->id);
         }
     }

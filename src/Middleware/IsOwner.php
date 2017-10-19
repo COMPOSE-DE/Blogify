@@ -19,18 +19,18 @@ class IsOwner
     /**
      * @var \App\User
      */
-    protected $user;
+    protected $users;
 
     /**
      * Create a new filter instance.
      *
      * @param \Illuminate\Contracts\Auth\Guard $auth
-     * @param \App\User $user
+     * @param \App\User                        $users
      */
-    public function __construct(Guard $auth, User $user)
+    public function __construct(Guard $auth, User $users)
     {
         $this->auth = $auth;
-        $this->user = $user;
+        $this->users = $users;
     }
 
     /**
@@ -42,7 +42,7 @@ class IsOwner
      */
     public function handle($request, Closure $next)
     {
-        $user = $this->user->findOrFail($request->segment(3));
+        $user = $this->users->findOrFail($request->segment(3));
 
         if ($this->auth->user()->getAuthIdentifier() != $user->id) {
             abort(404);

@@ -7,11 +7,21 @@ use ComposeDe\Blogify\Models\Role;
 
 class RolesTableSeeder extends Seeder
 {
+    /**
+     * @var \ComposeDe\Blogify\Models\Role
+     */
+    private $roles;
+
+    public function __construct(Role $roles)
+    {
+        $this->roles = $roles;
+    }
+
     public function run()
     {
-        Role::firstOrcreate(['name' => Role::ADMIN]);
-        Role::firstOrcreate(['name' => Role::AUTHOR]);
-        Role::firstOrcreate(['name' => Role::REVIEWER]);
-        Role::firstOrcreate(['name' => Role::MEMBER]);
+        $this->roles->firstOrcreate(['name' => $this->roles->getAdminRoleName()]);
+        $this->roles->firstOrcreate(['name' => $this->roles->getAuthorRoleName()]);
+        $this->roles->firstOrcreate(['name' => $this->roles->getReviewerRoleName()]);
+        $this->roles->firstOrcreate(['name' => $this->roles->getMemberRoleName()]);
     }
 }

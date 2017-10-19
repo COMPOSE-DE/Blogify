@@ -13,17 +13,17 @@ class DashboardController extends BaseController
     /**
      * @var \App\User
      */
-    protected $user;
+    protected $users;
 
     /**
      * @var \ComposeDe\Blogify\Models\Post
      */
-    protected $post;
+    protected $posts;
 
     /**
      * @var \ComposeDe\Blogify\Models\Comment
      */
-    protected $comment;
+    protected $comments;
 
     /**
      * Holds the data for the dashboard
@@ -33,19 +33,19 @@ class DashboardController extends BaseController
     protected $data = [];
 
     /**
-     * @param \App\User $user
-     * @param \ComposeDe\Blogify\Models\Post $post
-     * @param \ComposeDe\Blogify\Models\Comment $comment
-     * @param \Illuminate\Contracts\Auth\Guard $auth
+     * @param \App\User                         $user
+     * @param \ComposeDe\Blogify\Models\Post    $posts
+     * @param \ComposeDe\Blogify\Models\Comment $comments
+     * @param \Illuminate\Contracts\Auth\Guard  $auth
      */
-    public function __construct(Post $post, Comment $comment) {
+    public function __construct(Post $posts, Comment $comments) {
         parent::__construct();
 
-        $this->post = $post;
-        $this->comment = $comment;
+        $this->posts = $posts;
+        $this->comments = $comments;
 
-        if ($this->user) {
-            $this->{"buildDataArrayFor".$this->user->role->name}();
+        if ($this->users) {
+            $this->{"buildDataArrayFor".$this->users->role->name}();
         }
     }
 
@@ -72,13 +72,15 @@ class DashboardController extends BaseController
      */
     private function buildDataArrayForAdmin()
     {
-        $this->data['new_users_since_last_visit'] = User::newUsersSince($this->user->updated_at)->count();
+        $users = app(config('blogify.models.auth'));
 
-        $this->data['pending_comments'] = $this->comment->byRevised(1)->count();
+        $this->data['new_users_since_last_visit'] = $users->newUsersSince($this->users->updated_at)->count();
 
-        $this->data['published_posts'] = $this->post->where('publish_date', '<=', date('Y-m-d H:i:s'))->count();
+        $this->data['pending_comments'] = $this->comments->byRevised(1)->count();
 
-        $this->data['pending_review_posts'] = $this->post->whereStatusId(2)->count();
+        $this->data['published_posts'] = $this->posts->where('publish_date', '<=', date('Y-m-d H:i:s'))->count();
+
+        $this->data['pending_review_posts'] = $this->posts->whereStatusId(2)->count();
     }
 
     /**
@@ -86,14 +88,14 @@ class DashboardController extends BaseController
      */
     private function buildDataArrayForAuthor()
     {
-        $this->data['published_posts'] = $this->post->where('publish_date', '<=', date('Y-m-d H:i:s'))
+        $this->data['published_posts'] = $this->posts->where('publish_date', '<=', date('Y-m-d H:i:s'))
                                             ->forAuthor()
                                             ->count();
 
-        $this->data['pending_review_posts'] = $this->post->whereStatusId(2)->forAuthor()->count();
+        $this->data['pending_review_posts'] = $this->posts->whereStatusId(2)->forAuthor()->count();
 
-        $post_ids = $this->post->forAuthor()->lists('id');
-        $this->data['pending_comments'] = $this->comment->byRevised(1)->whereIn('post_id', $post_ids)->count();
+        $post_ids = $this->posts->forAuthor()->lists('id');
+        $this->data['pending_comments'] = $this->comments->byRevised(1)->whereIn('post_id', $post_ids)->count();
     }
 
     /**
@@ -101,7 +103,7 @@ class DashboardController extends BaseController
      */
     private function buildDataArrayForReviewer()
     {
-        $this->data['pending_review_posts'] = $this->post->whereStatusId(2)->forReviewer()->count();
+        $this->data['pending_review_posts'] = $this->posts->whereStatusId(2)->forReviewer()->count();
     }
 
 }

@@ -15,23 +15,23 @@ class UserController extends BaseController
     /**
      * @var \App\User
      */
-    protected $user;
+    protected $users;
 
     /**
      * @var \ComposeDe\Blogify\Models\Role
      */
-    protected $role;
+    protected $roles;
 
     /**
      * @var \ComposeDe\Blogify\Services\BlogifyMailer
      */
     protected $mail;
 
-    public function __construct(User $user, Role $role, BlogifyMailer $mail) {
+    public function __construct(Role $roles, BlogifyMailer $mail) {
         parent::__construct();
 
-        $this->user = $user;
-        $this->role = $role;
+        $this->users = app(config('blogify.models.auth'));
+        $this->roles = $roles;
         $this->mail = $mail;
     }
 
@@ -39,11 +39,11 @@ class UserController extends BaseController
     {
         $data = [
             'users' => (! $trashed) ?
-                    $this->user
+                    $this->users
                         ->with('role')
                         ->paginate($this->config->items_per_page)
                     :
-                    $this->user
+                    $this->users
                         ->with('role')
                         ->onlyTrashed()
                         ->paginate($this->config->items_per_page),
@@ -55,14 +55,14 @@ class UserController extends BaseController
 
     public function create()
     {
-        $roles = $this->role->all();
+        $roles = $this->roles->all();
 
         return view('blogify::admin.users.form', compact('roles'));
     }
 
     public function edit(User $user)
     {
-        $roles = $this->role->all();
+        $roles = $this->roles->all();
 
         return view('blogify::admin.users.form', compact('roles', 'user'));
     }
@@ -99,7 +99,7 @@ class UserController extends BaseController
 
     public function restore($id)
     {
-        $user = $this->user->withTrashed()->find($id);
+        $user = $this->users->withTrashed()->find($id);
         $user->restore();
 
         $this->flashSuccess($user->name, 'restored');

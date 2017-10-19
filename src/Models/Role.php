@@ -13,7 +13,7 @@ class Role extends BaseModel
 
     public function users()
     {
-        return $this->hasMany(config('blogify.models.auth'));
+        return $this->hasMany(config('blogify.auth_model'));
     }
 
     public function scopeByAdminRoles($query)
@@ -21,13 +21,33 @@ class Role extends BaseModel
         $query->whereIn('name', [static::ADMIN, static::AUTHOR, static::REVIEWER]);
     }
 
-    public static function getAdminRoleId()
+    public function getAdminRoleId()
     {
-        return (new static)->getCachedId(static::ADMIN);
+        return $this->getCachedId(static::ADMIN);
     }
 
     public function createUser($userData)
     {
         return $this->users()->create($userData);
+    }
+
+    public function getAdminRoleName()
+    {
+        return static::ADMIN;
+    }
+
+    public function getAuthorRoleName()
+    {
+        return static::AUTHOR;
+    }
+
+    public function getReviewerRoleName()
+    {
+        return static::REVIEWER;
+    }
+
+    public function getMemberRoleName()
+    {
+        return static::MEMBER;
     }
 }

@@ -29,42 +29,42 @@ class Post extends BaseModel
 
     public function comment()
     {
-        return $this->hasMany(Comment::class);
+        return $this->hasMany(config('blogify.models.comment'));
     }
 
     public function category()
     {
-        return $this->belongsTo(Category::class)->withTrashed();
+        return $this->belongsTo(config('blogify.models.category'))->withTrashed();
     }
 
     public function media()
     {
-        return $this->hasMany(Media::class);
+        return $this->hasMany(config('blogify.models.media'));
     }
 
     public function tags()
     {
-        return $this->belongsToMany(Tag::class, 'posts_have_tags', 'post_id', 'tag_id')->withTrashed();
+        return $this->belongsToMany(config('blogify.models.tag'), 'posts_have_tags', 'post_id', 'tag_id')->withTrashed();
     }
 
     public function status()
     {
-        return $this->belongsTo(Status::class);
+        return $this->belongsTo(config('blogify.models.status'));
     }
 
     public function visibility()
     {
-        return $this->belongsTo(Visibility::class);
+        return $this->belongsTo(config('blogify.models.visibility'));
     }
 
     public function approvedComments()
     {
-        return $this->hasMany(Comment::class)->approved();
+        return $this->hasMany(config('blogify.models.comment'))->approved();
     }
 
     public function comments()
     {
-        return $this->hasMany(Comment::class);
+        return $this->hasMany(config('blogify.models.comment'));
     }
 
     /*
@@ -109,15 +109,17 @@ class Post extends BaseModel
 
     public function scopeForRole($query, $role)
     {
-        if ($role === Role::ADMIN) {
+        $roleModel = app(config('blogify.models.role'));
+
+        if ($role === $roleModel->getAdminRoleName()) {
             return $query;
         }
 
-        if ($role === Role::AUTHOR) {
+        if ($role === $roleModel->getAuthorRoleName()) {
             return $query->whereReviewerId(Auth::user()->id);
         }
 
-        if ($role === Role::MEMBER) {
+        if ($role === $roleModel->getMemberRoleName()) {
             return $query->whereUserId(Auth::user()->id);
         }
     }
@@ -130,12 +132,12 @@ class Post extends BaseModel
     public function scopeForPublic($query)
     {
         return $query->where('publish_date', '<=', date('Y-m-d H:i:s'))
-                    ->whereIn('visibility_id', Visibility::getPublicIds());
+                    ->whereIn('visibility_id', app(config('blogify.models.visibility'))->getPublicIds());
     }
 
     public function scopeRecommended($query)
     {
-        return $query->where('visibility_id', Visibility::getRecommendedId());
+        return $query->where('visibility_id', app(config('blogify.models.visibility'))->getRecommendedId());
     }
 
     public function scopePopular($query)
@@ -157,7 +159,7 @@ class Post extends BaseModel
 
     public function assignTags($tags)
     {
-        $tags = Tag::findOrCreateTags($tags);
+        $tags = app(config('blogify.models.tag'))->findOrCreateTags($tags);
 
         $this->tags()->sync($tags->pluck('id'));
     }
@@ -165,13 +167,13 @@ class Post extends BaseModel
     public function assignTagsRelation($tags = [])
     {
         $this->setRelation('tags', (new Collection($tags))->map(function($tag) {
-            return Tag::make(['name' => $tag]);
+            return app(config('blogify.models.tag'))->make(['name' => $tag]);
         }));
     }
 
     public function hasPassword()
     {
-        return $this->visibility_id === Visibility::getProtectedId();
+        return $this->visibility_id === app(config('blogify.models.visibility'))->getProtectedId();
     }
 
     public function passwordIs($password)

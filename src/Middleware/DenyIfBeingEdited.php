@@ -20,25 +20,25 @@ class DenyIfBeingEdited
     /**
      * @var \ComposeDe\Blogify\Models\Post
      */
-    protected $post;
+    protected $posts;
 
     /**
      * @var \App\User
      */
-    protected $user;
+    protected $users;
 
     /**
      * Create a new filter instance.
      *
      * @param \Illuminate\Contracts\Auth\Guard $auth
-     * @param \ComposeDe\Blogify\Models\Post $post
-     * @param \App\User $user
+     * @param \ComposeDe\Blogify\Models\Post   $posts
+     * @param \App\User                        $users
      */
-    public function __construct(Guard $auth, Post $post, User $user)
+    public function __construct(Guard $auth, Post $posts, User $users)
     {
         $this->auth = $auth;
-        $this->post = $post;
-        $this->user = $user;
+        $this->posts = $posts;
+        $this->users = $users;
     }
 
     /**
@@ -51,13 +51,13 @@ class DenyIfBeingEdited
     public function handle($request, Closure $next)
     {
         $hash = $request->segment(3);
-        $post = $this->post->byHash($hash);
+        $post = $this->posts->byHash($hash);
 
         if (
             $post->being_edited_by != null &&
             $post->being_edited_by != $this->auth->user()->getAuthIdentifier()
         ) {
-            $user = $this->user->find($post->being_edited_by)->fullName;
+            $user = $this->users->find($post->being_edited_by)->fullName;
 
             session()->flash('notify', ['danger', trans('blogify::posts.notify.being_edited', ['name' => $user])]);
             return redirect()->route('posts.index');

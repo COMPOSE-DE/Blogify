@@ -9,9 +9,9 @@ use ComposeDe\Blogify\Requests\CategoryRequest;
 
 class CategoriesController extends BaseController
 {
-    public function index($trashed = null)
+    public function index($trashed = null, Category $categoriesModel)
     {
-        $query = Category::orderBy('created_at', 'DESC');
+        $query = $categoriesModel->orderBy('created_at', 'DESC');
 
         if ($trashed) {
             $query->onlyTrashed();
@@ -32,9 +32,9 @@ class CategoriesController extends BaseController
         return view('blogify::admin.categories.form', compact('category'));
     }
 
-    public function store(CategoryRequest $request)
+    public function store(CategoryRequest $request, Category $categories)
     {
-        $category = Category::create([
+        $category = $categories->create([
             'name' => $request->get('name'),
             'hash' => str_random(),
         ]);
@@ -68,9 +68,9 @@ class CategoriesController extends BaseController
         return redirect()->route('admin.categories.index');
     }
 
-    public function restore($id)
+    public function restore($id, Category $categories)
     {
-        $category = Category::withTrashed()->findOrFail($id);
+        $category = $categories->withTrashed()->findOrFail($id);
         $category->restore();
 
         $this->flashSuccess($category->name, 'deleted');

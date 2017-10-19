@@ -16,7 +16,7 @@ class Visibility extends BaseModel
 
     public function post()
     {
-        return $this->hasMany(Post::class);
+        return $this->hasMany(config('blogify.models.post'));
     }
 
     public static function getPublicIds()
@@ -42,5 +42,25 @@ class Visibility extends BaseModel
     public static function getProtectedId()
     {
         return (new static)->getCachedId(static::PROTECTED);
+    }
+
+    public function getPublicVisibilityName()
+    {
+        return static::PUBLIC;
+    }
+    
+    public function getPrivateVisibilityName()
+    {
+        return static::PRIVATE;
+    }
+
+    public function getProtectedVisibilityName()
+    {
+        return static::PROTECTED;
+    }
+
+    public function getRecommendedVisibilityName()
+    {
+        return static::RECOMMENDED;
     }
 }

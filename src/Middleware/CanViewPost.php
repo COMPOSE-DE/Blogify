@@ -19,18 +19,18 @@ class CanViewPost
     /**
      * @var \ComposeDe\Blogify\Models\Post
      */
-    protected $post;
+    protected $posts;
 
     /**
      * Create a new filter instance.
      *
-     * @param \ComposeDe\Blogify\Models\Post $post
+     * @param \ComposeDe\Blogify\Models\Post   $posts
      * @param \Illuminate\Contracts\Auth\Guard $auth
      */
-    public function __construct(Guard $auth, Post $post)
+    public function __construct(Guard $auth, Post $posts)
     {
         $this->auth = $auth;
-        $this->post = $post;
+        $this->posts = $posts;
     }
 
     /**
@@ -55,7 +55,7 @@ class CanViewPost
      */
     private function checkIfUserCanViewPost($request)
     {
-        $post = $this->post->byHash($request->segment(3));
+        $post = $this->posts->byHash($request->segment(3));
         $user_id = $this->auth->user()->getAuthIdentifier();
 
         if ($post->visibility_id == 'Private') {

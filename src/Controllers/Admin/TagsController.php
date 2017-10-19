@@ -10,9 +10,9 @@ use ComposeDe\Blogify\Requests\TagUpdateRequest;
 class TagsController extends BaseController
 {
 
-    public function index($trashed = null)
+    public function index($trashed = null, Tag $tags)
     {
-        $q = Tag::orderBy('created_at', 'DESC');
+        $q = $tags->orderBy('created_at', 'DESC');
         if ($trashed) {
             $q->onlyTrashed();
         }
@@ -32,7 +32,7 @@ class TagsController extends BaseController
         return view('blogify::admin.tags.form', compact('tag'));
     }
 
-    public function storeOrUpdate(Request $request)
+    public function storeOrUpdate(Request $request, Tag $tagsModel)
     {
         $tags = collect(explode(',', $request->get('tags')))->map(function ($tag) {
             return trim($tag);
@@ -44,7 +44,7 @@ class TagsController extends BaseController
             'tags.*' => 'required|min:2|max:45'
         ]);
 
-        $storedTags = Tag::createMissing($tags);
+        $storedTags = $tagsModel->createMissing($tags);
 
         $this->flashSuccess($storedTags->pluck('name')->implode(', '), 'created');
 
@@ -80,9 +80,9 @@ class TagsController extends BaseController
      * @param string $hash
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function restore($hash)
+    public function restore($hash, Tag $tags)
     {
-        $tag = Tag::withTrashed()->byHash($hash);
+        $tag = $tags->withTrashed()->byHash($hash);
         $tag->restore();
 
         $this->flashSuccess($tag->name, 'restored');

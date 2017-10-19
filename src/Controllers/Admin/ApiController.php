@@ -58,12 +58,12 @@ class ApiController extends BaseController
      * @param string $slug
      * @return string
      */
-    public function checkIfSlugIsUnique($slug)
+    public function checkIfSlugIsUnique($slug, Post $posts)
     {
         $i = 0;
         $baseSlug = $slug;
 
-        while (Post::whereSlug($slug)->get()->count() > 0) {
+        while ($posts->whereSlug($slug)->get()->count() > 0) {
             $i++;
             $slug = "$baseSlug-$i";
         }
@@ -78,12 +78,12 @@ class ApiController extends BaseController
      * @param \Illuminate\Http\Request $request;
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function autoSave(Cache $cache, Request $request)
+    public function autoSave(Cache $cache, Request $request, Tag $tags)
     {
         try {
-            Tag::findOrCreateTags($request->get('tags') ?? []);
+            $tags->findOrCreateTags($request->get('tags') ?? []);
 
-            $id = $this->user->id;
+            $id = $this->users->id;
             $cache->put(
                 "autoSavedPost-$id",
                 $request->all(),
