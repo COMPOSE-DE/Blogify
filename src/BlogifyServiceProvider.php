@@ -1,10 +1,10 @@
 <?php
 
-namespace Donatix\Blogify;
+namespace ComposeDe\Blogify;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Foundation\AliasLoader;
-use Donatix\Blogify\Services\Validation;
+use ComposeDe\Blogify\Services\Validation;
 
 class BlogifyServiceProvider extends ServiceProvider
 {
@@ -87,17 +87,17 @@ class BlogifyServiceProvider extends ServiceProvider
      */
     private function registerMiddleware()
     {
-        $this->app['router']->aliasMiddleware('BlogifyAdminAuthenticate', 'Donatix\Blogify\Middleware\BlogifyAdminAuthenticate');
-        $this->app['router']->aliasMiddleware('BlogifyVerifyCsrfToken', 'Donatix\Blogify\Middleware\BlogifyVerifyCsrfToken');
-        $this->app['router']->aliasMiddleware('CanEditPost', 'Donatix\Blogify\Middleware\CanEditPost');
-        $this->app['router']->aliasMiddleware('DenyIfBeingEdited', 'Donatix\Blogify\Middleware\DenyIfBeingEdited');
-        $this->app['router']->aliasMiddleware('BlogifyGuest', 'Donatix\Blogify\Middleware\Guest');
-        $this->app['router']->aliasMiddleware('HasAdminOrAuthorRole', 'Donatix\Blogify\Middleware\HasAdminOrAuthorRole');
-        $this->app['router']->aliasMiddleware('HasAdminRole', 'Donatix\Blogify\Middleware\HasAdminRole');
-        $this->app['router']->aliasMiddleware('RedirectIfAuthenticated', 'Donatix\Blogify\Middleware\RedirectIfAuthenticated');
-        $this->app['router']->aliasMiddleware('IsOwner', 'Donatix\Blogify\Middleware\IsOwner');
-        $this->app['router']->aliasMiddleware('CanViewPost', 'Donatix\Blogify\Middleware\CanViewPost');
-        $this->app['router']->aliasMiddleware('ConfirmPasswordChange', 'Donatix\Blogify\Middleware\ConfirmPasswordChange');
+        $this->app['router']->aliasMiddleware('BlogifyAdminAuthenticate', 'ComposeDe\Blogify\Middleware\BlogifyAdminAuthenticate');
+        $this->app['router']->aliasMiddleware('BlogifyVerifyCsrfToken', 'ComposeDe\Blogify\Middleware\BlogifyVerifyCsrfToken');
+        $this->app['router']->aliasMiddleware('CanEditPost', 'ComposeDe\Blogify\Middleware\CanEditPost');
+        $this->app['router']->aliasMiddleware('DenyIfBeingEdited', 'ComposeDe\Blogify\Middleware\DenyIfBeingEdited');
+        $this->app['router']->aliasMiddleware('BlogifyGuest', 'ComposeDe\Blogify\Middleware\Guest');
+        $this->app['router']->aliasMiddleware('HasAdminOrAuthorRole', 'ComposeDe\Blogify\Middleware\HasAdminOrAuthorRole');
+        $this->app['router']->aliasMiddleware('HasAdminRole', 'ComposeDe\Blogify\Middleware\HasAdminRole');
+        $this->app['router']->aliasMiddleware('RedirectIfAuthenticated', 'ComposeDe\Blogify\Middleware\RedirectIfAuthenticated');
+        $this->app['router']->aliasMiddleware('IsOwner', 'ComposeDe\Blogify\Middleware\IsOwner');
+        $this->app['router']->aliasMiddleware('CanViewPost', 'ComposeDe\Blogify\Middleware\CanViewPost');
+        $this->app['router']->aliasMiddleware('ConfirmPasswordChange', 'ComposeDe\Blogify\Middleware\ConfirmPasswordChange');
     }
 
     /**
@@ -148,10 +148,10 @@ class BlogifyServiceProvider extends ServiceProvider
     private function registerCommands()
     {
         $this->commands([
-            'Donatix\Blogify\Commands\BlogifyMigrateCommand',
-            'Donatix\Blogify\Commands\BlogifySeedCommand',
-            'Donatix\Blogify\Commands\BlogifyGeneratePublicPartCommand',
-            'Donatix\Blogify\Commands\BlogifyCreateRequiredDirectories',
+            'ComposeDe\Blogify\Commands\BlogifyMigrateCommand',
+            'ComposeDe\Blogify\Commands\BlogifySeedCommand',
+            'ComposeDe\Blogify\Commands\BlogifyGeneratePublicPartCommand',
+            'ComposeDe\Blogify\Commands\BlogifyCreateRequiredDirectories',
         ]);
     }
 

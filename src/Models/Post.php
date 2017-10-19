@@ -1,14 +1,14 @@
 <?php
 
-namespace Donatix\Blogify\Models;
+namespace ComposeDe\Blogify\Models;
 
 use Auth;
-use Donatix\Blogify\Models\Category;
-use Donatix\Blogify\Models\Comment;
-use Donatix\Blogify\Models\Media;
-use Donatix\Blogify\Models\Status;
-use Donatix\Blogify\Models\Tag;
-use Donatix\Blogify\Models\Visibility;
+use ComposeDe\Blogify\Models\Category;
+use ComposeDe\Blogify\Models\Comment;
+use ComposeDe\Blogify\Models\Media;
+use ComposeDe\Blogify\Models\Status;
+use ComposeDe\Blogify\Models\Tag;
+use ComposeDe\Blogify\Models\Visibility;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Hash;

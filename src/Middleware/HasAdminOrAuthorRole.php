@@ -1,8 +1,8 @@
-<?php namespace Donatix\Blogify\Middleware;
+<?php namespace ComposeDe\Blogify\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Auth\Guard;
-use Donatix\Blogify\Models\Role;
+use ComposeDe\Blogify\Models\Role;
 
 class HasAdminOrAuthorRole
 {
@@ -15,7 +15,7 @@ class HasAdminOrAuthorRole
     protected $auth;
 
     /**
-     * @var \Donatix\Blogify\Models\Role
+     * @var \ComposeDe\Blogify\Models\Role
      */
     private $role;
 
@@ -27,7 +27,7 @@ class HasAdminOrAuthorRole
     /**
      * Create a new filter instance.
      *
-     * @param \Donatix\Blogify\Models\Role $role
+     * @param \ComposeDe\Blogify\Models\Role $role
      * @param \Illuminate\Contracts\Auth\Guard $auth
      */
     public function __construct(Guard $auth, Role $role)

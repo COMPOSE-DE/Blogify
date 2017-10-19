@@ -1,14 +1,14 @@
 <?php
 
-namespace Donatix\Blogify\Controllers\Admin;
+namespace ComposeDe\Blogify\Controllers\Admin;
 
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Http\Request;
-use Donatix\Blogify\Exceptions\BlogifyException;
-use Donatix\Blogify\Models\Post;
+use ComposeDe\Blogify\Exceptions\BlogifyException;
+use ComposeDe\Blogify\Models\Post;
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Carbon\Carbon;
-use Donatix\Blogify\Models\Tag;
+use ComposeDe\Blogify\Models\Tag;
 
 class ApiController extends BaseController
 {
@@ -103,7 +103,7 @@ class ApiController extends BaseController
     }
 
     /**
-     * @param \Donatix\Blogify\Models\Tag $tag
+     * @param \ComposeDe\Blogify\Models\Tag $tag
      * @return mixed
      */
     public function getTag(Tag $tag)

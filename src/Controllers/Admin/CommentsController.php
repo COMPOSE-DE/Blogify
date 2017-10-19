@@ -1,8 +1,8 @@
 <?php
 
-namespace Donatix\Blogify\Controllers\Admin;
+namespace ComposeDe\Blogify\Controllers\Admin;
 
-use Donatix\Blogify\Models\Comment;
+use ComposeDe\Blogify\Models\Comment;
 
 class CommentsController extends BaseController
 {

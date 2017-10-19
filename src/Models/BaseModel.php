@@ -1,6 +1,6 @@
 <?php
 
-namespace Donatix\Blogify\Models;
+namespace ComposeDe\Blogify\Models;
 
 use Illuminate\Database\Eloquent\Model;
 

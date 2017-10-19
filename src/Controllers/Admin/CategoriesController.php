@@ -1,11 +1,11 @@
 <?php
 
-namespace Donatix\Blogify\Controllers\Admin;
+namespace ComposeDe\Blogify\Controllers\Admin;
 
 use Illuminate\Contracts\Auth\Guard;
-use Donatix\Blogify\Blogify;
-use Donatix\Blogify\Models\Category;
-use Donatix\Blogify\Requests\CategoryRequest;
+use ComposeDe\Blogify\Blogify;
+use ComposeDe\Blogify\Models\Category;
+use ComposeDe\Blogify\Requests\CategoryRequest;
 
 class CategoriesController extends BaseController
 {

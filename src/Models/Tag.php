@@ -1,9 +1,9 @@
 <?php
 
-namespace Donatix\Blogify\Models;
+namespace ComposeDe\Blogify\Models;
 
 use Validator;
-use Donatix\Blogify\Models\Post;
+use ComposeDe\Blogify\Models\Post;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Collection;
 

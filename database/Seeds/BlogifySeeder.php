@@ -1,6 +1,6 @@
 <?php
 
-namespace Donatix\Blogify\database\Seeds;
+namespace ComposeDe\Blogify\database\Seeds;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
@@ -17,10 +17,10 @@ class BlogifySeeder extends Seeder
     {
         Model::unguard();
 
-        $this->call('Donatix\Blogify\database\Seeds\RolesTableSeeder');
-        $this->call('Donatix\Blogify\database\Seeds\UsersTableSeeder');
-        $this->call('Donatix\Blogify\database\Seeds\StatusesTableSeeder');
-        $this->call('Donatix\Blogify\database\Seeds\VisibilityTableSeeder');
-        $this->call('Donatix\Blogify\database\Seeds\TagsTableSeeder');
+        $this->call('ComposeDe\Blogify\database\Seeds\RolesTableSeeder');
+        $this->call('ComposeDe\Blogify\database\Seeds\UsersTableSeeder');
+        $this->call('ComposeDe\Blogify\database\Seeds\StatusesTableSeeder');
+        $this->call('ComposeDe\Blogify\database\Seeds\VisibilityTableSeeder');
+        $this->call('ComposeDe\Blogify\database\Seeds\TagsTableSeeder');
     }
 }

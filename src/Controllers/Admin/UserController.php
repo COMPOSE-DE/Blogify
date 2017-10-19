@@ -1,13 +1,13 @@
 <?php
 
-namespace Donatix\Blogify\Controllers\Admin;
+namespace ComposeDe\Blogify\Controllers\Admin;
 
-use Donatix\Blogify\Blogify;
-use Donatix\Blogify\Models\Role;
-use Donatix\Blogify\Requests\UserRequest;
+use ComposeDe\Blogify\Blogify;
+use ComposeDe\Blogify\Models\Role;
+use ComposeDe\Blogify\Requests\UserRequest;
 use App\User;
 use Illuminate\Contracts\Hashing\Hasher as Hash;
-use Donatix\Blogify\Services\BlogifyMailer;
+use ComposeDe\Blogify\Services\BlogifyMailer;
 
 class UserController extends BaseController
 {
@@ -18,12 +18,12 @@ class UserController extends BaseController
     protected $user;
 
     /**
-     * @var \Donatix\Blogify\Models\Role
+     * @var \ComposeDe\Blogify\Models\Role
      */
     protected $role;
 
     /**
-     * @var \Donatix\Blogify\Services\BlogifyMailer
+     * @var \ComposeDe\Blogify\Services\BlogifyMailer
      */
     protected $mail;
 
@@ -112,7 +112,7 @@ class UserController extends BaseController
     ///////////////////////////////////////////////////////////////////////////
 
     /**
-     * @param \Donatix\Blogify\Requests\UserRequest $data
+     * @param \ComposeDe\Blogify\Requests\UserRequest $data
      * @param string $id
      * @return array
      */

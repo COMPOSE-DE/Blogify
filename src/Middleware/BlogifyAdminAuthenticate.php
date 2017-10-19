@@ -1,10 +1,10 @@
 <?php
 
-namespace Donatix\Blogify\Middleware;
+namespace ComposeDe\Blogify\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Auth\Guard;
-use Donatix\Blogify\Models\Role;
+use ComposeDe\Blogify\Models\Role;
 
 class BlogifyAdminAuthenticate
 {
@@ -17,7 +17,7 @@ class BlogifyAdminAuthenticate
     protected $auth;
 
     /**
-     * @var \Donatix\Blogify\Models\Role
+     * @var \ComposeDe\Blogify\Models\Role
      */
     private $roles;
 
@@ -30,7 +30,7 @@ class BlogifyAdminAuthenticate
      * Create a new filter instance.
      *
      * @param \Illuminate\Contracts\Auth\Guard $auth
-     * @param \Donatix\Blogify\Models\Role $role
+     * @param \ComposeDe\Blogify\Models\Role $role
      */
     public function __construct(Guard $auth, Role $role)
     {

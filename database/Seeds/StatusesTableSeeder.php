@@ -1,9 +1,9 @@
 <?php
 
-namespace Donatix\Blogify\database\Seeds;
+namespace ComposeDe\Blogify\database\Seeds;
 
 use Illuminate\Database\Seeder;
-use Donatix\Blogify\Models\Status;
+use ComposeDe\Blogify\Models\Status;
 
 class StatusesTableSeeder extends Seeder
 {

@@ -1,26 +1,26 @@
 <?php
 
-namespace Donatix\Blogify\Requests;
+namespace ComposeDe\Blogify\Requests;
 
-use Donatix\Blogify\Models\Post;
-use Donatix\Blogify\Models\Visibility;
+use ComposeDe\Blogify\Models\Post;
+use ComposeDe\Blogify\Models\Visibility;
 
 class PostRequest extends Request
 {
 
     /**
-     * @var \Donatix\Blogify\Models\Post
+     * @var \ComposeDe\Blogify\Models\Post
      */
     protected $post;
 
     /**
-     * @var \Donatix\Blogify\Models\Visibility
+     * @var \ComposeDe\Blogify\Models\Visibility
      */
     protected $visibility;
 
     /**
-     * @param \Donatix\Blogify\Models\Post $post
-     * @param \Donatix\Blogify\Models\Visibility $visibility
+     * @param \ComposeDe\Blogify\Models\Post $post
+     * @param \ComposeDe\Blogify\Models\Visibility $visibility
      */
     public function __construct(Post $post, Visibility $visibility)
     {

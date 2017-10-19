@@ -39,7 +39,7 @@ if ($use_default_routes) {
 
 $admin = [
     'prefix' => 'admin',
-    'namespace' => 'Donatix\Blogify\Controllers\Admin',
+    'namespace' => 'ComposeDe\Blogify\Controllers\Admin',
     'middleware' => ['web', 'auth'],
 ];
 

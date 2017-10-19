@@ -1,8 +1,8 @@
 <?php
 
-namespace Donatix\Blogify\Controllers\Admin;
+namespace ComposeDe\Blogify\Controllers\Admin;
 
-use Donatix\Blogify\Controllers\Admin;
+use ComposeDe\Blogify\Controllers\Admin;
 
 class BaseController extends Controller
 {

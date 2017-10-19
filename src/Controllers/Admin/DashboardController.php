@@ -1,10 +1,10 @@
 <?php
 
-namespace Donatix\Blogify\Controllers\Admin;
+namespace ComposeDe\Blogify\Controllers\Admin;
 
 use App\User;
-use Donatix\Blogify\Models\Comment;
-use Donatix\Blogify\Models\Post;
+use ComposeDe\Blogify\Models\Comment;
+use ComposeDe\Blogify\Models\Post;
 use Illuminate\Contracts\Auth\Guard;
 
 class DashboardController extends BaseController
@@ -16,12 +16,12 @@ class DashboardController extends BaseController
     protected $user;
 
     /**
-     * @var \Donatix\Blogify\Models\Post
+     * @var \ComposeDe\Blogify\Models\Post
      */
     protected $post;
 
     /**
-     * @var \Donatix\Blogify\Models\Comment
+     * @var \ComposeDe\Blogify\Models\Comment
      */
     protected $comment;
 
@@ -34,8 +34,8 @@ class DashboardController extends BaseController
 
     /**
      * @param \App\User $user
-     * @param \Donatix\Blogify\Models\Post $post
-     * @param \Donatix\Blogify\Models\Comment $comment
+     * @param \ComposeDe\Blogify\Models\Post $post
+     * @param \ComposeDe\Blogify\Models\Comment $comment
      * @param \Illuminate\Contracts\Auth\Guard $auth
      */
     public function __construct(Post $post, Comment $comment) {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Donatix\Blogify\Middleware;
+namespace ComposeDe\Blogify\Middleware;
 
 use \Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Closure;

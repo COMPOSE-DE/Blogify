@@ -1,8 +1,8 @@
 <?php
 
-namespace Donatix\Blogify\Controllers\Admin;
+namespace ComposeDe\Blogify\Controllers\Admin;
 
-use Donatix\Blogify\Requests\LoginRequest;
+use ComposeDe\Blogify\Requests\LoginRequest;
 use Illuminate\Contracts\Auth\Guard;
 
 class AuthController extends BaseController
@@ -19,7 +19,7 @@ class AuthController extends BaseController
     }
 
     /**
-     * @param \Donatix\Blogify\Requests\LoginRequest $request
+     * @param \ComposeDe\Blogify\Requests\LoginRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function login(LoginRequest $request)

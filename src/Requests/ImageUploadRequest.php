@@ -1,6 +1,6 @@
 <?php
 
-namespace Donatix\Blogify\Requests;
+namespace ComposeDe\Blogify\Requests;
 
 class ImageUploadRequest extends Request
 {

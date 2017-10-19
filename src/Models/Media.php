@@ -1,8 +1,8 @@
 <?php
 
-namespace Donatix\Blogify\Models;
+namespace ComposeDe\Blogify\Models;
 
-use Donatix\Blogify\Models\Post;
+use ComposeDe\Blogify\Models\Post;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Media extends BaseModel

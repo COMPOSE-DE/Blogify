@@ -1,6 +1,6 @@
 <?php
 
-namespace Donatix\Blogify\Facades;
+namespace ComposeDe\Blogify\Facades;
 
 use Illuminate\Support\Facades\Facade;
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace Donatix\Blogify\Middleware;
+namespace ComposeDe\Blogify\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Auth\Guard;
-use Donatix\Blogify\Models\Post;
+use ComposeDe\Blogify\Models\Post;
 
 class CanEditPost
 {
@@ -17,14 +17,14 @@ class CanEditPost
     protected $auth;
 
     /**
-     * @var \Donatix\Blogify\Models\Post
+     * @var \ComposeDe\Blogify\Models\Post
      */
     protected $post;
 
     /**
      * Create a new filter instance.
      *
-     * @param \Donatix\Blogify\Models\Post $post
+     * @param \ComposeDe\Blogify\Models\Post $post
      * @param \Illuminate\Contracts\Auth\Guard $auth
      */
     public function __construct(Guard $auth, Post $post)

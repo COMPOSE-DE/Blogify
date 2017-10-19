@@ -1,6 +1,6 @@
 <?php
 
-namespace Donatix\Blogify;
+namespace ComposeDe\Blogify;
 
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Database\DatabaseManager;

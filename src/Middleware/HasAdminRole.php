@@ -1,6 +1,6 @@
 <?php
 
-namespace Donatix\Blogify\Middleware;
+namespace ComposeDe\Blogify\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Auth\Guard;

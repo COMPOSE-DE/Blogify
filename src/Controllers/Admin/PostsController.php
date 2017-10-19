@@ -1,21 +1,21 @@
 <?php
 
-namespace Donatix\Blogify\Controllers\Admin;
+namespace ComposeDe\Blogify\Controllers\Admin;
 
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Contracts\Hashing\Hasher;
-use Donatix\Blogify\Blogify;
-use Donatix\Blogify\Models\Category;
-use Donatix\Blogify\Models\Role;
-use Donatix\Blogify\Models\Status;
-use Donatix\Blogify\Models\Tag;
-use Donatix\Blogify\Models\Visibility;
-use Donatix\Blogify\Requests\ImageUploadRequest;
+use ComposeDe\Blogify\Blogify;
+use ComposeDe\Blogify\Models\Category;
+use ComposeDe\Blogify\Models\Role;
+use ComposeDe\Blogify\Models\Status;
+use ComposeDe\Blogify\Models\Tag;
+use ComposeDe\Blogify\Models\Visibility;
+use ComposeDe\Blogify\Requests\ImageUploadRequest;
 use Intervention\Image\Facades\Image;
-use Donatix\Blogify\Requests\PostRequest;
-use Donatix\Blogify\Models\Post;
-use Donatix\Blogify\Services\BlogifyMailer;
+use ComposeDe\Blogify\Requests\PostRequest;
+use ComposeDe\Blogify\Models\Post;
+use ComposeDe\Blogify\Services\BlogifyMailer;
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Database\Eloquent\Collection;
@@ -24,32 +24,32 @@ class PostsController extends BaseController
 {
 
     /**
-     * @var \Donatix\Blogify\Models\Post
+     * @var \ComposeDe\Blogify\Models\Post
      */
     protected $post;
 
     /**
-     * @var \Donatix\Blogify\Models\Status
+     * @var \ComposeDe\Blogify\Models\Status
      */
     protected $status;
 
     /**
-     * @var \Donatix\Blogify\Models\Visibility
+     * @var \ComposeDe\Blogify\Models\Visibility
      */
     protected $visibility;
 
     /**
-     * @var \Donatix\Blogify\Models\Category
+     * @var \ComposeDe\Blogify\Models\Category
      */
     protected $category;
 
     /**
-     * @var \Donatix\Blogify\Models\Tag
+     * @var \ComposeDe\Blogify\Models\Tag
      */
     protected $tag;
 
     /**
-     * @var \Donatix\Blogify\Models\Role
+     * @var \ComposeDe\Blogify\Models\Role
      */
     protected $role;
 
@@ -69,7 +69,7 @@ class PostsController extends BaseController
     protected $tags = [];
 
     /**
-     * @var \Donatix\Blogify\Services\BlogifyMailer
+     * @var \ComposeDe\Blogify\Services\BlogifyMailer
      */
     protected $mail;
 
@@ -79,23 +79,23 @@ class PostsController extends BaseController
     protected $cache;
 
     /**
-     * @var \Donatix\Blogify\Blogify
+     * @var \ComposeDe\Blogify\Blogify
      */
     protected $blogify;
 
     /**
-     * @param \Donatix\Blogify\Models\Tag $tag
-     * @param \Donatix\Blogify\Models\Role $role
+     * @param \ComposeDe\Blogify\Models\Tag $tag
+     * @param \ComposeDe\Blogify\Models\Role $role
      * @param \App\User $user
-     * @param \Donatix\Blogify\Models\Post $post
-     * @param \Donatix\Blogify\Services\BlogifyMailer $mail
+     * @param \ComposeDe\Blogify\Models\Post $post
+     * @param \ComposeDe\Blogify\Services\BlogifyMailer $mail
      * @param \Illuminate\Contracts\Hashing\Hasher $hash
-     * @param \Donatix\Blogify\Models\Status $status
+     * @param \ComposeDe\Blogify\Models\Status $status
      * @param \Illuminate\Contracts\Cache\Repository $cache
-     * @param \Donatix\Blogify\Models\Category $category
-     * @param \Donatix\Blogify\Models\Visibility $visibility
+     * @param \ComposeDe\Blogify\Models\Category $category
+     * @param \ComposeDe\Blogify\Models\Visibility $visibility
      * @param \Illuminate\Contracts\Auth\Guard $auth
-     * @param \Donatix\Blogify\Blogify $blogify
+     * @param \ComposeDe\Blogify\Blogify $blogify
      */
     public function __construct(
         Tag $tag,
@@ -214,7 +214,7 @@ class PostsController extends BaseController
      * calling this function because we are using the
      * CKEditor within an iframe :(
      *
-     * @param \Donatix\Blogify\Requests\ImageUploadRequest $request
+     * @param \ComposeDe\Blogify\Requests\ImageUploadRequest $request
      * @return string
      */
     public function uploadImage(ImageUploadRequest $request)
@@ -353,7 +353,7 @@ class PostsController extends BaseController
     }
 
     /**
-     * @return \Donatix\Blogify\Models\Post
+     * @return \ComposeDe\Blogify\Models\Post
      */
     private function storeOrUpdatePost($data)
     {
@@ -385,7 +385,7 @@ class PostsController extends BaseController
     }
 
     /**
-     * @param \Donatix\Blogify\Models\Post $post
+     * @param \ComposeDe\Blogify\Models\Post $post
      * @return void
      */
     private function mailReviewer($post)

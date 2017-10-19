@@ -1,19 +1,19 @@
 <?php
 
-namespace Donatix\Blogify\Requests;
+namespace ComposeDe\Blogify\Requests;
 
-use Donatix\Blogify\Models\Category;
+use ComposeDe\Blogify\Models\Category;
 
 class CategoryRequest extends Request
 {
 
     /**
-     * @var \Donatix\Blogify\Models\Category
+     * @var \ComposeDe\Blogify\Models\Category
      */
     protected $category;
 
     /**
-     * @param \Donatix\Blogify\Models\Category $category
+     * @param \ComposeDe\Blogify\Models\Category $category
      */
     public function __construct(Category $category)
     {

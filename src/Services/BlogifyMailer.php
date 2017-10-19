@@ -1,6 +1,6 @@
 <?php
 
-namespace Donatix\Blogify\Services;
+namespace ComposeDe\Blogify\Services;
 
 use Illuminate\Contracts\Mail\Mailer;
 

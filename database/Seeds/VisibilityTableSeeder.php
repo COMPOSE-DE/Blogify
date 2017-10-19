@@ -1,9 +1,9 @@
 <?php
 
-namespace Donatix\Blogify\database\Seeds;
+namespace ComposeDe\Blogify\database\Seeds;
 
 use Illuminate\Database\Seeder;
-use Donatix\Blogify\Models\Visibility;
+use ComposeDe\Blogify\Models\Visibility;
 
 class VisibilityTableSeeder extends Seeder
 {

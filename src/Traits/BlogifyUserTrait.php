@@ -1,10 +1,10 @@
 <?php
 
-namespace Donatix\Blogify\Traits;
+namespace ComposeDe\Blogify\Traits;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Auth;
-use Donatix\Blogify\Models\Role;
+use ComposeDe\Blogify\Models\Role;
 
 Trait BlogifyUserTrait
 {
@@ -23,22 +23,22 @@ Trait BlogifyUserTrait
 
     public function role()
     {
-        return $this->belongsTo('Donatix\Blogify\Models\role');
+        return $this->belongsTo('ComposeDe\Blogify\Models\role');
     }
 
     public function history()
     {
-        return $this->hasMany('Donatix\Blogify\Models\history');
+        return $this->hasMany('ComposeDe\Blogify\Models\history');
     }
 
     public function post()
     {
-        return $this->hasMany('Donatix\Blogify\Models\post');
+        return $this->hasMany('ComposeDe\Blogify\Models\post');
     }
 
     public function comment()
     {
-        return $this->hasMany('Donatix\Blogify\Models\comment');
+        return $this->hasMany('ComposeDe\Blogify\Models\comment');
     }
 
     /*

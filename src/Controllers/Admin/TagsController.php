@@ -1,11 +1,11 @@
 <?php
 
-namespace Donatix\Blogify\Controllers\Admin;
+namespace ComposeDe\Blogify\Controllers\Admin;
 
-use Donatix\Blogify\Blogify;
-use Donatix\Blogify\Models\Tag;
+use ComposeDe\Blogify\Blogify;
+use ComposeDe\Blogify\Models\Tag;
 use Illuminate\Http\Request;
-use Donatix\Blogify\Requests\TagUpdateRequest;
+use ComposeDe\Blogify\Requests\TagUpdateRequest;
 
 class TagsController extends BaseController
 {
@@ -53,7 +53,7 @@ class TagsController extends BaseController
 
     /**
      * @param string $hash
-     * @param \Donatix\Blogify\Requests\TagUpdateRequest $request
+     * @param \ComposeDe\Blogify\Requests\TagUpdateRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Tag $tag, TagUpdateRequest $request)

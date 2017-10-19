@@ -1,11 +1,11 @@
 <?php
 
-namespace Donatix\Blogify\Controllers\Admin;
+namespace ComposeDe\Blogify\Controllers\Admin;
 
 use App\User;
-use Donatix\Blogify\Config;
-use Donatix\Blogify\Middleware\IsOwner;
-use Donatix\Blogify\Requests\ProfileUpdateRequest;
+use ComposeDe\Blogify\Config;
+use ComposeDe\Blogify\Middleware\IsOwner;
+use ComposeDe\Blogify\Requests\ProfileUpdateRequest;
 use Intervention\Image\Facades\Image;
 
 class ProfileController extends BaseController
