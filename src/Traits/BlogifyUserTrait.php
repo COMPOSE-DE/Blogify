@@ -23,7 +23,7 @@ Trait BlogifyUserTrait
 
     public function role()
     {
-        return $this->belongsTo('ComposeDe\Blogify\Models\role');
+        return $this->belongsTo('ComposeDe\Blogify\Models\Role');
     }
 
     public function history()
