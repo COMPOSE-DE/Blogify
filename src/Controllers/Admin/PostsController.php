@@ -2,7 +2,6 @@
 
 namespace ComposeDe\Blogify\Controllers\Admin;
 
-use App\User;
 use Carbon\Carbon;
 use Illuminate\Contracts\Hashing\Hasher;
 use ComposeDe\Blogify\Blogify;
@@ -48,6 +47,8 @@ class PostsController extends BaseController
      */
     protected $tags;
 
+    protected $users;
+
     /**
      * @var \ComposeDe\Blogify\Models\Role
      */
@@ -78,7 +79,6 @@ class PostsController extends BaseController
     /**
      * @param \ComposeDe\Blogify\Models\Tag             $tags
      * @param \ComposeDe\Blogify\Models\Role            $roles
-     * @param \App\User                                 $user
      * @param \ComposeDe\Blogify\Models\Post            $posts
      * @param \ComposeDe\Blogify\Services\BlogifyMailer $mail
      * @param \Illuminate\Contracts\Hashing\Hasher      $hash
@@ -104,7 +104,7 @@ class PostsController extends BaseController
         parent::__construct($auth);
 
         $this->appendMiddleware();
-
+        $this->users = app(config('blogify.models.auth'));
         $this->tags = $tags;
         $this->roles = $roles;
         $this->posts = $posts;
@@ -297,7 +297,7 @@ class PostsController extends BaseController
     private function getViewData($post = null)
     {
         return [
-            'reviewers'     => User::reviewers()->get(),
+            'reviewers'     => $this->users->reviewers()->get(),
             'statuses'      => $this->statuses->all(),
             'categories'    => $this->categories->all(),
             'visibility'    => $this->visibilities->all(),
@@ -382,7 +382,7 @@ class PostsController extends BaseController
      */
     private function mailReviewer($post)
     {
-        $reviewer = User::find($post->reviewer_id);
+        $reviewer = $this->users->find($post->reviewer_id);
         $data = [
             'reviewer'  => $reviewer,
             'post'      => $post,
@@ -411,7 +411,7 @@ class PostsController extends BaseController
         $post->publish_date = $cachedPost['publishdate'];
         $post->status_id = $this->statuses->byHash($cachedPost['status'])->id;
         $post->visibility_id = $this->visibilities->byHash($cachedPost['visibility'])->id;
-        $post->reviewer_id = User::find($cachedPost['reviewer'])->id;
+        $post->reviewer_id = $this->users->find($cachedPost['reviewer'])->id;
         $post->category_id = $category ? $category->id : null;
         $post->assignTagsRelation($cachedPost['tags']);
 
