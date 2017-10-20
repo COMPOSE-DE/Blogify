@@ -1,6 +1,5 @@
 <?php namespace {{namespace}};
 
-use Illuminate\Contracts\Auth\Guard;
 use {{appnamespace}}\Http\Requests\CommentRequest;
 use ComposeDe\Blogify\Models\Comment;
 use ComposeDe\Blogify\Models\Post;
@@ -23,22 +22,18 @@ class CommentsController extends Controller
      */
     protected $post;
 
-    /**
-     * @var Guard
-     */
     protected $auth;
 
     /**
      * @param Comment $comment
      * @param Post $post
-     * @param Guard $auth
      */
-    public function __construct(Comment $comment, Post $post, Guard $auth)
+    public function __construct(Comment $comment, Post $post)
     {
         $this->comment = $comment;
         $this->config = objectify(config('blogify'));
         $this->post = $post;
-        $this->auth = $auth;
+        $this->auth = BlogifyAuth::getFacadeRoot();
     }
 
 
