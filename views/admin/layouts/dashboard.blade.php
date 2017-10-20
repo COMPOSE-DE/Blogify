@@ -42,7 +42,7 @@
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
                         <li>
-                            <a href="{{ url ('admin') }}"><i class="fa fa-dashboard fa-fw"></i> {{ trans("blogify::navigation.dashboard.title") }} </a>
+                            <a href="{{ route('admin.dashboard') }}"><i class="fa fa-dashboard fa-fw"></i> {{ trans("blogify::navigation.dashboard.title") }} </a>
                         </li>
                         <li >
                             <a href="#"><i class="fa fa-pencil fa-fw"></i>{{ trans("blogify::navigation.posts.title") }}<span class="fa arrow"></span></a>
