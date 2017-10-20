@@ -3,17 +3,12 @@
 namespace ComposeDe\Blogify\Requests;
 
 use App\User;
+use ComposeDe\Blogify\Facades\BlogifyAuth;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Validation\Rule;
 
 class ProfileUpdateRequest extends Request
 {
-
-    /**
-     * Holds an instance of the Guard contract
-     *
-     * @var \Illuminate\Contracts\Auth\Guard
-     */
     protected $auth;
 
     /**
@@ -24,9 +19,6 @@ class ProfileUpdateRequest extends Request
      */
     protected $hash;
 
-    /**
-     * @var \App\User
-     */
     protected $users;
 
 
@@ -40,14 +32,11 @@ class ProfileUpdateRequest extends Request
 
     /**
      * Construct the class
-     *
-     * @param Guard $auth
-     * @param User  $users
      */
-    public function __construct(Guard $auth, User $users)
+    public function __construct()
     {
-        $this->auth = $auth;
-        $this->users = $users;
+        $this->auth = BlogifyAuth::getFacadeRoot();
+        $this->users = app(config('blogify.models.auth'));
     }
 
     /**
@@ -57,7 +46,7 @@ class ProfileUpdateRequest extends Request
      */
     public function authorize()
     {
-        return $this->auth->user()->getAuthIdentifier() == $this->route('profile');
+        return $this->auth->user()->id == $this->route('profile');
     }
 
     /**

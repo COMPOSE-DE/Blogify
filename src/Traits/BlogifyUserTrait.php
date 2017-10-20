@@ -3,7 +3,7 @@
 namespace ComposeDe\Blogify\Traits;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Auth;
+use BlogifyAuth;
 use ComposeDe\Blogify\Models\Role;
 
 Trait BlogifyUserTrait
@@ -74,7 +74,7 @@ Trait BlogifyUserTrait
         $adminRoleId = $roles->whereName('admin')->first()->id;
 
         return $query
-            ->where('id', '<>', Auth::id())
+            ->where('id', '<>', BlogifyAuth::id())
             ->whereIn('role_id', [$reviewerRoleId, $adminRoleId]);
     }
 }

@@ -3,17 +3,12 @@
 namespace ComposeDe\Blogify\Middleware;
 
 use Closure;
+use ComposeDe\Blogify\Facades\BlogifyAuth;
 use Illuminate\Contracts\Auth\Guard;
 use ComposeDe\Blogify\Models\Post;
 
 class CanEditPost
 {
-
-    /**
-     * The Guard implementation.
-     *
-     * @var \Illuminate\Contracts\Auth\Guard
-     */
     protected $auth;
 
     /**
@@ -25,11 +20,10 @@ class CanEditPost
      * Create a new filter instance.
      *
      * @param \ComposeDe\Blogify\Models\Post   $posts
-     * @param \Illuminate\Contracts\Auth\Guard $auth
      */
-    public function __construct(Guard $auth, Post $posts)
+    public function __construct(Post $posts)
     {
-        $this->auth = $auth;
+        $this->auth = BlogifyAuth::getFacadeRoot();
         $this->posts = $posts;
     }
 

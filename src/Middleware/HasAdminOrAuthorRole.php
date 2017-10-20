@@ -1,17 +1,12 @@
 <?php namespace ComposeDe\Blogify\Middleware;
 
 use Closure;
+use ComposeDe\Blogify\Facades\BlogifyAuth;
 use Illuminate\Contracts\Auth\Guard;
 use ComposeDe\Blogify\Models\Role;
 
 class HasAdminOrAuthorRole
 {
-
-    /**
-     * The Guard implementation.
-     *
-     * @var \Illuminate\Contracts\Auth\Guard
-     */
     protected $auth;
 
     /**
@@ -28,11 +23,10 @@ class HasAdminOrAuthorRole
      * Create a new filter instance.
      *
      * @param \ComposeDe\Blogify\Models\Role   $roles
-     * @param \Illuminate\Contracts\Auth\Guard $auth
      */
-    public function __construct(Guard $auth, Role $roles)
+    public function __construct(Role $roles)
     {
-        $this->auth = $auth;
+        $this->auth = BlogifyAuth::getFacadeRoot();
         $this->roles = $roles;
 
         $this->fillAlowedRolesArray();

@@ -54,7 +54,7 @@
         <div class="col-md-12">
             <h3>Comments</h3>
 
-            @if (Auth::check())
+            @if (BlogifyAuth::check())
                 {!! Form::open( [ 'route' => 'comments.store' ] ) !!}
 
                 <div class="row form-group {{ $errors->has('comment') ? 'has-error' : '' }}">

@@ -4,17 +4,12 @@ namespace ComposeDe\Blogify\Middleware;
 
 use App\User;
 use Closure;
+use ComposeDe\Blogify\Facades\BlogifyAuth;
 use Illuminate\Contracts\Auth\Guard;
 use ComposeDe\Blogify\Models\Post;
 
 class DenyIfBeingEdited
 {
-
-    /**
-     * Holds the Guard Contract
-     *
-     * @var \Illuminate\Contracts\Auth\Guard
-     */
     protected $auth;
 
     /**
@@ -22,23 +17,18 @@ class DenyIfBeingEdited
      */
     protected $posts;
 
-    /**
-     * @var \App\User
-     */
     protected $users;
 
     /**
      * Create a new filter instance.
      *
-     * @param \Illuminate\Contracts\Auth\Guard $auth
      * @param \ComposeDe\Blogify\Models\Post   $posts
-     * @param \App\User                        $users
      */
-    public function __construct(Guard $auth, Post $posts, User $users)
+    public function __construct(Post $posts)
     {
-        $this->auth = $auth;
+        $this->auth = BlogifyAuth::getFacadeRoot();
         $this->posts = $posts;
-        $this->users = $users;
+        $this->users = app(config('blogify.models.auth'));
     }
 
     /**
@@ -55,7 +45,7 @@ class DenyIfBeingEdited
 
         if (
             $post->being_edited_by != null &&
-            $post->being_edited_by != $this->auth->user()->getAuthIdentifier()
+            $post->being_edited_by != $this->auth->user()->id
         ) {
             $user = $this->users->find($post->being_edited_by)->fullName;
 

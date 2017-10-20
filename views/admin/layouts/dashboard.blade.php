@@ -23,7 +23,7 @@
                     </a>
                     <ul class="dropdown-menu dropdown-user">
                         <li>
-                            <a href="{{ route('admin.profile.edit', Auth::id()) }}">
+                            <a href="{{ route('admin.profile.edit', BlogifyAuth::id()) }}">
                                 <i class="fa fa-user fa-fw"></i>
                                 {{ trans('blogify::navigation.profile') }}
                             </a>
@@ -47,7 +47,7 @@
                         <li >
                             <a href="#"><i class="fa fa-pencil fa-fw"></i>{{ trans("blogify::navigation.posts.title") }}<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
-                                @if ( Auth::user()->role->name == 'admin' || Auth::user()->role->name == 'author' )
+                                @if ( BlogifyAuth::user()->role->name == BlogifyRole::getAdminRoleName() || BlogifyAuth::user()->role->name == BlogifyRole::getAuthorRoleName() )
                                     <li>
                                         <a href="{{ route ('admin.posts.create') }}"><span class="fa fa-plus fa-fw"></span> {{ trans("blogify::navigation.posts.new") }}</a>
                                     </li>
@@ -59,13 +59,13 @@
                             <!-- /.nav-second-level -->
                         </li>
 
-                        @if ( Auth::user()->role->name != 'reviewer' )
+                        @if ( BlogifyAuth::user()->role->name != BlogifyRole::getReviewerRoleName() )
                             <li>
                                 <a href="{{ route('admin.comments.index') }}"><i class="fa fa-comment fa-fw"></i>{{ trans("blogify::navigation.comments.title") }}</a>
                             </li>
                         @endif
 
-                        @if ( Auth::user()->role->name == 'admin' )
+                        @if ( BlogifyAuth::user()->role->name == BlogifyRole::getAdminRoleName() )
                             <li >
                                 <a href="#"><i class="fa fa-th-large fa-fw"></i>{{ trans("blogify::navigation.categories.title") }}<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
@@ -80,7 +80,7 @@
                             </li>
                         @endif
 
-                        @if ( Auth::user()->role->name != 'reviewer' )
+                        @if ( BlogifyAuth::user()->role->name != BlogifyRole::getReviewerRoleName() )
                             <li >
                                 <a href="#"><i class="fa fa-tags fa-fw"></i>{{ trans("blogify::navigation.tags.title") }}<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
@@ -95,7 +95,7 @@
                             </li>
                         @endif
 
-                        @if ( Auth::user()->role->name == 'admin' )
+                        @if ( BlogifyAuth::user()->role->name == BlogifyRole::getAdminRoleName() )
                             <li >
                                 <a href="#"><i class="fa fa-users fa-fw"></i>{{ trans("blogify::navigation.users.title") }}<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">

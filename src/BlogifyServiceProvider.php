@@ -2,6 +2,7 @@
 
 namespace ComposeDe\Blogify;
 
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Foundation\AliasLoader;
 use ComposeDe\Blogify\Services\Validation;
@@ -25,6 +26,8 @@ class BlogifyServiceProvider extends ServiceProvider
         'Html' => 'Collective\Html\HtmlFacade',
         'Image' => 'Intervention\Image\Facades\Image',
         'Input' => 'Illuminate\Support\Facades\Input',
+        'BlogifyAuth' => \ComposeDe\Blogify\Facades\BlogifyAuth::class,
+        'BlogifyRole' => \ComposeDe\Blogify\Facades\BlogifyRole::class,
     ];
 
     /**
@@ -43,6 +46,7 @@ class BlogifyServiceProvider extends ServiceProvider
         $this->registerMiddleware();
         $this->registerServiceProviders();
         $this->registerAliases();
+        $this->registerAuthWrapper();
     }
 
     /**
@@ -156,6 +160,16 @@ class BlogifyServiceProvider extends ServiceProvider
             $loader->alias($key, $alias);
         }
     }
+
+    private function registerAuthWrapper()
+    {
+        $this->app->bind('ComposeDe.blogifyAuth', function () {
+            $configValue = config('blogify.auth_wrapper', \ComposeDe\Helpers\BlogifyAuth::class);
+
+            return $this->app->make($configValue);
+        });
+    }
+
 
     /**
      * @return void

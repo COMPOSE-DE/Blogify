@@ -2,8 +2,8 @@
 
 namespace ComposeDe\Blogify\Services;
 
+use BlogifyAuth;
 use Hash;
-use Auth;
 use Illuminate\Validation\Validator;
 
 class Validation extends Validator
@@ -19,7 +19,7 @@ class Validation extends Validator
     {
         $passCheck = Hash::check(
             $value,
-            Auth::user()->getAuthPassword()
+            BlogifyAuth::user()->getAuthPassword()
         );
 
         if (!$passCheck) {

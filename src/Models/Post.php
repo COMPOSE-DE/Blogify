@@ -2,7 +2,7 @@
 
 namespace ComposeDe\Blogify\Models;
 
-use Auth;
+use BlogifyAuth;
 use ComposeDe\Blogify\Models\Category;
 use ComposeDe\Blogify\Models\Comment;
 use ComposeDe\Blogify\Models\Media;
@@ -116,11 +116,11 @@ class Post extends BaseModel
         }
 
         if ($role === $roleModel->getAuthorRoleName()) {
-            return $query->whereReviewerId(Auth::user()->id);
+            return $query->whereReviewerId(BlogifyAuth::user()->id);
         }
 
         if ($role === $roleModel->getMemberRoleName()) {
-            return $query->whereUserId(Auth::user()->id);
+            return $query->whereUserId(BlogifyAuth::user()->id);
         }
     }
 

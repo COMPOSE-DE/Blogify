@@ -82,6 +82,12 @@ return [
     ],
 
     /**
+     * A class implementing Illuminate\Contracts\Auth\Guard
+     * It will be used by blogify for simple authentication functionality.
+     */
+    'auth_wrapper' => \ComposeDe\Helpers\BlogifyAuth::class,
+    
+    /**
      * Define if new comments
      * first needs approval
      *

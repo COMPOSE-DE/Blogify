@@ -3,34 +3,24 @@
 namespace ComposeDe\Blogify\Middleware;
 
 use Closure;
+use ComposeDe\Blogify\Facades\BlogifyAuth;
 use Illuminate\Contracts\Auth\Guard;
-use App\User;
+
 
 class IsOwner
 {
-
-    /**
-     * The Guard implementation.
-     *
-     * @var \Illuminate\Contracts\Auth\Guard
-     */
     protected $auth;
 
-    /**
-     * @var \App\User
-     */
     protected $users;
 
     /**
-     * Create a new filter instance.
-     *
-     * @param \Illuminate\Contracts\Auth\Guard $auth
+     * Create a new filter instance
      * @param \App\User                        $users
      */
-    public function __construct(Guard $auth, User $users)
+    public function __construct()
     {
-        $this->auth = $auth;
-        $this->users = $users;
+        $this->auth = BlogifyAuth::getFacadeRoot();
+        $this->users = app(config('blogify.models.auth'));
     }
 
     /**
@@ -44,7 +34,7 @@ class IsOwner
     {
         $user = $this->users->findOrFail($request->segment(3));
 
-        if ($this->auth->user()->getAuthIdentifier() != $user->id) {
+        if ($this->auth->user()->id != $user->id) {
             abort(404);
         }
 
