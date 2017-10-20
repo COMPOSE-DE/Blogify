@@ -3,6 +3,7 @@
 namespace ComposeDe\Blogify\Middleware;
 
 use Closure;
+use ComposeDe\Blogify\Models\Role;
 use Illuminate\Contracts\Auth\Guard;
 
 class HasAdminRole
@@ -34,7 +35,7 @@ class HasAdminRole
      */
     public function handle($request, Closure $next)
     {
-        if ($this->auth->user()->role->name != 'admin') {
+        if ($this->auth->user()->role->name != app(Role::class)->getAdminRoleName()) {
             return redirect()->route('admin.dashboard');
         }
 
