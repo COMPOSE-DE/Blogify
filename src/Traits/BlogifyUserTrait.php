@@ -22,9 +22,9 @@ Trait BlogifyUserTrait
     |
     */
 
-    public function role()
+    public function roles()
     {
-        return $this->belongsTo('ComposeDe\Blogify\Models\Role');
+        return $this->belongsToMany('ComposeDe\Blogify\Models\Role', config('blogify.tables.role_user'), 'user_id', 'role_id');
     }
 
     public function post()

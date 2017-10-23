@@ -27,6 +27,7 @@ return [
         'posts' => 'blogify_post',
         'post_tag' => 'blogify_post_tag',
         'roles' => 'blogify_role',
+        'role_user' => 'blogify_role_user',
         'statuses' => 'blogify_status',
         'tags' => 'blogify_tag',
         'visibility' => 'blogify_visibility',
