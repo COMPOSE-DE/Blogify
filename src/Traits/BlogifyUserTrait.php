@@ -2,9 +2,10 @@
 
 namespace ComposeDe\Blogify\Traits;
 
+use BlogifyRole;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use BlogifyAuth;
-use ComposeDe\Blogify\Models\Role;
+
 
 Trait BlogifyUserTrait
 {
@@ -68,10 +69,10 @@ Trait BlogifyUserTrait
 
     public function scopeReviewers($query)
     {
-        $roles = app(config('blogify.models.role'));
+        $roles = BlogifyRole::getFacadeRoot();
 
-        $reviewerRoleId = $roles->whereName('reviewer')->first()->id;
-        $adminRoleId = $roles->whereName('admin')->first()->id;
+        $reviewerRoleId = $roles->whereName($roles->getReviewerRoleName())->first()->id;
+        $adminRoleId = $roles->whereName($roles->getAdminRoleName())->first()->id;
 
         return $query
             ->where('id', '<>', BlogifyAuth::id())
