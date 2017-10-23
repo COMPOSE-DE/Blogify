@@ -3,6 +3,7 @@
 namespace ComposeDe\Blogify\Controllers\Admin;
 
 use App\User;
+use ComposeDe\Blogify\Facades\BlogifyAuth;
 use ComposeDe\Blogify\Models\Comment;
 use ComposeDe\Blogify\Models\Post;
 use Illuminate\Contracts\Auth\Guard;
@@ -13,7 +14,7 @@ class DashboardController extends BaseController
     /**
      * @var \App\User
      */
-    protected $users;
+    protected $user;
 
     /**
      * @var \ComposeDe\Blogify\Models\Post
@@ -43,9 +44,10 @@ class DashboardController extends BaseController
 
         $this->posts = $posts;
         $this->comments = $comments;
+        $this->user = BlogifyAuth::user();
 
-        if ($this->users) {
-            $this->{"buildDataArrayFor".$this->users->role->name}();
+        if ($this->user) {
+            $this->{"buildDataArrayFor".$this->user->role->name}();
         }
     }
 
@@ -74,7 +76,7 @@ class DashboardController extends BaseController
     {
         $users = app(config('blogify.models.auth'));
 
-        $this->data['new_users_since_last_visit'] = $users->newUsersSince($this->users->updated_at)->count();
+        $this->data['new_users_since_last_visit'] = $users->newUsersSince($this->user->updated_at)->count();
 
         $this->data['pending_comments'] = $this->comments->byRevised(1)->count();
 
