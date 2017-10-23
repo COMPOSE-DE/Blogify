@@ -22,7 +22,7 @@ class Category extends BaseModel
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = ['name', 'hash'];
 
     /**
      * Set or unset the timestamps for the model
