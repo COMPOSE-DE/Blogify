@@ -51,7 +51,7 @@ class CanEditPost
     private function checkIfUserCanEditPost($request)
     {
         $post = $this->posts->byHash($request->segment(3));
-        $user_id = $this->auth->user()->id;
+        $user_id = $this->auth->id();
 
         if (
             $user_id != $post->user_id &&
