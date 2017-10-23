@@ -5,16 +5,11 @@ namespace ComposeDe\Blogify\Controllers\Admin;
 use ComposeDe\Blogify\Blogify;
 use ComposeDe\Blogify\Models\Role;
 use ComposeDe\Blogify\Requests\UserRequest;
-use App\User;
 use Illuminate\Contracts\Hashing\Hasher as Hash;
 use ComposeDe\Blogify\Services\BlogifyMailer;
 
 class UserController extends BaseController
 {
-
-    /**
-     * @var \App\User
-     */
     protected $users;
 
     /**
@@ -60,8 +55,10 @@ class UserController extends BaseController
         return view('blogify::admin.users.form', compact('roles'));
     }
 
-    public function edit(User $user)
+    public function edit($userId)
     {
+        $user = $this->users->find($userId);
+
         $roles = $this->roles->all();
 
         return view('blogify::admin.users.form', compact('roles', 'user'));
@@ -77,8 +74,9 @@ class UserController extends BaseController
         return redirect()->route('admin.users.index');
     }
 
-    public function update(UserRequest $request, User $user)
+    public function update(UserRequest $request, $userId)
     {
+        $user = $this->users->find($userId);
         $user->role_id = $request->get('role');
         $user->save();
 
@@ -87,8 +85,9 @@ class UserController extends BaseController
         return redirect()->route('admin.users.index');
     }
 
-    public function destroy(User $user)
+    public function destroy($userId)
     {
+        $user = $this->users->find($userId);
         $username = $user->name;
         $user->delete();
 
