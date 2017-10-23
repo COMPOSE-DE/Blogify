@@ -19,6 +19,19 @@ return [
         'visibility' => \ComposeDe\Blogify\Models\Visibility::class,
     ],
 
+    'tables' => [
+        'users' => 'blogify_user',
+        'categories' => 'blogify_category',
+        'comments' => 'blogify_comment',
+        'media' => 'blogify_media',
+        'posts' => 'blogify_post',
+        'post_tag' => 'blogify_post_tag',
+        'roles' => 'blogify_role',
+        'statuses' => 'blogify_status',
+        'tags' => 'blogify_tag',
+        'visibility' => 'blogify_visibility',
+    ],
+
     /**
      * Other models
      */

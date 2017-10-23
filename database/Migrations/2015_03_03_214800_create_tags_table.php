@@ -5,6 +5,13 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateTagsTable extends Migration {
 
+    private $tableName;
+
+    public function __construct()
+    {
+        $this->tableName = config('blogify.tables.tags');
+    }
+
     /**
      * Run the migrations.
      *
@@ -12,7 +19,7 @@ class CreateTagsTable extends Migration {
      */
     public function up()
     {
-        Schema::create('tags', function($table)
+        Schema::create($this->tableName, function($table)
         {
             $table->increments('id');
             $table->string('hash', 80)->unique();
@@ -29,6 +36,6 @@ class CreateTagsTable extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('tags');
+        Schema::dropIfExists($this->tableName);
     }
 }

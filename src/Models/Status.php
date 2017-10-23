@@ -11,6 +11,12 @@ class Status extends BaseModel
 
     public $timestamps = false;
 
+    public function __construct(array $attributes = [])
+    {
+        $this->table = config('blogify.tables.statuses');
+        parent::__construct($attributes);
+    }
+
     public function post()
     {
         return $this->hasMany(config('blogify.models.post'));

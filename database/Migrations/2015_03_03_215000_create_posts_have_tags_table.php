@@ -5,6 +5,13 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreatePostsHaveTagsTable extends Migration {
 
+    private $tableName;
+
+    public function __construct()
+    {
+        $this->tableName = config('blogify.tables.post_tag');
+    }
+    
     /**
      * Run the migrations.
      *
@@ -12,7 +19,7 @@ class CreatePostsHaveTagsTable extends Migration {
      */
     public function up()
     {
-        Schema::create('posts_have_tags', function($table)
+        Schema::create($this->tableName, function($table)
         {
             $table->increments('id');
             $table->integer('post_id')->unsigned()->index();
@@ -27,6 +34,6 @@ class CreatePostsHaveTagsTable extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('posts_have_tags');
+        Schema::dropIfExists($this->tableName);
     }
 }

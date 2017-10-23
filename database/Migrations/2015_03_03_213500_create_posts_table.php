@@ -5,6 +5,13 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreatePostsTable extends Migration {
 
+    private $tableName;
+
+    public function __construct()
+    {
+        $this->tableName = config('blogify.tables.posts');
+    }
+
     /**
      * Run the migrations.
      *
@@ -12,7 +19,7 @@ class CreatePostsTable extends Migration {
      */
     public function up()
     {
-        Schema::create('posts', function($table)
+        Schema::create($this->tableName, function($table)
         {
             $table->increments('id');
             $table->string('hash', 80)->unique();
@@ -41,6 +48,6 @@ class CreatePostsTable extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('posts');
+        Schema::dropIfExists($this->tableName);
     }
 }

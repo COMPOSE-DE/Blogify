@@ -11,6 +11,12 @@ class Post extends BaseModel
 {
     use SoftDeletes;
 
+    public function __construct(array $attributes = [])
+    {
+        $this->table = config('blogify.tables.posts');
+        parent::__construct($attributes);
+    }
+
     public function getRouteKeyName()
     {
         return 'hash';
@@ -38,7 +44,7 @@ class Post extends BaseModel
 
     public function tags()
     {
-        return $this->belongsToMany(config('blogify.models.tag'), 'posts_have_tags', 'post_id', 'tag_id')->withTrashed();
+        return $this->belongsToMany(config('blogify.models.tag'), config('blogify.tables.post_tag'), 'post_id', 'tag_id')->withTrashed();
     }
 
     public function status()

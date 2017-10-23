@@ -5,15 +5,16 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateUsersTable extends Migration
 {
-
     /**
      * @var array
      */
     protected $fields;
+    private $tableName;
 
     public function __construct()
     {
         $this->fillFieldsArray();
+        $this->tableName = config('blogify.tables.users');
     }
 
     /**
@@ -23,7 +24,7 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        if (! Schema::hasTable('users')) {
+        if (! Schema::hasTable($this->tableName)) {
             $this->createUsersTable();
         } else {
             $this->updateUsersTable();
@@ -37,7 +38,7 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists($this->tableName);
     }
 
     /**
@@ -81,7 +82,7 @@ class CreateUsersTable extends Migration
      */
     private function createUsersTable()
     {
-        Schema::create('users', function ($table) {
+        Schema::create($this->tableName, function ($table) {
             foreach ($this->fields as $field => $value) {
                 $query = $table->{$value['type']}($field);
 
@@ -101,9 +102,9 @@ class CreateUsersTable extends Migration
      */
     private function updateUsersTable()
     {
-        Schema::table('users', function ($table) {
+        Schema::table($this->tableName, function ($table) {
             foreach ($this->fields as $field => $value) {
-                if (!Schema::hasColumn('users', $field)) {
+                if (!Schema::hasColumn($this->tableName, $field)) {
                     $type  = $value['type'];
                     $query = $table->$type($field);
 
@@ -114,11 +115,11 @@ class CreateUsersTable extends Migration
                 }
             }
 
-            if (!Schema::hasColumn('users', 'created_at') && !Schema::hasColumn('users', 'updated_at')) {
+            if (!Schema::hasColumn($this->tableName, 'created_at') && !Schema::hasColumn($this->tableName, 'updated_at')) {
                 $table->timestamps();
             }
 
-            if (!Schema::hasColumn('users', 'deleted_at')) {
+            if (!Schema::hasColumn($this->tableName, 'deleted_at')) {
                 $table->softDeletes();
             }
         });

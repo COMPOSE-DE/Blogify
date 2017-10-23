@@ -11,6 +11,12 @@ class Role extends BaseModel
 
     protected $hasHash = false;
 
+    public function __construct(array $attributes = [])
+    {
+        $this->table = config('blogify.tables.roles');
+        parent::__construct($attributes);
+    }
+
     public function users()
     {
         return $this->hasMany(config('blogify.auth_model'));

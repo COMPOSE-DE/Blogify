@@ -5,6 +5,13 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateCategoriesTable extends Migration {
 
+    private $tableName;
+
+    public function __construct()
+    {
+        $this->tableName = config('blogify.tables.categories');
+    }
+
     /**
      * Run the migrations.
      *
@@ -12,7 +19,7 @@ class CreateCategoriesTable extends Migration {
      */
     public function up()
     {
-        Schema::create('categories', function($table)
+        Schema::create($this->tableName, function($table)
         {
             $table->increments('id');
             $table->string('hash', 80)->unique();
@@ -29,6 +36,6 @@ class CreateCategoriesTable extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists($this->tableName);
     }
 }

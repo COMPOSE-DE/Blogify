@@ -5,6 +5,13 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateCommentsTable extends Migration {
 
+
+    private $tableName;
+
+    public function __construct()
+    {
+        $this->tableName = config('blogify.tables.comments');
+    }
     /**
      * Run the migrations.
      *
@@ -12,7 +19,7 @@ class CreateCommentsTable extends Migration {
      */
     public function up()
     {
-        Schema::create('comments', function($table)
+        Schema::create($this->tableName, function($table)
         {
             $table->increments('id');
             $table->string('hash', 80)->unique();
@@ -32,6 +39,6 @@ class CreateCommentsTable extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('comments');
+        Schema::dropIfExists($this->tableName);
     }
 }

@@ -5,6 +5,14 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateRolesTable extends Migration {
 
+    private $tableName;
+
+    public function __construct()
+    {
+        $this->tableName = config('blogify.tables.roles');
+    }
+
+
     /**
      * Run the migrations.
      *
@@ -12,8 +20,8 @@ class CreateRolesTable extends Migration {
      */
     public function up()
     {
-        if (! Schema::hasTable('roles')) {
-            Schema::create('roles', function($table)
+        if (! Schema::hasTable($this->tableName)) {
+            Schema::create($this->tableName, function($table)
             {
                 $table->increments('id');
                 $table->string('name', 25)->unique();
@@ -28,6 +36,6 @@ class CreateRolesTable extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('roles');
+        Schema::dropIfExists($this->tableName);
     }
 }

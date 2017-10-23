@@ -5,6 +5,13 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateMediaTable extends Migration {
 
+    private $tableName;
+
+    public function __construct()
+    {
+        $this->tableName = config('blogify.tables.media');
+    }
+
     /**
      * Run the migrations.
      *
@@ -12,7 +19,7 @@ class CreateMediaTable extends Migration {
      */
     public function up()
     {
-        Schema::create('media', function($table)
+        Schema::create($this->tableName, function($table)
         {
             $table->increments('id');
             $table->string('hash', 80)->unique();
@@ -31,6 +38,6 @@ class CreateMediaTable extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('media');
+        Schema::dropIfExists($this->tableName);
     }
 }

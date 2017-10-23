@@ -31,6 +31,14 @@ class Category extends BaseModel
      */
     public $timestamps = true;
 
+
+    public function __construct(array $attributes = [])
+    {
+        $this->table = config('blogify.tables.categories');
+        parent::__construct($attributes);
+    }
+
+
     public function getLinkAttribute()
     {
         return url('blog') . '?category=' . $this->id;

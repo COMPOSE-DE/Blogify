@@ -19,6 +19,12 @@ class Comment extends BaseModel
         'disapproved' => 3,
     ];
 
+    public function __construct(array $attributes = [])
+    {
+        $this->table = config('blogify.tables.comments');
+        parent::__construct($attributes);
+    }
+
     public function user()
     {
         return $this->belongsTo(config('blogify.models.auth'));

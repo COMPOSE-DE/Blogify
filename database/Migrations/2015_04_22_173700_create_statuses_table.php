@@ -4,6 +4,13 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateStatusesTable extends Migration {
 
+    private $tableName;
+
+    public function __construct()
+    {
+        $this->tableName = config('blogify.tables.statuses');
+    }
+
     /**
      * Run the migrations.
      *
@@ -11,7 +18,7 @@ class CreateStatusesTable extends Migration {
      */
     public function up()
     {
-        Schema::create('statuses', function($table)
+        Schema::create($this->tableName, function($table)
         {
             $table->increments('id');
             $table->string('hash', 80)->unique();
@@ -26,6 +33,6 @@ class CreateStatusesTable extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('statuses');
+        Schema::dropIfExists($this->tableName);
     }
 }

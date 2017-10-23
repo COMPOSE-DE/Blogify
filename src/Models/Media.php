@@ -31,6 +31,12 @@ class Media extends BaseModel
      */
     public $timestamps = true;
 
+    public function __construct(array $attributes = [])
+    {
+        $this->table = config('blogify.tables.media');
+        parent::__construct($attributes);
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Relationships
