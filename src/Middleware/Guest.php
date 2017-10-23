@@ -34,7 +34,7 @@ class Guest
                 return response('Unauthorized.', 401);
             }
 
-            return redirect('admin');
+            return redirect(route('admin'));
         }
 
         return $next($request);
