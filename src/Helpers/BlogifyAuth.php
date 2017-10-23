@@ -2,13 +2,10 @@
 
 namespace ComposeDe\Helpers;
 
-
-use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Support\Facades\Auth;
 
 
-class BlogifyAuth implements Guard
+class BlogifyAuth
 {
     /**
      * Determine if the current user is authenticated.
@@ -48,29 +45,5 @@ class BlogifyAuth implements Guard
     public function id()
     {
         return Auth::id();
-    }
-
-    /**
-     * Validate a user's credentials.
-     *
-     * @param  array $credentials
-     *
-     * @return bool
-     */
-    public function validate(array $credentials = [])
-    {
-        return Auth::validate($credentials);
-    }
-
-    /**
-     * Set the current user.
-     *
-     * @param  \Illuminate\Contracts\Auth\Authenticatable $user
-     *
-     * @return void
-     */
-    public function setUser(Authenticatable $user)
-    {
-        Auth::setUser($user);
     }
 }

@@ -134,7 +134,7 @@
                             <div class="row">
                                 <div class="col-sm-12 form-group">
                                     <select name="reviewer" id="reviewer" class="form-control">
-                                        <option {{ (!isset($post) ? 'selected' : '') }} value="{{BlogifyAuth::user()->id}}">{{ BlogifyAuth::user()->name }}</option>
+                                        <option {{ (!isset($post) ? 'selected' : '') }} value="{{BlogifyAuth::id()}}">{{ BlogifyAuth::user()->name }}</option>
                                         @foreach ( $reviewers as $reviewer )
                                             @if ( isset($post) )
                                                 <option {{ ($reviewer->id === $post->reviewer_id || $reviewer->id == Input::old('reviewer') ) ? 'selected' : '' }} value="{{$reviewer->id}}">{{ $reviewer->name }}</option>

@@ -46,7 +46,7 @@ class ProfileUpdateRequest extends Request
      */
     public function authorize()
     {
-        return $this->auth->user()->id == $this->route('profile');
+        return $this->auth->id() == $this->route('profile');
     }
 
     /**

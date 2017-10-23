@@ -116,11 +116,11 @@ class Post extends BaseModel
         }
 
         if ($role === $roleModel->getAuthorRoleName()) {
-            return $query->whereReviewerId(BlogifyAuth::user()->id);
+            return $query->whereReviewerId(BlogifyAuth::id());
         }
 
         if ($role === $roleModel->getMemberRoleName()) {
-            return $query->whereUserId(BlogifyAuth::user()->id);
+            return $query->whereUserId(BlogifyAuth::id());
         }
     }
 

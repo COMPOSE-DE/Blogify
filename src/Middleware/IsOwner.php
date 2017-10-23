@@ -15,7 +15,6 @@ class IsOwner
 
     /**
      * Create a new filter instance
-     * @param \App\User                        $users
      */
     public function __construct()
     {
@@ -34,7 +33,7 @@ class IsOwner
     {
         $user = $this->users->findOrFail($request->segment(3));
 
-        if ($this->auth->user()->id != $user->id) {
+        if ($this->auth->id() != $user->id) {
             abort(404);
         }
 
