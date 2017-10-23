@@ -487,7 +487,7 @@ var app = {
                     'X-CSRF-TOKEN': $("input[name='_token']")[0].value
                 },
                 type:     'post',
-                url:       app.routing.getUrl('admin.categories.create'),
+                url:       app.routing.getUrl('admin.categories.store'),
                 data:       { 'name': $('#newCategory')[0].value },
                 dataType:   'json',
                 success: function(data)
