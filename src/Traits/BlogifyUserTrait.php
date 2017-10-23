@@ -27,11 +27,6 @@ Trait BlogifyUserTrait
         return $this->belongsTo('ComposeDe\Blogify\Models\Role');
     }
 
-    public function history()
-    {
-        return $this->hasMany('ComposeDe\Blogify\Models\history');
-    }
-
     public function post()
     {
         return $this->hasMany('ComposeDe\Blogify\Models\post');
