@@ -129,6 +129,9 @@
             </div>
             <!-- /#page-wrapper -->
         </div>
+        <div id="routes" data-routes="{{ json_encode(\ComposeDe\Helpers\Routes::getSimpleRoutes()) }}"
+            data-admin-route-prefix="{{ json_encode(\ComposeDe\Helpers\Routes::getAdminRoutePrefix()) }}"></div>
     </div>
+
 @stop
 

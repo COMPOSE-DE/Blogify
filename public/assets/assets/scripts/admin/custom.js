@@ -12,6 +12,7 @@ var app = {
         app.tags.init();
         app.autoSave.init();
         app.protectedPosts.init();
+        app.routing.init();
     },
 
     /**
@@ -57,6 +58,7 @@ var app = {
      */
     sortable: {
         url: '',
+        adminRoutePrefix: 'admin',
 
         /**
          * Listen to a click on a sortable element
@@ -64,6 +66,7 @@ var app = {
          */
         init: function()
         {
+            app.sortable.adminRoutePrefix = $('#routes').data('adminRoutePrefix');
 
             $('.sort').on('click', function(e){
                 e.preventDefault();
@@ -196,7 +199,7 @@ var app = {
                 var link            = $(atag);
                 var url             = link[0].href;
                 var urlParts        = url.split('/');
-                var newUrl = app.generateBaseUrl() + '/' + '/admin/' + urlParts[6] + '/';
+                var newUrl = app.generateBaseUrl() + '/' + app.sortable.adminRoutePrefix + '/' + urlParts[6] + '/';
 
                 if ( 'status_id' in data['data'][i] ) {
                     // Append the actions to the last column
@@ -319,7 +322,7 @@ var app = {
             CKEDITOR.config.height = 400;
             CKEDITOR.config.extraPlugins = 'wordcount';
             CKEDITOR.replace( 'post',{
-                filebrowserUploadUrl: app.generateBaseUrl() + '/admin/posts/image/upload'
+                filebrowserUploadUrl: app.routing.getUrl('admin.posts.uploadImage')
             } );
         }
     },
@@ -367,7 +370,6 @@ var app = {
      */
     slug: {
         slug: '',
-        apiBaseUrl: '',
 
         /**
          * Check if the listener has to be called
@@ -415,12 +417,13 @@ var app = {
          */
         checkIfSlugIsUnique: function()
         {
-            app.slug.apiBaseUrl = app.generateBaseUrl() + '/admin/api/slug/checkIfSlugIsUnique/' + app.slug.slug;
             if ( app.slug.slug.length > 0 )
             {
+                var url = app.routing.getUrl('admin.api.slug.checkIfUnique', app.slug.slug);
+
                 $.ajax({
                     'type': 'get',
-                    'url': app.slug.apiBaseUrl,
+                    'url': url,
                     'dateType': 'json'
                 }).done( function( data ) {
                     app.slug.fillSlugField(data);
@@ -484,7 +487,7 @@ var app = {
                     'X-CSRF-TOKEN': $("input[name='_token']")[0].value
                 },
                 type:     'post',
-                url:        app.generateBaseUrl() + '/admin/categories',
+                url:       app.routing.getUrl('admin.categories.create'),
                 data:       { 'name': $('#newCategory')[0].value },
                 dataType:   'json',
                 success: function(data)
@@ -554,7 +557,7 @@ var app = {
                     'X-CSRF-TOKEN': $("input[name='_token']")[0].value
                 },
                 type:     'post',
-                url:        app.generateBaseUrl() + '/admin/tags',
+                url:        app.routing.getUrl('admin.tags.create'),
                 data:       { 'tags': $('#newTags')[0].value },
                 dataType:   'json',
                 success: function(data)
@@ -621,7 +624,7 @@ var app = {
             {
                 $.ajax({
                     type:     'get',
-                    url:        app.generateBaseUrl() + '/admin/api/tags/' + hashes[i],
+                    url:       app.routing.getUrl('admin.api.tags', hashes[i]),
                     dataType:   'json',
                     success: function(data)
                     {
@@ -778,9 +781,9 @@ var app = {
                     'X-CSRF-TOKEN': $("input[name='_token']")[0].value
                 },
                 type:     'post',
-                url:        app.generateBaseUrl() + '/admin/api/autosave',
-                data:       app.autoSave.data,
-                dataType:   'json',
+                url:       app.routing.getUrl('admin.api.autosave'),
+                data:      app.autoSave.data,
+                dataType:  'json',
                 success: function( response )
                 {
                     $('.auto-save-log').empty();
@@ -820,6 +823,36 @@ var app = {
             });
         }
 
+    },
+
+    routing: {
+        routes: [],
+
+        init: function()
+        {
+            app.routing.routes = $('#routes').data('routes');
+        },
+
+        getUrl: function(routeName, parameters)
+        {
+            var url = app.generateBaseUrl() + '/' + app.routing.routes[routeName];
+
+            if(typeof parameters == 'undefined' || !parameters)
+            {
+                return url;
+            }
+
+            if(!Array.isArray(parameters))
+            {
+                parameters = [parameters.toString()];
+            }
+
+            parameters.forEach(function(item) {
+                url = url.replace(/\{.*?\}/, item)
+            });
+
+            return url;
+        }
     }
 
 };
