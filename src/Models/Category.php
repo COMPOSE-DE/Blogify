@@ -41,7 +41,7 @@ class Category extends BaseModel
 
     public function getLinkAttribute()
     {
-        return url('blog') . '?category=' . $this->id;
+        return config('blogify.blog_route_prefix') . '?category=' . $this->id;
     }
 
     /*
