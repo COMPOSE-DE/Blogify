@@ -4,6 +4,7 @@ namespace ComposeDe\Blogify\Middleware;
 
 use Closure;
 use ComposeDe\Blogify\Facades\BlogifyAuth;
+use ComposeDe\Blogify\Facades\BlogifyRole;
 use Illuminate\Contracts\Auth\Guard;
 use ComposeDe\Blogify\Models\Post;
 
@@ -55,7 +56,7 @@ class CanEditPost
         if (
             $user_id != $post->user_id &&
             $user_id != $post->reviewer_id &&
-            $this->auth->user()->role->name != 'admin'
+            $this->auth->user()->role->name != BlogifyRole::getAdminRoleName()
         ) {
             return false;
         }
