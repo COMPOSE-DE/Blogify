@@ -9,7 +9,14 @@ $use_default_routes = config('blogify.enable_default_routes');
 
 if ($use_default_routes) {
     Route::group(['prefix' => config('blogify.blog_route_prefix'), 'namespace' => 'App\Http\Controllers', 'middleware' => 'web'], function() {
-        Route::resource('/', 'BlogController', ['only' => ['index', 'show']]);
+        Route::get('/', [
+            'as' => 'blog.index',
+            'uses' => 'BlogController@index'
+        ]);
+        Route::get('/{slug}', [
+            'as' => 'blog.show',
+            'uses' => 'BlogController@show'
+        ]);
         Route::post('{slug}', [
             'as' => 'blog.confirmPass',
             'uses' => 'BlogController@show',
