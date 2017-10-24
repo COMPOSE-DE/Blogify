@@ -89,19 +89,19 @@ class BlogifyServiceProvider extends ServiceProvider
 
     private function bindModels()
     {
-        $this->bindIfNeeded(\App\User::class, 'blogify.models.auth');
-        $this->bindIfNeeded(\ComposeDe\Blogify\Models\Category::class);
-        $this->bindIfNeeded(\ComposeDe\Blogify\Models\Comment::class);
-        $this->bindIfNeeded(\ComposeDe\Blogify\Models\Media::class);
-        $this->bindIfNeeded(\ComposeDe\Blogify\Models\Post::class);
-        $this->bindIfNeeded(\ComposeDe\Blogify\Models\Role::class);
-        $this->bindIfNeeded(\ComposeDe\Blogify\Models\Status::class);
-        $this->bindIfNeeded(\ComposeDe\Blogify\Models\Tag::class);
-        $this->bindIfNeeded(\ComposeDe\Blogify\Models\Visibility::class);
+        $this->bindModelIfNeeded(\App\User::class, 'blogify.models.auth');
+        $this->bindModelIfNeeded(\ComposeDe\Blogify\Models\Category::class);
+        $this->bindModelIfNeeded(\ComposeDe\Blogify\Models\Comment::class);
+        $this->bindModelIfNeeded(\ComposeDe\Blogify\Models\Media::class);
+        $this->bindModelIfNeeded(\ComposeDe\Blogify\Models\Post::class);
+        $this->bindModelIfNeeded(\ComposeDe\Blogify\Models\Role::class);
+        $this->bindModelIfNeeded(\ComposeDe\Blogify\Models\Status::class);
+        $this->bindModelIfNeeded(\ComposeDe\Blogify\Models\Tag::class);
+        $this->bindModelIfNeeded(\ComposeDe\Blogify\Models\Visibility::class);
     }
 
 
-    private function bindIfNeeded($className, $configKey = null)
+    private function bindModelIfNeeded($className, $configKey = null)
     {
         if($configKey === null) {
             $classBaseName = class_basename($className);
