@@ -41,7 +41,7 @@
                                     <small>{{ $post->views_count }} views</small>
                                 </div>
                                 <div class="col-md-6 col-xs-12 text-right">
-                                    <small>Posted on {{$post->publish_date}} by {{$post->user->fullName}}</small>
+                                    <small>Posted on {{$post->publish_date->toDateTimeString()}} by {{$post->user->fullName}}</small>
                                 </div>
                             </div>
                         </div>

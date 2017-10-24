@@ -3,6 +3,7 @@
 namespace ComposeDe\Blogify\Models;
 
 use BlogifyAuth;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Hash;
@@ -17,6 +18,8 @@ use BlogifyVisibilityModel;
 class Post extends BaseModel
 {
     use SoftDeletes;
+
+    protected $dates = ['publish_date'];
 
     public function __construct(array $attributes = [])
     {
@@ -91,14 +94,13 @@ class Post extends BaseModel
 
     public function setPublishDateAttribute($value)
     {
-        $this->attributes['publish_date'] = date("Y-m-d H:i:s", strtotime($value));
-    }
+        if(!$value instanceof Carbon) {
+            $value = Carbon::parse($value);
+        }
 
-    public function getPublishDateAttribute($value)
-    {
-        return date("d-m-Y H:i", strtotime($value));
+        $this->attributes['publish_date'] = $value;
     }
-
+    
     public function getAuthorNameAttribute()
     {
         return $this->user->name;

@@ -102,7 +102,7 @@
                                     {!! Form::label('date', trans("blogify::posts.form.publish.publish_date.label") ) !!}
                                 </div>
                                 <div class="col-sm-8 form-group {{ $errors->has('publishdate') ? 'has-error' : '' }}">
-                                    {!! Form::text('publishdate', isset($post) ? $post->publish_date : $publish_date , [ 'data-field' => 'datetime', 'class' => 'form-control', 'readonly', 'id' => 'publishdate' ] ) !!}
+                                    {!! Form::text('publishdate', isset($post) ? $post->publish_date->toDateTimeString() : $publish_date , [ 'data-field' => 'datetime', 'class' => 'form-control', 'readonly', 'id' => 'publishdate' ] ) !!}
                                     <div id="dtBox"></div>
                                 </div>
                             </div>

@@ -41,7 +41,7 @@ $currentPage    = (Request::has('page')) ? Request::get('page') : '1';
                 <td>{!! $post->title !!}</td>
                 <td>{!! $post->slug !!}</td>
                 <td>{!! $post->status->name !!}</td>
-                <td>{!! $post->publish_date !!}</td>
+                <td>{!! $post->publish_date->toDateTimeString() !!}</td>
                 <td>
                     @if(!$trashed)
                         <a href="{{ route('admin.posts.edit', $post ) }}"><span class="fa fa-edit fa-fw"></span></a>

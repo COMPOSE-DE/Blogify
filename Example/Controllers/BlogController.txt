@@ -135,7 +135,7 @@ class BlogController extends Controller
     private function getOverviewData($post = null)
     {
         $archive = $this->post->where('publish_date', '<=', date('Y-m-d H:i:s'))->orderBy('publish_date', 'DESC')->get()->groupBy(function($query){
-            return Carbon::parse($query->publish_date)->format('F Y');
+            return $query->publish_date->format('F Y');
         });
 
         $data = [
