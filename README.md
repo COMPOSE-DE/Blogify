@@ -35,3 +35,10 @@ Check your users table and your roles table. Blogify has created a new admin use
 
 4. `php artisan blogify:create-dirs`
 5. `php artisan blogify:generate` (see the command help for options)
+
+## Known issues
+- Original code is not fully migrated to handling multiple roles per user.
+- Workflows for login and registration are very likely not working. This functionality should be removed, because Blogify is a package and should use the users and roles of the main application.
+
+## You found an issue?
+Let's hope it's not too bad.
