@@ -60,4 +60,15 @@ trait BlogifyRoleTrait
     {
         return 'member';
     }
+
+    public function getCachedId($type)
+    {
+        return cache()->remember(
+            "{$this->getTable()}.{$type}",
+            config('blogify.config_items_cache_time'),
+            function() use($type) {
+                return $this->where('name', $type)->first(['id'])->id;
+            }
+        );
+    }
 }
