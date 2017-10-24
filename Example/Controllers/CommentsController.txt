@@ -1,8 +1,8 @@
 <?php namespace {{namespace}};
 
 use {{appnamespace}}\Http\Requests\CommentRequest;
-use ComposeDe\Blogify\Models\Comment;
-use ComposeDe\Blogify\Models\Post;
+use BlogifyCommentModel;
+use BlogifyPostModel;
 
 class CommentsController extends Controller
 {
@@ -28,7 +28,7 @@ class CommentsController extends Controller
      * @param Comment $comment
      * @param Post $post
      */
-    public function __construct(Comment $comment, Post $post)
+    public function __construct(BlogifyCommentModel $comment, BlogifyPostModel $post)
     {
         $this->comment = $comment;
         $this->config = objectify(config('blogify'));
@@ -39,7 +39,7 @@ class CommentsController extends Controller
 
     public function store(CommentRequest $request)
     {
-        $comment = new Comment;
+        $comment = new BlogifyCommentModel;
         $comment->hash = blogify()->makeHash('comments', 'hash', true);
         $comment->content = $request->comment;
         $comment->user_id = $this->auth->id();

@@ -4,7 +4,7 @@ namespace ComposeDe\Blogify\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Auth\Guard;
-use ComposeDe\Blogify\Models\Role;
+use BlogifyRoleModel;
 
 class BlogifyAdminAuthenticate
 {
@@ -29,10 +29,10 @@ class BlogifyAdminAuthenticate
     /**
      * Create a new filter instance.
      *
-     * @param \Illuminate\Contracts\Auth\Guard $auth
-     * @param \ComposeDe\Blogify\Models\Role   $roles
+     * @param \Illuminate\Contracts\Auth\Guard                 $auth
+     * @param \BlogifyRoleModel|\ComposeDe\Blogify\Models\Role $roles
      */
-    public function __construct(Guard $auth, Role $roles)
+    public function __construct(Guard $auth, BlogifyRoleModel $roles)
     {
         $this->auth = $auth;
         $this->adminRoles = $roles->byAdminRoles()->get();
@@ -57,7 +57,7 @@ class BlogifyAdminAuthenticate
         }
 
         // Check if the user has permission to visit the admin panel
-        if (! in_array($this->auth->user()->role_id, $this->allowed_roles)) {
+        if (array_intersect($this->auth->user()->roles->pluck('id')->all(), $this->allowed_roles)) {
             return redirect()->route('admin.login');
         }
 

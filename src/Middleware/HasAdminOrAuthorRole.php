@@ -2,8 +2,7 @@
 
 use Closure;
 use ComposeDe\Blogify\Facades\BlogifyAuth;
-use Illuminate\Contracts\Auth\Guard;
-use ComposeDe\Blogify\Models\Role;
+use BlogifyRoleModel;
 
 class HasAdminOrAuthorRole
 {
@@ -22,9 +21,9 @@ class HasAdminOrAuthorRole
     /**
      * Create a new filter instance.
      *
-     * @param \ComposeDe\Blogify\Models\Role   $roles
+     * @param \BlogifyRoleModel $roles
      */
-    public function __construct(Role $roles)
+    public function __construct(BlogifyRoleModel $roles)
     {
         $this->auth = BlogifyAuth::getFacadeRoot();
         $this->roles = $roles;
@@ -41,7 +40,7 @@ class HasAdminOrAuthorRole
      */
     public function handle($request, Closure $next)
     {
-        if (! in_array($this->auth->user()->role->id, $this->allowed_roles)) {
+        if (! in_array($this->auth->user()->getHighestRole()->id, $this->allowed_roles)) {
             return redirect()->route('admin.dashboard');
         }
 

@@ -5,8 +5,7 @@ namespace ComposeDe\Blogify\Middleware;
 use Closure;
 use ComposeDe\Blogify\Facades\BlogifyAuth;
 use ComposeDe\Blogify\Facades\BlogifyRole;
-use Illuminate\Contracts\Auth\Guard;
-use ComposeDe\Blogify\Models\Post;
+use BlogifyPostModel;
 
 class CanEditPost
 {
@@ -20,9 +19,9 @@ class CanEditPost
     /**
      * Create a new filter instance.
      *
-     * @param \ComposeDe\Blogify\Models\Post   $posts
+     * @param \BlogifyPostModel $posts
      */
-    public function __construct(Post $posts)
+    public function __construct(BlogifyPostModel $posts)
     {
         $this->auth = BlogifyAuth::getFacadeRoot();
         $this->posts = $posts;
@@ -56,7 +55,7 @@ class CanEditPost
         if (
             $user_id != $post->user_id &&
             $user_id != $post->reviewer_id &&
-            $this->auth->user()->role->name != BlogifyRole::getAdminRoleName()
+            $this->auth->user()->getHighestRole()->name != BlogifyRole::getAdminRoleName()
         ) {
             return false;
         }

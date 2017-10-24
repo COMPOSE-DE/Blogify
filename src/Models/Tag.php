@@ -3,7 +3,7 @@
 namespace ComposeDe\Blogify\Models;
 
 use Validator;
-use ComposeDe\Blogify\Models\Post;
+use BlogifyPostModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -47,6 +47,6 @@ class Tag extends BaseModel
 
     public function post()
     {
-        return $this->belongsToMany(config('blogify.models.post'), config('blogify.tables.post_tag'), 'tag_id', 'post_id');
+        return $this->belongsToMany(BlogifyPostModel::class, config('blogify.tables.post_tag'), 'tag_id', 'post_id');
     }
 }

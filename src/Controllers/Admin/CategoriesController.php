@@ -2,14 +2,12 @@
 
 namespace ComposeDe\Blogify\Controllers\Admin;
 
-use Illuminate\Contracts\Auth\Guard;
-use ComposeDe\Blogify\Blogify;
-use ComposeDe\Blogify\Models\Category;
 use ComposeDe\Blogify\Requests\CategoryRequest;
+use BlogifyCategoryModel;
 
 class CategoriesController extends BaseController
 {
-    public function index($trashed = null, Category $categoriesModel)
+    public function index($trashed = null, BlogifyCategoryModel $categoriesModel)
     {
         $query = $categoriesModel->orderBy('created_at', 'DESC');
 
@@ -27,12 +25,12 @@ class CategoriesController extends BaseController
         return view('blogify::admin.categories.form');
     }
 
-    public function edit(Category $category)
+    public function edit(BlogifyCategoryModel $category)
     {
         return view('blogify::admin.categories.form', compact('category'));
     }
 
-    public function store(CategoryRequest $request, Category $categories)
+    public function store(CategoryRequest $request, BlogifyCategoryModel $categories)
     {
         $category = $categories->create([
             'name' => $request->get('name'),
@@ -48,7 +46,7 @@ class CategoriesController extends BaseController
         return redirect()->route('admin.categories.index');
     }
 
-    public function update(Category $category, CategoryRequest $request)
+    public function update(BlogifyCategoryModel $category, CategoryRequest $request)
     {
         $category->name = $request->name;
         $category->save();
@@ -58,7 +56,7 @@ class CategoriesController extends BaseController
         return redirect()->route('admin.categories.index');
     }
 
-    public function destroy(Category $category)
+    public function destroy(BlogifyCategoryModel $category)
     {
         $categoryName = $category->name;
         $category->delete();
@@ -68,7 +66,7 @@ class CategoriesController extends BaseController
         return redirect()->route('admin.categories.index');
     }
 
-    public function restore($id, Category $categories)
+    public function restore($id, BlogifyCategoryModel $categories)
     {
         $category = $categories->withTrashed()->findOrFail($id);
         $category->restore();

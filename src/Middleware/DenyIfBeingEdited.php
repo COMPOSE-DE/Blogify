@@ -2,11 +2,9 @@
 
 namespace ComposeDe\Blogify\Middleware;
 
-use App\User;
 use Closure;
 use ComposeDe\Blogify\Facades\BlogifyAuth;
-use Illuminate\Contracts\Auth\Guard;
-use ComposeDe\Blogify\Models\Post;
+use BlogifyPostModel;
 
 class DenyIfBeingEdited
 {
@@ -22,9 +20,9 @@ class DenyIfBeingEdited
     /**
      * Create a new filter instance.
      *
-     * @param \ComposeDe\Blogify\Models\Post   $posts
+     * @param \BlogifyPostModel $posts
      */
-    public function __construct(Post $posts)
+    public function __construct(BlogifyPostModel $posts)
     {
         $this->auth = BlogifyAuth::getFacadeRoot();
         $this->posts = $posts;

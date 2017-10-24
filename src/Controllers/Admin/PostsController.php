@@ -3,13 +3,15 @@
 namespace ComposeDe\Blogify\Controllers\Admin;
 
 use Carbon\Carbon;
-use Illuminate\Contracts\Hashing\Hasher;
 use ComposeDe\Blogify\Blogify;
-use ComposeDe\Blogify\Models\Category;
-use ComposeDe\Blogify\Models\Role;
+use BlogifyTagModel;
+use BlogifyRoleModel;
+use BlogifyPostModel;
+use BlogifyStatusModel;
+use BlogifyCategoryModel;
+use BlogifyVisibilityModel;
 use ComposeDe\Blogify\Models\Status;
 use ComposeDe\Blogify\Models\Tag;
-use ComposeDe\Blogify\Models\Visibility;
 use ComposeDe\Blogify\Requests\ImageUploadRequest;
 use Intervention\Image\Facades\Image;
 use ComposeDe\Blogify\Requests\PostRequest;
@@ -17,7 +19,6 @@ use ComposeDe\Blogify\Models\Post;
 use ComposeDe\Blogify\Services\BlogifyMailer;
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Database\Eloquent\Collection;
 
 class PostsController extends BaseController
 {
@@ -77,27 +78,26 @@ class PostsController extends BaseController
     protected $blogify;
 
     /**
-     * @param \ComposeDe\Blogify\Models\Tag             $tags
-     * @param \ComposeDe\Blogify\Models\Role            $roles
-     * @param \ComposeDe\Blogify\Models\Post            $posts
-     * @param \ComposeDe\Blogify\Services\BlogifyMailer $mail
-     * @param \Illuminate\Contracts\Hashing\Hasher      $hash
-     * @param \ComposeDe\Blogify\Models\Status          $statuses
-     * @param \Illuminate\Contracts\Cache\Repository    $cache
-     * @param \ComposeDe\Blogify\Models\Category        $categories
-     * @param \ComposeDe\Blogify\Models\Visibility      $visibilities
-     * @param \Illuminate\Contracts\Auth\Guard          $auth
-     * @param \ComposeDe\Blogify\Blogify                $blogify
+     * @param \BlogifyTagModel|\ComposeDe\Blogify\Models\Tag               $tags
+     * @param \BlogifyRoleModel|\ComposeDe\Blogify\Models\Role             $roles
+     * @param \BlogifyPostModel|\ComposeDe\Blogify\Models\Post             $posts
+     * @param \ComposeDe\Blogify\Services\BlogifyMailer                    $mail
+     * @param \BlogifyStatusModel|\ComposeDe\Blogify\Models\Status         $statuses
+     * @param \Illuminate\Contracts\Cache\Repository                       $cache
+     * @param \BlogifyCategoryModel|\ComposeDe\Blogify\Models\Category     $categories
+     * @param \BlogifyVisibilityModel|\ComposeDe\Blogify\Models\Visibility $visibilities
+     * @param \Illuminate\Contracts\Auth\Guard                             $auth
+     * @param \ComposeDe\Blogify\Blogify                                   $blogify
      */
     public function __construct(
-        Tag $tags,
-        Role $roles,
-        Post $posts,
+        BlogifyTagModel $tags,
+        BlogifyRoleModel $roles,
+        BlogifyPostModel $posts,
         BlogifyMailer $mail,
-        Status $statuses,
+        BlogifyStatusModel $statuses,
         Repository $cache,
-        Category $categories,
-        Visibility $visibilities,
+        BlogifyCategoryModel $categories,
+        BlogifyVisibilityModel $visibilities,
         Guard $auth,
         Blogify $blogify
     ) {
@@ -128,7 +128,7 @@ class PostsController extends BaseController
     {
         $query = $this->posts
             ->with('status')
-            ->forRole($this->users->role->name)
+            ->forRole($this->users->getHighestRole()->name)
             ->orderBy('publish_date', 'DESC');
         if ($trashed) {
             $query->onlyTrashed();
@@ -152,7 +152,7 @@ class PostsController extends BaseController
         return view('blogify::admin.posts.show', compact('post'));
     }
 
-    public function edit(Post $post)
+    public function edit(BlogifyPostModel $post)
     {
         $post->being_edited_by = $this->users->id;
         $post->save();
@@ -185,10 +185,11 @@ class PostsController extends BaseController
     }
 
     /**
-     * @param string $hash
+     * @param \BlogifyPostModel $post
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(Post $post)
+    public function destroy(BlogifyPostModel $post)
     {
         $postTitle = $post->title;
         $post->delete();
@@ -353,7 +354,7 @@ class PostsController extends BaseController
             $post = $this->posts->byHash($data->hash);
         } else {
             $post = new Post;
-            $post->hash = $this->blogify->makeHash('posts', 'hash', true);
+            $post->hash = $this->blogify->makeHash(config('blogify.tables.posts'), 'hash', true);
         }
 
         $post->slug = $data->slug;

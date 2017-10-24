@@ -64,10 +64,6 @@ class CreateUsersTable extends Migration
                 'length' => 100,
                 'extra' => 'nullable'
             ],
-            'role_id' => [
-                'type' => 'integer',
-                'extra' => 'unsigned'
-            ],
             'profilepicture' => [
                 'type' => 'string',
                 'length' => 200,

@@ -2,12 +2,12 @@
 
 namespace ComposeDe\Blogify\Controllers\Admin;
 
-use ComposeDe\Blogify\Models\Comment;
+use BlogifyCommentModel;
 
 class CommentsController extends BaseController
 {
 
-    public function index($revised = "pending", Comment $commentsModel)
+    public function index($revised = "pending", BlogifyCommentModel $commentsModel)
     {
         $this->checkRevised($revised);
 
@@ -16,7 +16,7 @@ class CommentsController extends BaseController
         return view('blogify::admin.comments.index', compact('comments', 'revised'));
     }
 
-    public function changeStatus($hash, $status, Comment $comments)
+    public function changeStatus($hash, $status, BlogifyCommentModel $comments)
     {
         $this->checkRevised($status);
 

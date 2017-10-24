@@ -6,6 +6,13 @@ use BlogifyAuth;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Hash;
+use BlogifyAuthModel;
+use BlogifyCommentModel;
+use BlogifyCategoryModel;
+use BlogifyMediaModel;
+use BlogifyTagModel;
+use BlogifyStatusModel;
+use BlogifyVisibilityModel;
 
 class Post extends BaseModel
 {
@@ -24,47 +31,47 @@ class Post extends BaseModel
 
     public function user()
     {
-        return $this->belongsTo(config('blogify.models.auth'))->withTrashed();
+        return $this->belongsTo(BlogifyAuthModel::class)->withTrashed();
     }
 
     public function comment()
     {
-        return $this->hasMany(config('blogify.models.comment'));
+        return $this->hasMany(BlogifyCommentModel::class);
     }
 
     public function category()
     {
-        return $this->belongsTo(config('blogify.models.category'))->withTrashed();
+        return $this->belongsTo(BlogifyCategoryModel::class)->withTrashed();
     }
 
     public function media()
     {
-        return $this->hasMany(config('blogify.models.media'));
+        return $this->hasMany(BlogifyMediaModel::class);
     }
 
     public function tags()
     {
-        return $this->belongsToMany(config('blogify.models.tag'), config('blogify.tables.post_tag'), 'post_id', 'tag_id')->withTrashed();
+        return $this->belongsToMany(BlogifyTagModel::class, config('blogify.tables.post_tag'), 'post_id', 'tag_id')->withTrashed();
     }
 
     public function status()
     {
-        return $this->belongsTo(config('blogify.models.status'));
+        return $this->belongsTo(BlogifyStatusModel::class);
     }
 
     public function visibility()
     {
-        return $this->belongsTo(config('blogify.models.visibility'));
+        return $this->belongsTo(BlogifyVisibilityModel::class);
     }
 
     public function approvedComments()
     {
-        return $this->hasMany(config('blogify.models.comment'))->approved();
+        return $this->hasMany(BlogifyCommentModel::class)->approved();
     }
 
     public function comments()
     {
-        return $this->hasMany(config('blogify.models.comment'));
+        return $this->hasMany(BlogifyCommentModel::class);
     }
 
     /*
@@ -159,7 +166,7 @@ class Post extends BaseModel
 
     public function assignTags($tags)
     {
-        $tags = app(config('blogify.models.tag'))->findOrCreateTags($tags);
+        $tags = app(BlogifyTagModel::class)->findOrCreateTags($tags);
 
         $this->tags()->sync($tags->pluck('id'));
     }
@@ -167,13 +174,13 @@ class Post extends BaseModel
     public function assignTagsRelation($tags = [])
     {
         $this->setRelation('tags', (new Collection($tags))->map(function($tag) {
-            return app(config('blogify.models.tag'))->make(['name' => $tag]);
+            return app(BlogifyTagModel::class)->make(['name' => $tag]);
         }));
     }
 
     public function hasPassword()
     {
-        return $this->visibility_id === app(config('blogify.models.visibility'))->getProtectedId();
+        return $this->visibility_id === app(BlogifyVisibilityModel::class)->getProtectedId();
     }
 
     public function passwordIs($password)

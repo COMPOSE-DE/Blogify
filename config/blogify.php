@@ -20,16 +20,16 @@ return [
     ],
 
     'tables' => [
-        'users' => 'blogify_user',
-        'categories' => 'blogify_category',
-        'comments' => 'blogify_comment',
+        'users' => 'users',
+        'categories' => 'blogify_categories',
+        'comments' => 'blogify_comments',
         'media' => 'blogify_media',
-        'posts' => 'blogify_post',
+        'posts' => 'blogify_posts',
         'post_tag' => 'blogify_post_tag',
-        'roles' => 'blogify_role',
-        'role_user' => 'blogify_role_user',
+        'roles' => 'roles',
+        'role_user' => 'role_users',
         'statuses' => 'blogify_status',
-        'tags' => 'blogify_tag',
+        'tags' => 'blogify_tags',
         'visibility' => 'blogify_visibility',
     ],
 

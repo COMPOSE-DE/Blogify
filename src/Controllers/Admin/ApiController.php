@@ -5,10 +5,10 @@ namespace ComposeDe\Blogify\Controllers\Admin;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Http\Request;
 use ComposeDe\Blogify\Exceptions\BlogifyException;
-use ComposeDe\Blogify\Models\Post;
+use BlogifyPostModel;
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Carbon\Carbon;
-use ComposeDe\Blogify\Models\Tag;
+use BlogifyTagModel;
 
 class ApiController extends BaseController
 {
@@ -58,7 +58,7 @@ class ApiController extends BaseController
      * @param string $slug
      * @return string
      */
-    public function checkIfSlugIsUnique($slug, Post $posts)
+    public function checkIfSlugIsUnique($slug, BlogifyPostModel $posts)
     {
         $i = 0;
         $baseSlug = $slug;
@@ -78,7 +78,7 @@ class ApiController extends BaseController
      * @param \Illuminate\Http\Request $request;
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function autoSave(Cache $cache, Request $request, Tag $tags)
+    public function autoSave(Cache $cache, Request $request, BlogifyTagModel $tags)
     {
         try {
             $tags->findOrCreateTags($request->get('tags') ?: []);
@@ -106,7 +106,7 @@ class ApiController extends BaseController
      * @param \ComposeDe\Blogify\Models\Tag $tag
      * @return mixed
      */
-    public function getTag(Tag $tag)
+    public function getTag(BlogifyTagModel $tag)
     {
         return $tag;
     }

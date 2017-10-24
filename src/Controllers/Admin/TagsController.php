@@ -2,15 +2,15 @@
 
 namespace ComposeDe\Blogify\Controllers\Admin;
 
-use ComposeDe\Blogify\Blogify;
 use ComposeDe\Blogify\Models\Tag;
 use Illuminate\Http\Request;
 use ComposeDe\Blogify\Requests\TagUpdateRequest;
+use BlogifyTagModel;
 
 class TagsController extends BaseController
 {
 
-    public function index($trashed = null, Tag $tags)
+    public function index($trashed = null, BlogifyTagModel $tags)
     {
         $q = $tags->orderBy('created_at', 'DESC');
         if ($trashed) {
@@ -32,7 +32,7 @@ class TagsController extends BaseController
         return view('blogify::admin.tags.form', compact('tag'));
     }
 
-    public function storeOrUpdate(Request $request, Tag $tagsModel)
+    public function storeOrUpdate(Request $request, BlogifyTagModel $tagsModel)
     {
         $tags = collect(explode(',', $request->get('tags')))->map(function ($tag) {
             return trim($tag);
@@ -52,11 +52,12 @@ class TagsController extends BaseController
     }
 
     /**
-     * @param string $hash
+     * @param \BlogifyTagModel                             $tag
      * @param \ComposeDe\Blogify\Requests\TagUpdateRequest $request
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Tag $tag, TagUpdateRequest $request)
+    public function update(BlogifyTagModel $tag, TagUpdateRequest $request)
     {
         $tag->name = $request->tags;
         $tag->save();
@@ -66,7 +67,7 @@ class TagsController extends BaseController
         return redirect()->route('admin.tags.index');
     }
 
-    public function destroy(Tag $tag)
+    public function destroy(BlogifyTagModel $tag)
     {
         $tagName = $tag->name;
         $tag->delete();
@@ -78,9 +79,10 @@ class TagsController extends BaseController
 
     /**
      * @param string $hash
+     * @param BlogifyTagModel                              $tag
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function restore($hash, Tag $tags)
+    public function restore($hash, BlogifyTagModel $tags)
     {
         $tag = $tags->withTrashed()->byHash($hash);
         $tag->restore();

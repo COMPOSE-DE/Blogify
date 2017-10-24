@@ -2,9 +2,7 @@
 
 namespace ComposeDe\Blogify\Requests;
 
-use App\User;
 use ComposeDe\Blogify\Facades\BlogifyAuth;
-use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Validation\Rule;
 
 class ProfileUpdateRequest extends Request

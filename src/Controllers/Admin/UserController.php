@@ -2,19 +2,15 @@
 
 namespace ComposeDe\Blogify\Controllers\Admin;
 
-use ComposeDe\Blogify\Blogify;
-use ComposeDe\Blogify\Models\Role;
 use ComposeDe\Blogify\Requests\UserRequest;
-use Illuminate\Contracts\Hashing\Hasher as Hash;
 use ComposeDe\Blogify\Services\BlogifyMailer;
+use BlogifyRoleModel;
 
 class UserController extends BaseController
 {
     protected $users;
 
-    /**
-     * @var \ComposeDe\Blogify\Models\Role
-     */
+
     protected $roles;
 
     /**
@@ -22,7 +18,13 @@ class UserController extends BaseController
      */
     protected $mail;
 
-    public function __construct(Role $roles, BlogifyMailer $mail) {
+    /**
+     * UserController constructor.
+     *
+     * @param \BlogifyRoleModel                         $roles
+     * @param \ComposeDe\Blogify\Services\BlogifyMailer $mail
+     */
+    public function __construct(BlogifyRoleModel $roles, BlogifyMailer $mail) {
         parent::__construct();
 
         $this->users = app(config('blogify.models.auth'));
@@ -74,6 +76,7 @@ class UserController extends BaseController
         return redirect()->route('admin.users.index');
     }
 
+    //TODO: Fix to handle multiple roles. Column role_id does not exist anymore.
     public function update(UserRequest $request, $userId)
     {
         $user = $this->users->find($userId);
@@ -118,7 +121,7 @@ class UserController extends BaseController
     private function createUser($request)
     {
         $password = str_random(8);
-        $user = Role::find($request->role)->createUser([
+        $user = $this->roles->find($request->role)->createUser([
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($password),

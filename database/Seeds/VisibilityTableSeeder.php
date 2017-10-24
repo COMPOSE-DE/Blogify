@@ -3,7 +3,7 @@
 namespace ComposeDe\Blogify\database\Seeds;
 
 use Illuminate\Database\Seeder;
-use ComposeDe\Blogify\Models\Visibility;
+use BlogifyVisibilityModel;
 
 class VisibilityTableSeeder extends Seeder
 {
@@ -12,7 +12,7 @@ class VisibilityTableSeeder extends Seeder
      */
     private $visibilities;
 
-    public function __construct(Visibility $visibilities)
+    public function __construct(BlogifyVisibilityModel $visibilities)
     {
         $this->visibilities = $visibilities;
     }

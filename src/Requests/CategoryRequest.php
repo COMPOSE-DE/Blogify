@@ -2,7 +2,7 @@
 
 namespace ComposeDe\Blogify\Requests;
 
-use ComposeDe\Blogify\Models\Category;
+use BlogifyCategoryModel;
 
 class CategoryRequest extends Request
 {
@@ -15,7 +15,7 @@ class CategoryRequest extends Request
     /**
      * @param \ComposeDe\Blogify\Models\Category $category
      */
-    public function __construct(Category $category)
+    public function __construct(BlogifyCategoryModel $category)
     {
         $this->category = $category;
     }
@@ -40,7 +40,7 @@ class CategoryRequest extends Request
         $id = $this->segment(3) ?: 0;
 
         return [
-            'name' => "required|unique:categories,name,$id|min:3|max:45",
+            'name' => "required|unique:" . config('blogify.tables.categories') . ",name,$id|min:3|max:45",
         ];
     }
 }

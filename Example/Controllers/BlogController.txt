@@ -1,10 +1,10 @@
 <?php namespace {{namespace}};
 
 use Carbon\Carbon;
-use ComposeDe\Blogify\Models\Tag;
-use ComposeDe\Blogify\Models\Post;
+use BlogifyTagModel;
+use BlogifyPostModel;
+use BlogifyCategoryModel;
 use Illuminate\Database\DatabaseManager;
-use ComposeDe\Blogify\Models\Category;
 
 class BlogController extends Controller
 {
@@ -39,7 +39,7 @@ class BlogController extends Controller
      * @param Tag $tag
      * @param DatabaseManager $db
      */
-    public function __construct(Post $post, Category $category, Tag $tag, DatabaseManager $db)
+    public function __construct(BlogifyPostModel $post, BlogifyCategoryModel $category, BlogifyTagModel $tag, DatabaseManager $db)
     {
         $this->post = $post;
         $this->category = $category;

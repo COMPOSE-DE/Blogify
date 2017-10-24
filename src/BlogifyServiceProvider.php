@@ -2,7 +2,6 @@
 
 namespace ComposeDe\Blogify;
 
-use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Foundation\AliasLoader;
 use ComposeDe\Blogify\Services\Validation;
@@ -158,6 +157,13 @@ class BlogifyServiceProvider extends ServiceProvider
         foreach ($this->aliases as $key => $alias)
         {
             $loader->alias($key, $alias);
+        }
+
+        $customModels = config('blogify.models');
+
+        foreach($customModels as $key => $model)
+        {
+            $loader->alias('Blogify' . studly_case($key) . 'Model', $model);
         }
     }
 

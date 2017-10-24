@@ -3,7 +3,7 @@
 namespace ComposeDe\Blogify\database\Seeds;
 
 use Illuminate\Database\Seeder;
-use ComposeDe\Blogify\Models\Role;
+use BlogifyRoleModel;
 use \Illuminate\Support\Facades\Hash;
 
 class UsersTableSeeder extends Seeder
@@ -14,7 +14,7 @@ class UsersTableSeeder extends Seeder
     private $roles;
     private $users;
 
-    public function __construct(Role $roles)
+    public function __construct(BlogifyRoleModel $roles)
     {
         $this->roles = $roles;
         $this->users = app()->make(config('blogify.models.auth'));
@@ -25,13 +25,18 @@ class UsersTableSeeder extends Seeder
     {
         $admin = config('blogify.admin_user');
 
-        if (! $this->users->where('email', $admin['email'])->exists()) {
-            $this->users->create([
+        $user = $this->users->where('email', $admin['email'])->first();
+
+        if (!$user) {
+            $user = $this->users->create([
                 'name' => $admin['name'],
                 'email' => $admin['email'],
                 'password' => Hash::make($admin['password']),
-                'role_id' => $this->roles->getAdminRoleId(),
             ]);
+        }
+
+        if(!$user->roles()->where('name', $this->roles->getAdminRoleName())->exists()) {
+            $user->roles()->attach($this->roles->getAdminRoleId());
         }
     }
 }

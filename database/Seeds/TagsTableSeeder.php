@@ -3,7 +3,7 @@
 namespace ComposeDe\Blogify\database\Seeds;
 
 use Illuminate\Database\Seeder;
-use ComposeDe\Blogify\Models\Tag;
+use BlogifyTagModel;
 
 class TagsTableSeeder extends Seeder
 {
@@ -12,7 +12,7 @@ class TagsTableSeeder extends Seeder
      */
     private $tags;
 
-    public function __construct(Tag $tags)
+    public function __construct(BlogifyTagModel $tags)
     {
         $this->tags = $tags;
     }

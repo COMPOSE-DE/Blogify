@@ -2,7 +2,7 @@
 
 namespace ComposeDe\Blogify\Models;
 
-use ComposeDe\Blogify\Models\Post;
+use BlogifyPostModel;
 
 class Visibility extends BaseModel
 {
@@ -22,7 +22,7 @@ class Visibility extends BaseModel
 
     public function post()
     {
-        return $this->hasMany(config('blogify.models.post'));
+        return $this->hasMany(BlogifyPostModel::class);
     }
 
     public static function getPublicIds()

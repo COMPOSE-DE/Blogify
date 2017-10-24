@@ -3,14 +3,15 @@
 namespace ComposeDe\Blogify\Traits;
 
 use BlogifyRole;
+use BlogifyRoleModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use BlogifyAuth;
 
 
 Trait BlogifyUserTrait
 {
-
     use SoftDeletes;
+    
 
     /*
     |--------------------------------------------------------------------------
@@ -24,7 +25,7 @@ Trait BlogifyUserTrait
 
     public function roles()
     {
-        return $this->belongsToMany('ComposeDe\Blogify\Models\Role', config('blogify.tables.role_user'), 'user_id', 'role_id');
+        return $this->belongsToMany(BlogifyRoleModel::class, config('blogify.tables.role_user'), 'user_id', 'role_id');
     }
 
     public function post()
@@ -35,6 +36,20 @@ Trait BlogifyUserTrait
     public function comment()
     {
         return $this->hasMany('ComposeDe\Blogify\Models\comment');
+    }
+
+    public function hasRole($roleName)
+    {
+        return $this->roles->pluck('name')->search($roleName) !== false;
+    }
+
+    public function getHighestRole()
+    {
+        $rolesDescending = BlogifyRole::getFacadeRoot()->getRoleOrder();
+
+        return $this->roles->sortBy(function($role) use($rolesDescending){
+            return array_search($role->name, $rolesDescending);
+        })->first();
     }
 
     /*
@@ -71,7 +86,9 @@ Trait BlogifyUserTrait
 
         return $query
             ->where('id', '<>', BlogifyAuth::id())
-            ->whereIn('role_id', [$reviewerRoleId, $adminRoleId]);
+            ->whereHas('roles', function($role) use($reviewerRoleId, $adminRoleId) {
+                $role->whereIn('role_id', [$reviewerRoleId, $adminRoleId]);
+            });
     }
 }
 

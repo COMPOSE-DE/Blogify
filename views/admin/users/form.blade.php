@@ -37,6 +37,7 @@ $editable = (isset($user)) ? "disabled" : null;
         </div>
         <div class="col-sm-10">
             <select name="role" class="form-control form-small">
+                {{-- TODO: Handle users having multiple roles. Column role_id does not exist anymore. --}}
                 @foreach ($roles as $role)
                     <option value="{!! $role->id !!}" {{ ( isset($user) && $role->id == $user->role_id ) ? 'selected' : '' }}>{!! $role->name !!}</option>
                 @endforeach

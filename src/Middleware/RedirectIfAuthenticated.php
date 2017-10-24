@@ -4,7 +4,6 @@ namespace ComposeDe\Blogify\Middleware;
 
 use Closure;
 use ComposeDe\Blogify\Facades\BlogifyAuth;
-use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\RedirectResponse;
 
 class RedirectIfAuthenticated

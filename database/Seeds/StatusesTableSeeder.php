@@ -3,7 +3,7 @@
 namespace ComposeDe\Blogify\database\Seeds;
 
 use Illuminate\Database\Seeder;
-use ComposeDe\Blogify\Models\Status;
+use BlogifyStatusModel;
 
 class StatusesTableSeeder extends Seeder
 {
@@ -12,7 +12,7 @@ class StatusesTableSeeder extends Seeder
      */
     private $statuses;
 
-    public function __construct(Status $statuses)
+    public function __construct(BlogifyStatusModel $statuses)
     {
         $this->statuses = $statuses;
     }

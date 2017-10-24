@@ -19,7 +19,7 @@ class Status extends BaseModel
 
     public function post()
     {
-        return $this->hasMany(config('blogify.models.post'));
+        return $this->hasMany(BlogifyPostModel::class);
     }
 
     public static function getDraftId()

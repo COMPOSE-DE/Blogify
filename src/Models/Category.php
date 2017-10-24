@@ -2,7 +2,7 @@
 
 namespace ComposeDe\Blogify\Models;
 
-use ComposeDe\Blogify\Models\Post;
+use BlogifyPostModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Category extends BaseModel
@@ -56,6 +56,6 @@ class Category extends BaseModel
 
     public function post()
     {
-        return $this->hasMany(Post::class);
+        return $this->hasMany(BlogifyPostModel::class);
     }
 }

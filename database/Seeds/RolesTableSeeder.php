@@ -3,7 +3,7 @@
 namespace ComposeDe\Blogify\database\Seeds;
 
 use Illuminate\Database\Seeder;
-use ComposeDe\Blogify\Models\Role;
+use BlogifyRoleModel;
 
 class RolesTableSeeder extends Seeder
 {
@@ -12,7 +12,7 @@ class RolesTableSeeder extends Seeder
      */
     private $roles;
 
-    public function __construct(Role $roles)
+    public function __construct(BlogifyRoleModel $roles)
     {
         $this->roles = $roles;
     }

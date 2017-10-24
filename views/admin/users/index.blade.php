@@ -39,7 +39,7 @@
                 <tr>
                     <td>{!! $user->name !!}</td>
                     <td>{!! $user->email !!}</td>
-                    <td>{!! $user->role->name !!}</td>
+                    <td>{!! $user->getHighestRole()->name !!}</td>
                     <td>
                         @if(!$trashed)
                             <a href="{{ route('admin.users.edit', [$user->id] ) }}"><span class="fa fa-edit fa-fw"></span></a>

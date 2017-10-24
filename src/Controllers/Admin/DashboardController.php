@@ -2,18 +2,14 @@
 
 namespace ComposeDe\Blogify\Controllers\Admin;
 
-use App\User;
 use ComposeDe\Blogify\Facades\BlogifyAuth;
-use ComposeDe\Blogify\Models\Comment;
-use ComposeDe\Blogify\Models\Post;
-use Illuminate\Contracts\Auth\Guard;
+use BlogifyPostModel;
+use BlogifyCommentModel;
+use BlogifyRoleModel;
+
 
 class DashboardController extends BaseController
 {
-
-    /**
-     * @var \App\User
-     */
     protected $user;
 
     /**
@@ -27,6 +23,11 @@ class DashboardController extends BaseController
     protected $comments;
 
     /**
+     * @var \ComposeDe\Blogify\Models\Role
+     */
+    protected $roles;
+
+    /**
      * Holds the data for the dashboard
      *
      * @var array
@@ -34,20 +35,33 @@ class DashboardController extends BaseController
     protected $data = [];
 
     /**
-     * @param \App\User                         $user
-     * @param \ComposeDe\Blogify\Models\Post    $posts
-     * @param \ComposeDe\Blogify\Models\Comment $comments
-     * @param \Illuminate\Contracts\Auth\Guard  $auth
+     * @param \BlogifyPostModel    $posts
+     * @param \BlogifyCommentModel $comments
+     * @param \BlogifyRoleModel    $roles
      */
-    public function __construct(Post $posts, Comment $comments) {
+    public function __construct(BlogifyPostModel $posts, BlogifyCommentModel $comments, BlogifyRoleModel $roles) {
         parent::__construct();
 
         $this->posts = $posts;
         $this->comments = $comments;
         $this->user = BlogifyAuth::user();
+        $this->roles = $roles;
 
         if ($this->user) {
-            $this->{"buildDataArrayFor".$this->user->role->name}();
+            $highestRoleName = $this->user->getHighestRole()->name;
+
+            switch($highestRoleName)
+            {
+                case $this->roles->getAdminRoleName():
+                    $this->buildDataArrayForAdmin();
+                    break;
+                case $this->roles->getAuthorRoleName():
+                    $this->buildDataArrayForAuthor();
+                    break;
+                case $this->roles->getReviewerRoleName():
+                    $this->buildDataArrayForReviewer();
+                    break;
+            }
         }
     }
 

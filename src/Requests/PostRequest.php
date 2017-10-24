@@ -2,8 +2,8 @@
 
 namespace ComposeDe\Blogify\Requests;
 
-use ComposeDe\Blogify\Models\Post;
-use ComposeDe\Blogify\Models\Visibility;
+use BlogifyPostModel;
+use BlogifyVisibilityModel;
 
 class PostRequest extends Request
 {
@@ -22,7 +22,7 @@ class PostRequest extends Request
      * @param \ComposeDe\Blogify\Models\Post       $posts
      * @param \ComposeDe\Blogify\Models\Visibility $visibilities
      */
-    public function __construct(Post $posts, Visibility $visibilities)
+    public function __construct(BlogifyPostModel $posts, BlogifyVisibilityModel $visibilities)
     {
         $this->posts = $posts;
         $this->visibilities = $visibilities;
@@ -51,10 +51,10 @@ class PostRequest extends Request
 
         return [
             'title'             => 'required|min:2|max:100',
-            'slug'              => "required|unique:posts,slug,$id|min:2|max:120",
-            'reviewer'          => 'exists:users,id',
+            'slug'              => "required|unique:" . config('blogify.tables.posts') . ",slug,$id|min:2|max:120",
+            'reviewer'          => 'exists:' . config('blogify.tables.users') . ',id',
             'post'              => 'required',
-            'category'          => 'required|exists:categories,hash',
+            'category'          => 'required|exists:' . config('blogify.tables.categories') . ',hash',
             'publishdate'       => 'required|date: d-M-Y H:i',
             'password'          => "required_if:visibility,$protected_visibility",
         ];
