@@ -26,7 +26,7 @@ class DenyIfBeingEdited
     {
         $this->auth = BlogifyAuth::getFacadeRoot();
         $this->posts = $posts;
-        $this->users = app(config('blogify.models.auth'));
+        $this->users = app(config('blogify.models.user'));
     }
 
     /**

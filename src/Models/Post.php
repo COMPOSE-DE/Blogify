@@ -6,7 +6,7 @@ use BlogifyAuth;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Hash;
-use BlogifyAuthModel;
+use BlogifyUserModel;
 use BlogifyCommentModel;
 use BlogifyCategoryModel;
 use BlogifyMediaModel;
@@ -31,7 +31,7 @@ class Post extends BaseModel
 
     public function user()
     {
-        return $this->belongsTo(BlogifyAuthModel::class)->withTrashed();
+        return $this->belongsTo(BlogifyUserModel::class)->withTrashed();
     }
 
     public function comment()

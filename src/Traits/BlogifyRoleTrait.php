@@ -3,13 +3,13 @@
 
 namespace ComposeDe\Traits;
 
-use BlogifyAuthModel;
+use BlogifyUserModel;
 
 trait BlogifyRoleTrait
 {
     public function users()
     {
-        return $this->belongsToMany(BlogifyAuthModel::class, config('blogify.tables.role_user'), 'role_id', 'user_id');
+        return $this->belongsToMany(BlogifyUserModel::class, config('blogify.tables.role_user'), 'role_id', 'user_id');
     }
 
     public function scopeByAdminRoles($query)

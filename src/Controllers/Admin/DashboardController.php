@@ -88,7 +88,7 @@ class DashboardController extends BaseController
      */
     private function buildDataArrayForAdmin()
     {
-        $users = app(config('blogify.models.auth'));
+        $users = app(config('blogify.models.user'));
 
         $this->data['new_users_since_last_visit'] = $users->newUsersSince($this->user->updated_at)->count();
 

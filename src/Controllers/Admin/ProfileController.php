@@ -16,7 +16,7 @@ class ProfileController extends BaseController
 
         $this->middleware(IsOwner::class, ['only', 'edit']);
 
-        $this->users = app(config('blogify.models.auth'));
+        $this->users = app(config('blogify.models.user'));
     }
 
     public function edit($id)

@@ -8,7 +8,7 @@ return [
     
     'models' => [
         //The model used for authentication and/or your users.
-        'auth' => \App\User::class,
+        'user' => \App\User::class,
         'category' => \ComposeDe\Blogify\Models\Category::class,
         'comment' => \ComposeDe\Blogify\Models\Comment::class,
         'media' => \ComposeDe\Blogify\Models\Media::class,

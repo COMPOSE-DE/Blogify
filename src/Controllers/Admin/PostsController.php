@@ -104,7 +104,7 @@ class PostsController extends BaseController
         parent::__construct($auth);
 
         $this->appendMiddleware();
-        $this->users = app(config('blogify.models.auth'));
+        $this->users = app(config('blogify.models.user'));
         $this->tags = $tags;
         $this->roles = $roles;
         $this->posts = $posts;

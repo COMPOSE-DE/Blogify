@@ -3,7 +3,7 @@
 namespace ComposeDe\Blogify\Models;
 
 use BlogifyPostModel;
-use BlogifyAuthModel;
+use BlogifyUserModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Comment extends BaseModel
@@ -28,7 +28,7 @@ class Comment extends BaseModel
 
     public function user()
     {
-        return $this->belongsTo(BlogifyAuthModel::class);
+        return $this->belongsTo(BlogifyUserModel::class);
     }
 
     public function post()

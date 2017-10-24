@@ -17,7 +17,7 @@ class UsersTableSeeder extends Seeder
     public function __construct(BlogifyRoleModel $roles)
     {
         $this->roles = $roles;
-        $this->users = app()->make(config('blogify.models.auth'));
+        $this->users = app()->make(config('blogify.models.user'));
     }
 
 

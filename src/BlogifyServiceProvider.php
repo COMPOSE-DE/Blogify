@@ -88,7 +88,7 @@ class BlogifyServiceProvider extends ServiceProvider
 
     private function bindModels()
     {
-        $this->bindModelIfNeeded(\App\User::class, 'blogify.models.auth');
+        $this->bindModelIfNeeded(\App\User::class, 'blogify.models.user');
         $this->bindModelIfNeeded(\ComposeDe\Blogify\Models\Category::class);
         $this->bindModelIfNeeded(\ComposeDe\Blogify\Models\Comment::class);
         $this->bindModelIfNeeded(\ComposeDe\Blogify\Models\Media::class);

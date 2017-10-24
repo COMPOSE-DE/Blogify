@@ -34,7 +34,7 @@ class ProfileUpdateRequest extends Request
     public function __construct()
     {
         $this->auth = BlogifyAuth::getFacadeRoot();
-        $this->users = app(config('blogify.models.auth'));
+        $this->users = app(config('blogify.models.user'));
     }
 
     /**

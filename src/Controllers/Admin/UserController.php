@@ -27,7 +27,7 @@ class UserController extends BaseController
     public function __construct(BlogifyRoleModel $roles, BlogifyMailer $mail) {
         parent::__construct();
 
-        $this->users = app(config('blogify.models.auth'));
+        $this->users = app(config('blogify.models.user'));
         $this->roles = $roles;
         $this->mail = $mail;
     }
