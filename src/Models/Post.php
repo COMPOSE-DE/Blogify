@@ -141,6 +141,7 @@ class Post extends BaseModel
     public function scopeForPublic($query)
     {
         return $query->where('publish_date', '<=', date('Y-m-d H:i:s'))
+                    ->where('status_id', BlogifyStatusModel::getReviewedId())
                     ->whereIn('visibility_id', app(config('blogify.models.visibility'))->getPublicIds());
     }
 
