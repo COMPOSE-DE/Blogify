@@ -41,7 +41,6 @@ class BlogifyServiceProvider extends ServiceProvider
             return new Blogify($db, $config);
         });
 
-        $this->bindModels();
         $this->registerMiddleware();
         $this->registerServiceProviders();
         $this->registerAliases();
@@ -85,38 +84,6 @@ class BlogifyServiceProvider extends ServiceProvider
     ///////////////////////////////////////////////////////////////////////////
     // Helper methods
     ///////////////////////////////////////////////////////////////////////////
-
-    private function bindModels()
-    {
-        $this->bindModelIfNeeded(\App\User::class, 'blogify.models.user');
-        $this->bindModelIfNeeded(\ComposeDe\Blogify\Models\Category::class);
-        $this->bindModelIfNeeded(\ComposeDe\Blogify\Models\Comment::class);
-        $this->bindModelIfNeeded(\ComposeDe\Blogify\Models\Media::class);
-        $this->bindModelIfNeeded(\ComposeDe\Blogify\Models\Post::class);
-        $this->bindModelIfNeeded(\ComposeDe\Blogify\Models\Role::class);
-        $this->bindModelIfNeeded(\ComposeDe\Blogify\Models\Status::class);
-        $this->bindModelIfNeeded(\ComposeDe\Blogify\Models\Tag::class);
-        $this->bindModelIfNeeded(\ComposeDe\Blogify\Models\Visibility::class);
-    }
-
-
-    private function bindModelIfNeeded($className, $configKey = null)
-    {
-        if($configKey === null) {
-            $classBaseName = class_basename($className);
-            $configKey = 'blogify.models.' . snake_case($classBaseName);
-        }
-
-        $configValue = config($configKey, $className);
-
-        if($configValue != $className) {
-            $this->app->bind($className, function () use ($configValue) {
-                return $this->app->make($configValue);
-            });
-        }
-    }
-
-
 
     /**
      * @return void
