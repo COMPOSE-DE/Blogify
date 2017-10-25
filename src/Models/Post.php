@@ -142,12 +142,12 @@ class Post extends BaseModel
     {
         return $query->where('publish_date', '<=', date('Y-m-d H:i:s'))
                     ->where('status_id', BlogifyStatusModel::getReviewedId())
-                    ->whereIn('visibility_id', app(config('blogify.models.visibility'))->getPublicIds());
+                    ->whereIn('visibility_id', BlogifyVisibilityModel::getPublicIds());
     }
 
     public function scopeRecommended($query)
     {
-        return $query->where('visibility_id', app(config('blogify.models.visibility'))->getRecommendedId());
+        return $query->where('visibility_id', BlogifyVisibilityModel::getRecommendedId());
     }
 
     public function scopePopular($query)
