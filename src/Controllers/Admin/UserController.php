@@ -5,6 +5,7 @@ namespace ComposeDe\Blogify\Controllers\Admin;
 use ComposeDe\Blogify\Requests\UserRequest;
 use ComposeDe\Blogify\Services\BlogifyMailer;
 use BlogifyRoleModel;
+use BlogifyUserModel;
 
 class UserController extends BaseController
 {
@@ -120,11 +121,14 @@ class UserController extends BaseController
     private function createUser($request)
     {
         $password = str_random(8);
-        $user = $this->roles->find($request->role)->createUser([
+
+        $user = BlogifyUserModel::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($password),
         ]);
+
+        $user->roles()->sync($request->get('roles'));
 
         return compact('user', 'password');
     }
