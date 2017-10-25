@@ -36,7 +36,7 @@ class ApiController extends BaseController
             $query = BlogifyUserModel::with('roles');
         }
         elseif($table == 'posts') {
-            $query = BlogifyPostModel::query();
+            $query = BlogifyPostModel::with('status');
         }
 
         if($trashed) {
