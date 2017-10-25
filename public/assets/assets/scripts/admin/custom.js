@@ -190,7 +190,7 @@ var app = {
                     }
 
                     if(columnName == 'status_id') {
-                        data['data'][i][columnName] = data['data'][i]['name'];
+                        data['data'][i][columnName] = data['data'][i]['status']['name'];
                     }
 
                     append_data += "<td>" + data['data'][i][columnName] + "</td>";
