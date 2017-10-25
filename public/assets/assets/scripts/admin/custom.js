@@ -185,8 +185,8 @@ var app = {
                         data['data'][i][columnName] = app.sortable.getHumanReadableDatetime(new Date(data['data'][i][columnName]));
                     }
 
-                    if(columnName == 'role_id') {
-                        data['data'][i][columnName] = data['data'][i]['name'];
+                    if(columnName == 'roles') {
+                        data['data'][i][columnName] = data['data'][i]['roles'].map((item) => item.name).join(', ');
                     }
 
                     if(columnName == 'status_id') {

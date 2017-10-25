@@ -43,7 +43,9 @@ class ApiController extends BaseController
             $query->onlyTrashed();
         }
 
-        $query->orderBy($tableName . '.' . $column, $order);
+        if($column != 'roles') {
+            $query->orderBy($tableName . '.' . $column, $order);
+        }
 
         return $query->paginate($this->config->items_per_page);
     }

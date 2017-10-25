@@ -23,7 +23,7 @@ $currentPage    = (Request::has('page')) ? Request::get('page') : '1';
         <tr>
             <th role="name"><a href="{!! route('admin.api.sort', ['users', 'name', 'asc', $trashed]).'?page='.$currentPage !!}" title="Order by Name" class="sort"> {{ trans("blogify::users.overview.table_head.name") }} </a></th>
             <th role="email"><a href="{!! route('admin.api.sort', ['users', 'email', 'asc', $trashed]).'?page='.$currentPage !!}" title="Order by E-mail" class="sort"> {{ trans("blogify::users.overview.table_head.email") }} </a></th>
-            <th role="role_id">{{ trans("blogify::users.overview.table_head.role") }}</th>
+            <th role="roles">{{ trans("blogify::users.overview.table_head.role") }}</th>
             <th> {{ trans("blogify::users.overview.table_head.actions") }} </th>
         </tr>
         </thead>
