@@ -6,6 +6,7 @@ use Illuminate\Database\DatabaseManager;
 use Illuminate\Http\Request;
 use ComposeDe\Blogify\Exceptions\BlogifyException;
 use BlogifyPostModel;
+use BlogifyUserModel;
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Carbon\Carbon;
 use BlogifyTagModel;
@@ -19,36 +20,32 @@ class ApiController extends BaseController
      * @param string $table
      * @param string $column
      * @param string $order
-     * @param bool $trashed
-     * @param \Illuminate\Database\DatabaseManager $db
+     * @param bool   $trashed
+     *
      * @return object
      */
     public function sort(
         $table,
         $column,
         $order,
-        $trashed = false,
-        DatabaseManager $db
+        $trashed = false
     ) {
-        $db = $db->connection();
-        $data = $db->table($table);
+        $tableName = config('blogify.tables.' . $table);
 
-        // Check for trashed data
-        $data = $trashed ? $data->whereNotNull('deleted_at') : $data->whereNull('deleted_at');
-
-        if ($table == 'users') {
-            $data = $data->join('roles', 'users.role_id', '=', 'roles.id');
+        if($table == 'users') {
+            $query = BlogifyUserModel::with('roles');
+        }
+        elseif($table == 'posts') {
+            $query = BlogifyPostModel::query();
         }
 
-        if ($table == 'posts') {
-            $data = $data->join('statuses', 'posts.status_id', '=', 'statuses.id');
+        if($trashed) {
+            $query->onlyTrashed();
         }
 
-        $data = $data
-            ->orderBy($column, $order)
-            ->paginate($this->config->items_per_page);
+        $query->orderBy($tableName . '.' . $column, $order);
 
-        return $data;
+        return $query->paginate($this->config->items_per_page);
     }
 
     /**

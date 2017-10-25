@@ -1,6 +1,6 @@
 <?php
-    $trashed        = ($trashed) ? 1 : 0;
-    $currentPage    = (Request::has('page')) ? Request::get('page') : '1';
+$trashed        = ($trashed) ? 1 : 0;
+$currentPage    = (Request::has('page')) ? Request::get('page') : '1';
 ?>
 @extends('blogify::admin.layouts.dashboard')
 @section('page_heading', trans("blogify::users.overview.page_title") )
@@ -20,40 +20,41 @@
 @section ('cotable_panel_body')
     <table class="table table-bordered sortable">
         <thead>
-            <tr>
-                <th role="username"><a href="{!! route('admin.api.sort', ['users', 'username', 'asc', $trashed]).'?page='.$currentPage !!}" title="Order by username" class="sort"> {{ trans("blogify::users.overview.table_head.name") }} </a></th>
-                <th role="email"><a href="{!! route('admin.api.sort', ['users', 'email', 'asc', $trashed]).'?page='.$currentPage !!}" title="Order by E-mail" class="sort"> {{ trans("blogify::users.overview.table_head.email") }} </a></th>
-                <th role="role_id"><a href="{!! route('admin.api.sort', ['users', 'role_id', 'asc', $trashed]).'?page='.$currentPage !!}" title="Order by Role" class="sort"> {{ trans("blogify::users.overview.table_head.role") }} </a></th>
-                <th> {{ trans("blogify::users.overview.table_head.actions") }} </th>
-            </tr>
+        <tr>
+            <th role="name"><a href="{!! route('admin.api.sort', ['users', 'name', 'asc', $trashed]).'?page='.$currentPage !!}" title="Order by Name" class="sort"> {{ trans("blogify::users.overview.table_head.name") }} </a></th>
+            <th role="email"><a href="{!! route('admin.api.sort', ['users', 'email', 'asc', $trashed]).'?page='.$currentPage !!}" title="Order by E-mail" class="sort"> {{ trans("blogify::users.overview.table_head.email") }} </a></th>
+            <th role="role_id">{{ trans("blogify::users.overview.table_head.role") }}</th>
+            <th> {{ trans("blogify::users.overview.table_head.actions") }} </th>
+        </tr>
         </thead>
         <tbody>
-            @if ( count($users) <= 0 )
-                <tr>
-                    <td colspan="7">
-                        <em>@lang('blogify::users.overview.no_results')</em>
-                    </td>
-                </tr>
-            @endif
-            @foreach ( $users as $user )
-                <tr>
-                    <td>{!! $user->name !!}</td>
-                    <td>{!! $user->email !!}</td>
-                    <td>{!! $user->getHighestRole()->name !!}</td>
-                    <td>
-                        @if(!$trashed)
-                            <a href="{{ route('admin.users.edit', [$user->id] ) }}"><span class="fa fa-edit fa-fw"></span></a>
-                            {!! Form::open( [ 'route' => ['admin.users.destroy', $user->id], 'class' => $user->id . ' form-delete' ] ) !!}
+        @if ( count($users) <= 0 )
+            <tr>
+                <td colspan="7">
+                    <em>@lang('blogify::users.overview.no_results')</em>
+                </td>
+            </tr>
+        @endif
 
-                            {!! Form::hidden('_method', 'delete') !!}
-                            <a href="#" title="{{$user->name}}" class="delete" id="{{$user->id}}"><span class="fa fa-trash-o fa-fw"></span></a>
-                            {!! Form::close() !!}
-                        @else
-                            <a href="{{route('admin.users.restore', [$user->id])}}" title="">Restore</a>
-                        @endif
-                    </td>
-                </tr>
-            @endforeach
+        @foreach ( $users as $user )
+            <tr>
+                <td>{!! $user->name !!}</td>
+                <td>{!! $user->email !!}</td>
+                <td>{!! $user->roles->sortBy(function($role){ return array_search($role->name, BlogifyRole::getRoleOrder()); })->implode('name', ', ') !!}</td>
+                <td>
+                    @if(!$trashed)
+                        <a href="{{ route('admin.users.edit', [$user->id] ) }}"><span class="fa fa-edit fa-fw"></span></a>
+                        {!! Form::open( [ 'route' => ['admin.users.destroy', $user->id], 'class' => $user->id . ' form-delete' ] ) !!}
+
+                        {!! Form::hidden('_method', 'delete') !!}
+                        <a href="#" title="{{$user->name}}" class="delete" id="{{$user->id}}"><span class="fa fa-trash-o fa-fw"></span></a>
+                        {!! Form::close() !!}
+                    @else
+                        <a href="{{route('admin.users.restore', [$user->id])}}" title="">Restore</a>
+                    @endif
+                </td>
+            </tr>
+        @endforeach
         </tbody>
     </table>
 @endsection

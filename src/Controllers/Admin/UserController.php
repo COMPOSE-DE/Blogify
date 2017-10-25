@@ -37,11 +37,11 @@ class UserController extends BaseController
         $data = [
             'users' => (! $trashed) ?
                     $this->users
-                        ->with('role')
+                        ->with('roles')
                         ->paginate($this->config->items_per_page)
                     :
                     $this->users
-                        ->with('role')
+                        ->with('roles')
                         ->onlyTrashed()
                         ->paginate($this->config->items_per_page),
             'trashed' => $trashed,
