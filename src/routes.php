@@ -60,12 +60,6 @@ Route::group($admin, function()
             'uses'  => 'DashboardController@index'
         ]);
 
-        // Logout
-        Route::get('logout', [
-            'as'    =>  'admin.logout',
-            'uses'  =>  'AuthController@logout'
-        ]);
-
         /**
          * User routes
          *

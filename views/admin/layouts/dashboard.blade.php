@@ -28,9 +28,6 @@
                                 {{ trans('blogify::navigation.profile') }}
                             </a>
                         </li>
-                        <li class="divider"></li>
-                        <li><a href="{!! route('admin.logout') !!}"><i class="fa fa-sign-out fa-fw"></i> {{ trans("blogify::navigation.logout") }} </a>
-                        </li>
                     </ul>
                     <!-- /.dropdown-user -->
                 </li>
