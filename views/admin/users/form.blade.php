@@ -5,14 +5,14 @@ $editable = (isset($user)) ? "disabled" : null;
 @section('page_heading', isset($user) ? trans("blogify::users.form.page_title_edit")  : trans("blogify::users.form.page_title_create") )
 @section('section')
 
-@include('blogify::admin.snippets.validation-errors')
+    @include('blogify::admin.snippets.validation-errors')
 
-@if ( isset($user) )
-    {!! Form::open( [ 'route' => ['admin.users.update', $user->id] ] ) !!}
-    {!! Form::hidden('_method', 'put') !!}
-@else
-    {!! Form::open( [ 'route' => 'admin.users.store' ] ) !!}
-@endif
+    @if ( isset($user) )
+        {!! Form::open( [ 'route' => ['admin.users.update', $user->id] ] ) !!}
+        {!! Form::hidden('_method', 'put') !!}
+    @else
+        {!! Form::open( [ 'route' => 'admin.users.store' ] ) !!}
+    @endif
     <div class="row form-group {{ $errors->has('name') ? 'has-error' : '' }}">
         <div class="col-sm-2">
             {!! Form::label('name', trans("blogify::users.form.name.label") ) !!}
@@ -36,10 +36,9 @@ $editable = (isset($user)) ? "disabled" : null;
             {!! Form::label('role', trans("blogify::users.form.role.label") ) !!}
         </div>
         <div class="col-sm-10">
-            <select name="role" class="form-control form-small">
-                {{-- TODO: Handle users having multiple roles. Column role_id does not exist anymore. --}}
+            <select name="roles[]" class="role-multi-select form-control" multiple>
                 @foreach ($roles as $role)
-                    <option value="{!! $role->id !!}" {{ ( isset($user) && $role->id == $user->role_id ) ? 'selected' : '' }}>{!! $role->name !!}</option>
+                    <option value="{!! $role->id !!}" {{ optionSelected(isset($user) && $user->roles->contains('id', $role->id)) }}>{!! $role->name !!}</option>
                 @endforeach
             </select>
         </div>
@@ -51,6 +50,12 @@ $editable = (isset($user)) ? "disabled" : null;
         </div>
     </div>
 
-{!! Form::close() !!}
+    {!! Form::close() !!}
 
+@stop
+
+@section('scripts')
+    <script type="text/javascript">
+        $('.role-multi-select').select2();
+    </script>
 @stop

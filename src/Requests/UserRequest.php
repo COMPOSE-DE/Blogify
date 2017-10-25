@@ -28,7 +28,7 @@ class UserRequest extends Request
         }
 
         $this->rules = [
-            'role' => 'required|exists:roles,id',
+            'roles' => 'required|exists:' . config('blogify.tables.roles') . ',id',
         ];
     }
 

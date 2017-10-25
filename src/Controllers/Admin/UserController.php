@@ -75,13 +75,12 @@ class UserController extends BaseController
 
         return redirect()->route('admin.users.index');
     }
-
-    //TODO: Fix to handle multiple roles. Column role_id does not exist anymore.
+    
     public function update(UserRequest $request, $userId)
     {
         $user = $this->users->find($userId);
-        $user->role_id = $request->get('role');
-        $user->save();
+
+        $user->roles()->sync($request->get('roles'));
 
         $this->flashSuccess($user->name, 'updated');
 
