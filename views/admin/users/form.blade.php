@@ -33,7 +33,7 @@ $editable = (isset($user)) ? "disabled" : null;
 
     <div class="row form-group {{ $errors->has('role') ? 'has-error' : '' }}">
         <div class="col-sm-2">
-            {!! Form::label('role', trans("blogify::users.form.role.label") ) !!}
+            {!! Form::label('role', trans("blogify::users.form.roles.label") ) !!}
         </div>
         <div class="col-sm-10">
             <select name="roles[]" class="role-multi-select form-control" multiple>

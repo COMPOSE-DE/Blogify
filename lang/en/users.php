@@ -9,7 +9,7 @@ return [
             'title_trashed' => 'Deleted users',
             'name' => 'Name',
             'email' => 'E-mail',
-            'role' => 'Role',
+            'roles' => 'Roles',
             'actions' => 'Actions'
         ],
 
@@ -33,8 +33,8 @@ return [
             'label' => 'E-mail:',
         ],
 
-        'role' => [
-            'label' => 'Role:',
+        'roles' => [
+            'label' => 'Roles:',
         ],
 
         'submit_button' => [
