@@ -37,8 +37,7 @@ Check your users table and your roles table. Blogify has created a new admin use
 5. `php artisan blogify:generate` (see the command help for options)
 
 ## Known issues
-- Original code is not fully migrated to handling multiple roles per user.
-- Workflows for login and registration are very likely not working. This functionality should be removed, because Blogify is a package and should use the users and roles of the main application.
+- Profile editing does not work. Since user handling should stay in your main application, this is not a real issue. Use your own user/profile controller and take the code for changing the profile picture from `src/Controllers/Admin/ProfileController.php`.
 
 ## You found an issue?
 Let's hope it's not too bad.
