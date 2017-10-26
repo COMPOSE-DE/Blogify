@@ -2,7 +2,6 @@
 
 namespace ComposeDe\Blogify\Controllers\Admin;
 
-use ComposeDe\Blogify\Config;
 use ComposeDe\Blogify\Middleware\IsOwner;
 use ComposeDe\Blogify\Requests\ProfileUpdateRequest;
 use Intervention\Image\Facades\Image;
