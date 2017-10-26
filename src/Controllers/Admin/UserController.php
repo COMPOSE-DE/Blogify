@@ -70,7 +70,7 @@ class UserController extends BaseController
     public function store(UserRequest $request)
     {
         $data = $this->createUser($request);
-        $this->mail->mailPassword($data['user']->email, 'Blogify temperary password', $data);
+        $this->mail->mailPassword($data['user']->email, 'Blogify temporary password', $data);
 
         $this->flashSuccess($data['user']->name, 'created');
 
