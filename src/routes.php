@@ -13,14 +13,6 @@ if ($use_default_routes) {
             'as' => 'blog.index',
             'uses' => 'BlogController@index'
         ]);
-        Route::get('/{slug}', [
-            'as' => 'blog.show',
-            'uses' => 'BlogController@show'
-        ]);
-        Route::post('{slug}', [
-            'as' => 'blog.confirmPass',
-            'uses' => 'BlogController@show',
-        ]);
         Route::get('archive/{year}/{month}', [
             'as' => 'blog.archive',
             'uses' => 'BlogController@archive'
@@ -36,6 +28,14 @@ if ($use_default_routes) {
         Route::post('comments', [
             'as' => 'comments.store',
             'uses' => 'CommentsController@store'
+        ]);
+        Route::get('/{slug}', [
+            'as' => 'blog.show',
+            'uses' => 'BlogController@show'
+        ]);
+        Route::post('{slug}', [
+            'as' => 'blog.confirmPass',
+            'uses' => 'BlogController@show',
         ]);
     });
 }
