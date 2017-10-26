@@ -1,6 +1,6 @@
 @extends('blogify::admin.layouts.dashboard')
 
-@section('page_heading',trans("blogify::posts.form.page.title.create"))
+@section('page_heading', Route::is('admin.posts.edit') ? trans("blogify::posts.form.page.title.update") : trans("blogify::posts.form.page.title.create"))
 
 @section('section')
     {!! Form::open( ['route' => 'admin.posts.store'] ) !!}
