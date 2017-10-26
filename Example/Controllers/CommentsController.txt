@@ -3,12 +3,13 @@
 use {{appnamespace}}\Http\Requests\CommentRequest;
 use BlogifyCommentModel;
 use BlogifyPostModel;
+use BlogifyAuth;
 
 class CommentsController extends Controller
 {
 
     /**
-     * @var Comment
+     * @var BlogifyCommentModel
      */
     protected $comment;
 
@@ -18,15 +19,15 @@ class CommentsController extends Controller
     protected $config;
 
     /**
-     * @var Post
+     * @var BlogifyPostModel
      */
     protected $post;
 
     protected $auth;
 
     /**
-     * @param Comment $comment
-     * @param Post $post
+     * @param BlogifyCommentModel $comment
+     * @param BlogifyPostModel $post
      */
     public function __construct(BlogifyCommentModel $comment, BlogifyPostModel $post)
     {
